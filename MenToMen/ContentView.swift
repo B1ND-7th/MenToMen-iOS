@@ -24,51 +24,32 @@ extension View {
 }
 
 struct ContentView: View {
+    @State var selectedView = 0
     var body: some View {
         VStack {
-            PostsView()
+            switch(selectedView) {
+                case 0: PostsView()
+                case 1: Text("a")
+                default:Text("b")
+            }
             HStack {
                 Spacer()
-                
-                Button(action: { }) {
-                    VStack(spacing: 2) {
-                        Image("home")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                        Text("홈")
-                            .foregroundColor(Color(.label))
-                            .font(.caption2)
+                ForEach(0..<3, id: \.self) { idx in
+                    Button(action: { selectedView = idx }) {
+                        VStack(spacing: 2) {
+                            Image(["home", "add-circle", "user"][idx])
+                                .resizable()
+                                .renderingMode(.template)
+                                .frame(width: 25, height: 25)
+                            Text(["홈", "등록", "마이"][idx])
+                                .font(.caption2)
+                        }
+                        .foregroundColor(idx == selectedView ? .accentColor : Color(.label))
                     }
+                    .padding([.leading, .trailing], idx == 1 ? 30 : 0)
+                    .padding(.bottom, 5)
+                    Spacer()
                 }
-                
-                Spacer()
-                
-                Button(action: { }) {
-                    VStack(spacing: 2) {
-                        Image("add-circle")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                        Text("등록")
-                            .foregroundColor(Color(.label))
-                            .font(.caption2)
-                    }
-                }
-                .padding([.leading, .trailing], 30)
-                
-                Spacer()
-                
-                Button(action: { }) {
-                    VStack(spacing: 2) {
-                        Image("user")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                        Text("마이")
-                            .foregroundColor(Color(.label))
-                            .font(.caption2)
-                    }
-                }
-                
-                Spacer()
             }
         }
     }
