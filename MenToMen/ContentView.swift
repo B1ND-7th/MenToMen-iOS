@@ -27,6 +27,49 @@ struct ContentView: View {
     var body: some View {
         VStack {
             PostsView()
+            HStack {
+                Spacer()
+                
+                Button(action: { }) {
+                    VStack(spacing: 2) {
+                        Image("home")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                        Text("홈")
+                            .foregroundColor(Color(.label))
+                            .font(.caption2)
+                    }
+                }
+                
+                Spacer()
+                
+                Button(action: { }) {
+                    VStack(spacing: 2) {
+                        Image("add-circle")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                        Text("등록")
+                            .foregroundColor(Color(.label))
+                            .font(.caption2)
+                    }
+                }
+                .padding([.leading, .trailing], 30)
+                
+                Spacer()
+                
+                Button(action: { }) {
+                    VStack(spacing: 2) {
+                        Image("user")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                        Text("마이")
+                            .foregroundColor(Color(.label))
+                            .font(.caption2)
+                    }
+                }
+                
+                Spacer()
+            }
         }
     }
 }

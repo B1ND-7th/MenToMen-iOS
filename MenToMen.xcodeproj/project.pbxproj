@@ -46,6 +46,7 @@
 		93FA241428B797B8000C8D64 /* MenToMenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenUITests.swift; sourceTree = "<group>"; };
 		93FA241628B797B8000C8D64 /* MenToMenUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		93FA242328B797E8000C8D64 /* PostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
+		93FA242528B7998A000C8D64 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +77,7 @@
 		93FA23ED28B797B7000C8D64 = {
 			isa = PBXGroup;
 			children = (
+				93FA242528B7998A000C8D64 /* README.md */,
 				93FA23F828B797B7000C8D64 /* MenToMen */,
 				93FA240928B797B8000C8D64 /* MenToMenTests */,
 				93FA241328B797B8000C8D64 /* MenToMenUITests */,

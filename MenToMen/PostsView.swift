@@ -18,7 +18,7 @@ struct PostTypes {
 struct PostsCellView: View {
     let data: PostTypes
     let autoColor: [String: [Color]] = ["iOS": [Color(.systemBackground), Color(.label)],
-                                        "Android": [.black, Color("Android")],
+                                        "Android": [.white, Color("Android")],
                                         "Web": [],
                                         "Server": [],
                                         "Design": [.white, Color("Design")]
