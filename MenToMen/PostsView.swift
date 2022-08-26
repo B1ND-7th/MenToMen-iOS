@@ -17,21 +17,14 @@ struct PostTypes {
 
 struct PostsCellView: View {
     let data: PostTypes
-    let autoColor: [String: [Color]] = ["iOS": [Color(.systemBackground), Color(.label)],
-                                        "Android": [.white, Color("Android")],
-                                        "Web": [],
-                                        "Server": [],
-                                        "Design": [.white, Color("Design")]
-                                        ]
     var body: some View {
         ZStack(alignment: .leading) {
             VStack {
                 HStack {
-                    Text(data.type)
-                        .frame(width: 90, height: 30)
-                        .foregroundColor(autoColor[data.type]![0])
-                        .background(autoColor[data.type]![1])
-                        .cornerRadius(50, corners: [.topLeft, .bottomRight])
+                    Image("\(data.type)BM")
+                        .resizable()
+                        .frame(width: 27, height: 39)
+                        .padding(.leading, 15)
                     Spacer()
                     Text("\(data.grade) \(data.name)")
                         .font(.caption)
@@ -44,23 +37,24 @@ struct PostsCellView: View {
                 Text(data.title)
                 Spacer()
             }
-            .padding(.top, 40)
+            .padding(.top, 45)
             .padding([.leading, .trailing], 15)
             .padding(.bottom, 5)
         }
         .buttonStyle(PlainButtonStyle())
         .listRowSeparator(.hidden)
         .frame(maxWidth: .infinity)
-        .frame(minHeight: 95)
+        .frame(minHeight: 100)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(15)
-        .padding([.top, .leading, .trailing], 20)
+        .padding([.bottom, .leading, .trailing], 20)
         .listRowInsets(EdgeInsets())
         .background(Color(.systemGroupedBackground))
     }
 }
 
 struct PostsView: View {
+    let TypeArray = ["Design", "Web", "Android", "Server", "iOS"]
     let postTypeArray: [PostTypes] = [
         PostTypes(title: "나르샤 iOS 대신 만들어주실 분 구해요~~ 상은선배님이면 좋아용 ㅎㅎ",
                     name: "조상영",
@@ -78,25 +72,29 @@ struct PostsView: View {
                     name: "조상영",
                     grade: "1215",
                     time: "18분 전",
-                    type: "iOS"
+                    type: "Android"
                  ),
         PostTypes(title: "iOS 코드베이스 하실 줄 아는 분 구해요",
                     name: "조상영",
                     grade: "1215",
                     time: "30분 전",
-                    type: "Android"
+                    type: "Server"
                  )
     ]
     var body: some View {
         VStack {
             HStack(spacing: 15) {
-                Text("대충 아무 로고")
-                    .font(.title3)
-                    .bold()
+                Image("M2MLogo")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(Color(.label))
+                    .frame(width: 100, height: 33.8)
                 Spacer()
                 Button(action: { }) {
                     Image("search-normal")
                         .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(Color(.label))
                 }
                 .frame(width: 25, height: 25)
                 Button(action: { }) {
@@ -107,17 +105,41 @@ struct PostsView: View {
                             .position(x: 22, y: 0)
                         Image("notification")
                             .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(Color(.label))
                     }
                 }
                 .frame(width: 25, height: 25)
             }
             .padding([.leading, .trailing], 20)
-            .padding([.top, .bottom], 6)
-            List(0..<postTypeArray.count, id: \.self) { idx in
-                PostsCellView(data: postTypeArray[idx])
+            .padding(.bottom, 6)
+            .padding(.top, 12)
+            List {
+                HStack {
+                    ForEach(0..<5, id: \.self) { idx in
+                        Button(action: { }) {
+                            Text(TypeArray[idx])
+                                .font(.caption)
+                                .frame(width: 63, height: 25)
+                                .foregroundColor(.white)
+                                .background(Color("\(TypeArray[idx])CR"))
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+                .padding([.top, .bottom], 15)
+                .buttonStyle(PlainButtonStyle())
+                .listRowSeparator(.hidden)
+                .frame(maxWidth: .infinity)
+                .listRowInsets(EdgeInsets())
+                .background(Color(.systemGroupedBackground))
+                .listRowBackground(Color(.systemGroupedBackground))
+                ForEach(0..<postTypeArray.count, id: \.self) { idx in
+                    PostsCellView(data: postTypeArray[idx])
+                }
             }
             .listStyle(PlainListStyle())
-            .background(Color(.systemGroupedBackground))
+            .background(Color("M2MBackground"))
         }
     }
 }

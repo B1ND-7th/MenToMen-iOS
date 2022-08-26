@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		931644E828B8396B001E5243 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E728B8396B001E5243 /* ProfileView.swift */; };
+		931644EA28B83983001E5243 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E928B83983001E5243 /* WriteView.swift */; };
+		93328E4828B867A000233573 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93328E4728B867A000233573 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
-		93FA23FE28B797B8000C8D64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93FA23FD28B797B8000C8D64 /* Assets.xcassets */; };
 		93FA240128B797B8000C8D64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93FA240028B797B8000C8D64 /* Preview Assets.xcassets */; };
 		93FA240B28B797B8000C8D64 /* MenToMenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA240A28B797B8000C8D64 /* MenToMenTests.swift */; };
 		93FA241528B797B8000C8D64 /* MenToMenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA241428B797B8000C8D64 /* MenToMenUITests.swift */; };
@@ -35,10 +37,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		93FA23F628B797B7000C8D64 /* MenToMen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenToMen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		931644E728B8396B001E5243 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		931644E928B83983001E5243 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
+		93328E4728B867A000233573 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../.Trash/Assets.xcassets; sourceTree = "<group>"; };
+		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
 		93FA23FB28B797B7000C8D64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		93FA23FD28B797B8000C8D64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA240028B797B8000C8D64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		93FA240628B797B8000C8D64 /* MenToMenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenToMenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA240A28B797B8000C8D64 /* MenToMenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenTests.swift; sourceTree = "<group>"; };
@@ -88,7 +92,7 @@
 		93FA23F728B797B7000C8D64 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				93FA23F628B797B7000C8D64 /* MenToMen.app */,
+				93FA23F628B797B7000C8D64 /* 멘투멘.app */,
 				93FA240628B797B8000C8D64 /* MenToMenTests.xctest */,
 				93FA241028B797B8000C8D64 /* MenToMenUITests.xctest */,
 			);
@@ -101,7 +105,9 @@
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
 				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
 				93FA242328B797E8000C8D64 /* PostsView.swift */,
-				93FA23FD28B797B8000C8D64 /* Assets.xcassets */,
+				931644E928B83983001E5243 /* WriteView.swift */,
+				931644E728B8396B001E5243 /* ProfileView.swift */,
+				93328E4728B867A000233573 /* Assets.xcassets */,
 				93FA23FF28B797B8000C8D64 /* Preview Content */,
 			);
 			path = MenToMen;
@@ -149,7 +155,7 @@
 			);
 			name = MenToMen;
 			productName = MenToMen;
-			productReference = 93FA23F628B797B7000C8D64 /* MenToMen.app */;
+			productReference = 93FA23F628B797B7000C8D64 /* 멘투멘.app */;
 			productType = "com.apple.product-type.application";
 		};
 		93FA240528B797B8000C8D64 /* MenToMenTests */ = {
@@ -236,8 +242,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93328E4828B867A000233573 /* Assets.xcassets in Resources */,
 				93FA240128B797B8000C8D64 /* Preview Assets.xcassets in Resources */,
-				93FA23FE28B797B8000C8D64 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +268,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				931644E828B8396B001E5243 /* ProfileView.swift in Sources */,
 				93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */,
+				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
 				93FA242428B797E8000C8D64 /* PostsView.swift in Sources */,
 			);
@@ -437,7 +445,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.b1nd.MenToMen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "멘투멘";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -466,7 +474,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.b1nd.MenToMen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "멘투멘";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

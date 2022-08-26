@@ -24,13 +24,14 @@ extension View {
 }
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State var selectedView = 0
     var body: some View {
         VStack {
             switch(selectedView) {
                 case 0: PostsView()
-                case 1: Text("a")
-                default:Text("b")
+                case 1: WriteView()
+                default: ProfileView()
             }
             HStack {
                 Spacer()
@@ -47,11 +48,12 @@ struct ContentView: View {
                         .foregroundColor(idx == selectedView ? .accentColor : Color(.label))
                     }
                     .padding([.leading, .trailing], idx == 1 ? 30 : 0)
-                    .padding(.bottom, 5)
+                    .padding(.bottom, 6)
                     Spacer()
                 }
             }
         }
+        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemBackground))
     }
 }
 
