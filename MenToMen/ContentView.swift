@@ -23,6 +23,14 @@ extension View {
     }
 }
 
+extension View {
+    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
+        if hidden {
+            if !remove { self.hidden() }
+        } else { self }
+    }
+}
+
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView = 0

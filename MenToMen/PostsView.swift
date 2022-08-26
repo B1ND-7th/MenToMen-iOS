@@ -54,7 +54,8 @@ struct PostsCellView: View {
 }
 
 struct PostsView: View {
-    let TypeArray = ["Design", "Web", "Android", "Server", "iOS"]
+    @State var selectedFilter: Int = 5
+    let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     let postTypeArray: [PostTypes] = [
         PostTypes(title: "나르샤 iOS 대신 만들어주실 분 구해요~~ 상은선배님이면 좋아용 ㅎㅎ",
                     name: "조상영",
@@ -117,17 +118,30 @@ struct PostsView: View {
             List {
                 HStack {
                     ForEach(0..<5, id: \.self) { idx in
-                        Button(action: { }) {
-                            Text(TypeArray[idx])
-                                .font(.caption)
-                                .frame(width: 63, height: 25)
-                                .foregroundColor(.white)
-                                .background(Color("\(TypeArray[idx])CR"))
-                                .clipShape(Capsule())
+                        Button(action: {
+                                selectedFilter = selectedFilter == idx ? 5 : idx
+                        }) {
+                            ZStack {
+                                switch(selectedFilter) {
+                                    case idx: Capsule()
+                                        .fill(Color("\(TypeArray[idx])CR"))
+                                    case 5: Capsule()
+                                        .fill(Color("\(TypeArray[idx])CR"))
+                                    default: Capsule()
+                                        .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
+                                }
+                                Text(TypeArray[idx])
+                                    .font(.caption)
+                                    .foregroundColor(selectedFilter == idx || selectedFilter == 5 ? .white : Color("\(TypeArray[idx])CR"))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 25)
+                                
                         }
                     }
                 }
                 .padding([.top, .bottom], 15)
+                .padding([.leading, .trailing], 20)
                 .buttonStyle(PlainButtonStyle())
                 .listRowSeparator(.hidden)
                 .frame(maxWidth: .infinity)
@@ -136,6 +150,7 @@ struct PostsView: View {
                 .listRowBackground(Color(.systemGroupedBackground))
                 ForEach(0..<postTypeArray.count, id: \.self) { idx in
                     PostsCellView(data: postTypeArray[idx])
+                        .isHidden(postTypeArray[idx].type != TypeArray[selectedFilter] && selectedFilter != 5, remove: true)
                 }
             }
             .listStyle(PlainListStyle())
