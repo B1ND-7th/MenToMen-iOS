@@ -33,7 +33,7 @@ extension View {
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State var selectedView = 0
+    @State var selectedView: Int = 0
     var body: some View {
         VStack {
             switch(selectedView) {

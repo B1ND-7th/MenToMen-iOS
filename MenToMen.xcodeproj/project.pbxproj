@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		930382F428BA1643005E08C0 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930382F328BA1643005E08C0 /* PostView.swift */; };
 		931644E828B8396B001E5243 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E728B8396B001E5243 /* ProfileView.swift */; };
 		931644EA28B83983001E5243 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E928B83983001E5243 /* WriteView.swift */; };
 		93328E4828B867A000233573 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93328E4728B867A000233573 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		930382F328BA1643005E08C0 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		931644E728B8396B001E5243 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		931644E928B83983001E5243 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
 		93328E4728B867A000233573 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../.Trash/Assets.xcassets; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
 				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
 				93FA242328B797E8000C8D64 /* PostsView.swift */,
+				930382F328BA1643005E08C0 /* PostView.swift */,
 				931644E928B83983001E5243 /* WriteView.swift */,
 				931644E728B8396B001E5243 /* ProfileView.swift */,
 				93328E4728B867A000233573 /* Assets.xcassets */,
@@ -272,6 +275,7 @@
 				93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */,
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
+				930382F428BA1643005E08C0 /* PostView.swift in Sources */,
 				93FA242428B797E8000C8D64 /* PostsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
