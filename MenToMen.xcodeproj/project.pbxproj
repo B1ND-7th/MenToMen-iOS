@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261555045FA4B04F9B80C0E4 /* Pods_MenToMen_MenToMenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ED80D752B10D5A16DD9E91D /* Pods_MenToMen_MenToMenUITests.framework */; };
+		72B1A13A946699633F541E11 /* Pods_MenToMen.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71CB3449538EC4918FD652EF /* Pods_MenToMen.framework */; };
 		931644E828B8396B001E5243 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E728B8396B001E5243 /* ProfileView.swift */; };
 		931644EA28B83983001E5243 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E928B83983001E5243 /* WriteView.swift */; };
 		9370ABC928BCA49400B1867B /* PostsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABC828BCA49400B1867B /* PostsCell.swift */; };
@@ -16,6 +18,7 @@
 		9370ABD528BCB7AD00B1867B /* NotifyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD428BCB7AD00B1867B /* NotifyCell.swift */; };
 		9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD628BCB92400B1867B /* NotifyAPI.swift */; };
 		9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD928BCC10D00B1867B /* LoginView.swift */; };
+		9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9379692C28BCCC1000FB707F /* LoginAPI.swift */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
@@ -24,6 +27,7 @@
 		93FA241528B797B8000C8D64 /* MenToMenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA241428B797B8000C8D64 /* MenToMenUITests.swift */; };
 		93FA241728B797B8000C8D64 /* MenToMenUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA241628B797B8000C8D64 /* MenToMenUITestsLaunchTests.swift */; };
 		93FA242428B797E8000C8D64 /* PostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA242328B797E8000C8D64 /* PostsView.swift */; };
+		CB51355B68AD0B15E2CB0C76 /* Pods_MenToMenTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073923FD5E1A713D29FAD74A /* Pods_MenToMenTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		073923FD5E1A713D29FAD74A /* Pods_MenToMenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MenToMenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		096D47650F7CE2242F25D23E /* Pods-MenToMenTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMenTests.release.xcconfig"; path = "Target Support Files/Pods-MenToMenTests/Pods-MenToMenTests.release.xcconfig"; sourceTree = "<group>"; };
+		0ED80D752B10D5A16DD9E91D /* Pods_MenToMen_MenToMenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MenToMen_MenToMenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E022BDA6A0B1209EECDF0C2 /* Pods-MenToMen-MenToMenUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMen-MenToMenUITests.debug.xcconfig"; path = "Target Support Files/Pods-MenToMen-MenToMenUITests/Pods-MenToMen-MenToMenUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		50A76AAE55D492BD2F1F6122 /* Pods-MenToMen-MenToMenUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMen-MenToMenUITests.release.xcconfig"; path = "Target Support Files/Pods-MenToMen-MenToMenUITests/Pods-MenToMen-MenToMenUITests.release.xcconfig"; sourceTree = "<group>"; };
+		71CB3449538EC4918FD652EF /* Pods_MenToMen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MenToMen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F3238D524AEC7B49FDB89D6 /* Pods-MenToMen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMen.release.xcconfig"; path = "Target Support Files/Pods-MenToMen/Pods-MenToMen.release.xcconfig"; sourceTree = "<group>"; };
 		931644E728B8396B001E5243 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		931644E928B83983001E5243 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
 		9370ABC828BCA49400B1867B /* PostsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCell.swift; sourceTree = "<group>"; };
@@ -53,6 +64,8 @@
 		9370ABD428BCB7AD00B1867B /* NotifyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCell.swift; sourceTree = "<group>"; };
 		9370ABD628BCB92400B1867B /* NotifyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyAPI.swift; sourceTree = "<group>"; };
 		9370ABD928BCC10D00B1867B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		9379692C28BCCC1000FB707F /* LoginAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
+		9379692E28BCD36500FB707F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		93F41EAC28BB3F9B000172C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
@@ -65,6 +78,8 @@
 		93FA241628B797B8000C8D64 /* MenToMenUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		93FA242328B797E8000C8D64 /* PostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
 		93FA242528B7998A000C8D64 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		BF86775406EC3A7ED7310FA0 /* Pods-MenToMenTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMenTests.debug.xcconfig"; path = "Target Support Files/Pods-MenToMenTests/Pods-MenToMenTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F178385FA58CF0E6B432A833 /* Pods-MenToMen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenToMen.debug.xcconfig"; path = "Target Support Files/Pods-MenToMen/Pods-MenToMen.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72B1A13A946699633F541E11 /* Pods_MenToMen.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB51355B68AD0B15E2CB0C76 /* Pods_MenToMenTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261555045FA4B04F9B80C0E4 /* Pods_MenToMen_MenToMenUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				9370ABD928BCC10D00B1867B /* LoginView.swift */,
+				9379692C28BCCC1000FB707F /* LoginAPI.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -145,6 +164,8 @@
 				93FA240928B797B8000C8D64 /* MenToMenTests */,
 				93FA241328B797B8000C8D64 /* MenToMenUITests */,
 				93FA23F728B797B7000C8D64 /* Products */,
+				AF52B1F81675D66CA6233400 /* Pods */,
+				DB2BC28C21433468C43DFE14 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -161,6 +182,7 @@
 		93FA23F828B797B7000C8D64 /* MenToMen */ = {
 			isa = PBXGroup;
 			children = (
+				9379692E28BCD36500FB707F /* Info.plist */,
 				93F41EAC28BB3F9B000172C9 /* Assets.xcassets */,
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
 				9370ABD828BCC10200B1867B /* LoginView */,
@@ -199,6 +221,29 @@
 			path = MenToMenUITests;
 			sourceTree = "<group>";
 		};
+		AF52B1F81675D66CA6233400 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F178385FA58CF0E6B432A833 /* Pods-MenToMen.debug.xcconfig */,
+				8F3238D524AEC7B49FDB89D6 /* Pods-MenToMen.release.xcconfig */,
+				3E022BDA6A0B1209EECDF0C2 /* Pods-MenToMen-MenToMenUITests.debug.xcconfig */,
+				50A76AAE55D492BD2F1F6122 /* Pods-MenToMen-MenToMenUITests.release.xcconfig */,
+				BF86775406EC3A7ED7310FA0 /* Pods-MenToMenTests.debug.xcconfig */,
+				096D47650F7CE2242F25D23E /* Pods-MenToMenTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		DB2BC28C21433468C43DFE14 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				71CB3449538EC4918FD652EF /* Pods_MenToMen.framework */,
+				0ED80D752B10D5A16DD9E91D /* Pods_MenToMen_MenToMenUITests.framework */,
+				073923FD5E1A713D29FAD74A /* Pods_MenToMenTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -206,9 +251,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93FA241A28B797B8000C8D64 /* Build configuration list for PBXNativeTarget "MenToMen" */;
 			buildPhases = (
+				6647D140791F9B5D21A51473 /* [CP] Check Pods Manifest.lock */,
 				93FA23F228B797B7000C8D64 /* Sources */,
 				93FA23F328B797B7000C8D64 /* Frameworks */,
 				93FA23F428B797B7000C8D64 /* Resources */,
+				3E61CB3935D496B947F21656 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -223,6 +270,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93FA241D28B797B8000C8D64 /* Build configuration list for PBXNativeTarget "MenToMenTests" */;
 			buildPhases = (
+				66C396B82D3F132C279F64C4 /* [CP] Check Pods Manifest.lock */,
 				93FA240228B797B8000C8D64 /* Sources */,
 				93FA240328B797B8000C8D64 /* Frameworks */,
 				93FA240428B797B8000C8D64 /* Resources */,
@@ -241,9 +289,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93FA242028B797B8000C8D64 /* Build configuration list for PBXNativeTarget "MenToMenUITests" */;
 			buildPhases = (
+				DE1ED71D4A32D86E7E82D97C /* [CP] Check Pods Manifest.lock */,
 				93FA240C28B797B8000C8D64 /* Sources */,
 				93FA240D28B797B8000C8D64 /* Frameworks */,
 				93FA240E28B797B8000C8D64 /* Resources */,
+				2FE5F614D270DA0863EF3109 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -324,6 +374,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2FE5F614D270DA0863EF3109 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MenToMen-MenToMenUITests/Pods-MenToMen-MenToMenUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MenToMen-MenToMenUITests/Pods-MenToMen-MenToMenUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MenToMen-MenToMenUITests/Pods-MenToMen-MenToMenUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3E61CB3935D496B947F21656 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MenToMen/Pods-MenToMen-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MenToMen/Pods-MenToMen-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MenToMen/Pods-MenToMen-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6647D140791F9B5D21A51473 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MenToMen-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		66C396B82D3F132C279F64C4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MenToMenTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DE1ED71D4A32D86E7E82D97C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MenToMen-MenToMenUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		93FA23F228B797B7000C8D64 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -335,6 +488,7 @@
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
 				9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */,
+				9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */,
 				9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */,
 				9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */,
 				9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */,
@@ -493,6 +647,7 @@
 		};
 		93FA241B28B797B8000C8D64 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F178385FA58CF0E6B432A833 /* Pods-MenToMen.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -502,6 +657,7 @@
 				DEVELOPMENT_TEAM = 56V747V83R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MenToMen/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -522,6 +678,7 @@
 		};
 		93FA241C28B797B8000C8D64 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F3238D524AEC7B49FDB89D6 /* Pods-MenToMen.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -531,6 +688,7 @@
 				DEVELOPMENT_TEAM = 56V747V83R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MenToMen/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -551,6 +709,7 @@
 		};
 		93FA241E28B797B8000C8D64 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF86775406EC3A7ED7310FA0 /* Pods-MenToMenTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -571,6 +730,7 @@
 		};
 		93FA241F28B797B8000C8D64 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 096D47650F7CE2242F25D23E /* Pods-MenToMenTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -591,6 +751,7 @@
 		};
 		93FA242128B797B8000C8D64 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E022BDA6A0B1209EECDF0C2 /* Pods-MenToMen-MenToMenUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -609,6 +770,7 @@
 		};
 		93FA242228B797B8000C8D64 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50A76AAE55D492BD2F1F6122 /* Pods-MenToMen-MenToMenUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

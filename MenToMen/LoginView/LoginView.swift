@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CryptoKit
+import Alamofire
 
 struct ShakeEffect: GeometryEffect {
     var travelDistance: CGFloat = 6
@@ -39,10 +41,11 @@ struct AndroidTextField: View {
 }
 
 struct LoginView: View {
+    let decoder: JSONDecoder = JSONDecoder()
     @State var loginId: String = ""
     @State var loginPw: String = ""
-    @State var invalid = 0
-    @State var success = false
+    @State var invalid: Int = 0
+    @State var success: Bool = false
     var body: some View {
         VStack {
             Spacer()
@@ -60,14 +63,56 @@ struct LoginView: View {
             }
             .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
             Spacer()
-            Text("로그인")
-                .font(.title3)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .background(Color.accentColor)
-                .foregroundColor(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 24))
+            Button(action: {
+                AF.request("http://dauth.b1nd.com/api/auth/login",
+                           method: .post,
+                           parameters: ["id": loginId, "pw":
+                                            SHA512.hash(data: loginPw.data(using: .utf8)!)
+                                                .compactMap{ String(format: "%02x", $0) }.joined(),
+                                        "clientId": "39bc523458c14eb987b7b16175426a31a9f105b7f5814f1f9eca7d454bd23c73",
+                                        "redirectUrl": "http://localhost:3000/callback",
+                                        "state": "null"
+                                       ],
+                           encoding: JSONEncoding.default,
+                           headers: ["Content-Type": "application/json"]
+                )
+                        .responseData { response in
+                            switch response.result {
+                            case .success:
+                                if (response.response?.statusCode)! == 200 {
+                                    guard let value = response.value else { return }
+                                    guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
+                                    let code = result.data.location.components(separatedBy: ["=", "&"])[1]
+                                    AF.request("\(api)/auth/code",
+                                               method: .post,
+                                               parameters: ["code": code],
+                                               encoding: JSONEncoding.default,
+                                               headers: ["Content-Type": "application/json"]
+                                    )
+                                    .responseData { response in
+                                        print(String(decoding: response.data!, as: UTF8.self))
+                                    }
+                                    //UserDefaults.standard.set(code, forKey: "token")
+                                    success.toggle()
+                                } else {
+                                    withAnimation(.default) {
+                                    self.invalid += 1
+                                }
+                            }
+                            case .failure(let error):
+                                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                            }
+                    }
+            }) {
+                Text("로그인")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 60)
+                    .background(Color.accentColor)
+                    .foregroundColor(Color(.systemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
         }
         .padding(20)
     }
