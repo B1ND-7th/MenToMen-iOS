@@ -15,6 +15,7 @@
 		9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD228BCB46400B1867B /* NotifyView.swift */; };
 		9370ABD528BCB7AD00B1867B /* NotifyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD428BCB7AD00B1867B /* NotifyCell.swift */; };
 		9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD628BCB92400B1867B /* NotifyAPI.swift */; };
+		9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD928BCC10D00B1867B /* LoginView.swift */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
@@ -51,6 +52,7 @@
 		9370ABD228BCB46400B1867B /* NotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyView.swift; sourceTree = "<group>"; };
 		9370ABD428BCB7AD00B1867B /* NotifyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCell.swift; sourceTree = "<group>"; };
 		9370ABD628BCB92400B1867B /* NotifyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyAPI.swift; sourceTree = "<group>"; };
+		9370ABD928BCC10D00B1867B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		93F41EAC28BB3F9B000172C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
@@ -90,17 +92,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9370ABC728BCA48100B1867B /* PostsView */ = {
-			isa = PBXGroup;
-			children = (
-				9370ABD128BCB44400B1867B /* NotifyView */,
-				93FA242328B797E8000C8D64 /* PostsView.swift */,
-				9370ABC828BCA49400B1867B /* PostsCell.swift */,
-				9370ABCA28BCA4C100B1867B /* PostsAPI.swift */,
-			);
-			path = PostsView;
-			sourceTree = "<group>";
-		};
 		9370ABCC28BCA4E900B1867B /* WriteView */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +116,25 @@
 				9370ABD628BCB92400B1867B /* NotifyAPI.swift */,
 			);
 			path = NotifyView;
+			sourceTree = "<group>";
+		};
+		9370ABD828BCC10200B1867B /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				9370ABD928BCC10D00B1867B /* LoginView.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		9370ABDB28BCC23C00B1867B /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				93FA242328B797E8000C8D64 /* PostsView.swift */,
+				9370ABC828BCA49400B1867B /* PostsCell.swift */,
+				9370ABCA28BCA4C100B1867B /* PostsAPI.swift */,
+				9370ABD128BCB44400B1867B /* NotifyView */,
+			);
+			path = MainView;
 			sourceTree = "<group>";
 		};
 		93FA23ED28B797B7000C8D64 = {
@@ -153,9 +163,10 @@
 			children = (
 				93F41EAC28BB3F9B000172C9 /* Assets.xcassets */,
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
+				9370ABD828BCC10200B1867B /* LoginView */,
 				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
+				9370ABDB28BCC23C00B1867B /* MainView */,
 				9370ABCD28BCB38300B1867B /* PostView */,
-				9370ABC728BCA48100B1867B /* PostsView */,
 				9370ABCC28BCA4E900B1867B /* WriteView */,
 				931644E728B8396B001E5243 /* ProfileView.swift */,
 				93FA23FF28B797B8000C8D64 /* Preview Content */,
@@ -324,6 +335,7 @@
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
 				9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */,
+				9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */,
 				9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */,
 				9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */,
 				9370ABC928BCA49400B1867B /* PostsCell.swift in Sources */,
