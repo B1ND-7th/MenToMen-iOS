@@ -5,14 +5,25 @@
 //  Created by Mercen on 2022/08/29.
 //
 
-struct LoginData: Decodable {
+struct CodeData: Decodable {
     let status: Int
     let message: String
-    let data: datas
+    let data: CodeDatas
 }
 
-struct datas: Decodable {
+struct CodeDatas: Decodable {
     let name: String
     let profileImage: String
     let location: String
+}
+
+struct LoginData: Decodable {
+    let status: Int
+    let message: String
+    let data: LoginDatas
+}
+
+struct LoginDatas: Decodable {
+    let accessToken: String
+    let refreshToken: String
 }
