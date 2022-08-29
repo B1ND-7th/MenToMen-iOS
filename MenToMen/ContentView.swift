@@ -17,20 +17,6 @@ struct RoundedCorner: Shape {
     }
 }
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
-    }
-}
-
-extension View {
-    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
-        if hidden {
-            if !remove { self.hidden() }
-        } else { self }
-    }
-}
-
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
@@ -61,6 +47,7 @@ struct ContentView: View {
                 }
             }
         }
+        .navigationBarHidden(true)
     }
 }
 
