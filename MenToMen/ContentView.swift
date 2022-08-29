@@ -61,7 +61,6 @@ struct ContentView: View {
                 }
             }
         }
-        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemBackground))
     }
 }
 

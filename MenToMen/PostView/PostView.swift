@@ -2,7 +2,7 @@
 //  PostView.swift
 //  MenToMen
 //
-//  Created by Mercen on 2022/08/27.
+//  Created by Mercen on 2022/08/29.
 //
 
 import SwiftUI

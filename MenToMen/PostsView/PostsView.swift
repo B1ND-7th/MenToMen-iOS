@@ -7,43 +7,6 @@
 
 import SwiftUI
 
-struct PostTypes {
-    let title: String
-    let name: String
-    let date: String
-    let time: String
-    let type: String
-}
-
-struct PostsCellView: View {
-    let data: PostTypes
-    var body: some View {
-        ZStack(alignment: .leading) {
-            VStack {
-                HStack {
-                    Image("\(data.type)BM")
-                        .resizable()
-                        .frame(width: 27, height: 39)
-                        .padding(.leading, 15)
-                    Spacer()
-                    Text("\(data.name) · \(data.date)")
-                        .font(.caption)
-                        .padding(.trailing, 10)
-                        .foregroundColor(.gray)
-                }
-                Spacer()
-            }
-            VStack {
-                Text(data.title)
-                Spacer()
-            }
-            .padding(.top, 45)
-            .padding([.leading, .trailing], 15)
-            .padding(.bottom, 5)
-        }
-    }
-}
-
 struct PostsView: View {
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
@@ -126,7 +89,7 @@ struct PostsView: View {
                             .foregroundColor(Color(.label))
                     }
                     .frame(width: 25, height: 25)
-                    Button(action: { }) {
+                    NavigationLink(destination: NotifyView()) {
                         ZStack {
                             Circle()
                                 .fill(.red)
@@ -178,7 +141,7 @@ struct PostsView: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                     ForEach(0..<postTypeArray.count, id: \.self) { idx in
                         ZStack {
-                            PostsCellView(data: postTypeArray[idx])
+                            PostsCell(data: postTypeArray[idx])
                             NavigationLink(destination: PostView()) { }
                                 .buttonStyle(PlainButtonStyle()).frame(width:0).opacity(0)
                         }
