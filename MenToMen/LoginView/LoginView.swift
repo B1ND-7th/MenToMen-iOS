@@ -105,6 +105,7 @@ struct LoginView: View {
                                         guard let value = response.value else { return }
                                         guard let result = try? decoder.decode(CodeData.self, from: value) else { return }
                                         let code = result.data.location.components(separatedBy: ["=", "&"])[1]
+                                        print(code)
                                         AF.request("\(api)/auth/code",
                                                    method: .post,
                                                    parameters: ["code": code],

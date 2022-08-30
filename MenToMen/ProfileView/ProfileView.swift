@@ -37,7 +37,7 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        VStack {
+        HStack {
             AsyncImage(url: URL(string: profileImage)) { image in
                 image
                     .resizable()
@@ -50,12 +50,19 @@ struct ProfileView: View {
                 }
             }
                 .frame(width: 80, height: 80)
-                .clipShape(RoundedRectangle(cornerRadius: 7))
-            Text(name)
-            Text(info)
-            Text(email)
+                .clipShape(Circle())
+            VStack(alignment: .leading) {
+                Text(info)
+                Text("\(name)님, 환영합니다!")
+                    .fontWeight(.bold)
+                    .font(.title2)
+                Text(email)
+                    .fontWeight(.light)
+            }
+            
             Spacer()
         }
+        .padding(20)
         .onAppear { load() }
         .refreshable { load() }
     }
