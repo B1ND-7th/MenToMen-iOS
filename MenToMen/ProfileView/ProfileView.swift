@@ -10,8 +10,9 @@ import Alamofire
 
 struct ProfileView: View {
     @State var name: String = ""
-    @State var profileImage: String = ""
+    @State var profileImage: String = "null"
     @State var info: String = ""
+    @State var email: String = ""
     let decoder: JSONDecoder = JSONDecoder()
     func load() {
         AF.request("\(api)/user/my",
@@ -29,6 +30,7 @@ struct ProfileView: View {
                 self.name = data.name
                 self.profileImage = data.profileImage ?? ""
                 self.info = "\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번"
+                self.email = data.email
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
@@ -51,6 +53,7 @@ struct ProfileView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 7))
             Text(name)
             Text(info)
+            Text(email)
             Spacer()
         }
         .onAppear { load() }
