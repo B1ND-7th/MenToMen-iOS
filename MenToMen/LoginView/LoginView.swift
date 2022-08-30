@@ -83,6 +83,7 @@ struct LoginView: View {
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 Spacer()
+                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     AF.request("http://dauth.b1nd.com/api/auth/login",
                                method: .post,
@@ -97,6 +98,7 @@ struct LoginView: View {
                                headers: ["Content-Type": "application/json"]
                     )
                             .responseData { response in
+                                print(String(decoding: response.data!, as: UTF8.self))
                                 switch response.result {
                                 case .success:
                                     if (response.response?.statusCode)! == 200 {
@@ -115,8 +117,7 @@ struct LoginView: View {
                                                 if (response.response?.statusCode)! == 200 {
                                                     guard let value = response.value else { return }
                                                     guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
-                                                    UserDefaults.standard.set(result.data.accessToken, forKey: "accessToken")
-                                                    UserDefaults.standard.set(result.data.accessToken, forKey: "refreshToken")
+                                                    try? saveToken(result.data.accessToken)
                                                     success.toggle()
                                                 } else {
                                                         withAnimation(.default) {
@@ -141,6 +142,7 @@ struct LoginView: View {
                 }) {
                     AndroidButton(text: "로그인", color: .accentColor)
                 }
+                .disabled(loginId.isEmpty || loginPw.isEmpty)
                 VStack {
                     Text("DEVELOPER MENU")
                         .foregroundColor(.gray)
@@ -152,6 +154,8 @@ struct LoginView: View {
                 .isHidden(!devmenu, remove: true)
             }
             .padding(20)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
         }
     }
 }

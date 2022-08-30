@@ -7,8 +7,9 @@
 
 import SwiftUI
 import Alamofire
+import KeychainAccess
 
-public let api = "http://10.80.162.9:8080"
+public let api = "http://10.80.161.252:8080"
 
 @main
 struct MenToMenApp: App {
@@ -17,6 +18,17 @@ struct MenToMenApp: App {
             LoginView()
         }
     }
+}
+
+func saveToken(_ token: String) throws {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    try keychain.set(token, key: "token")
+}
+
+func getToken() throws -> String {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    let token = try? keychain.getString("token")!
+    return token!
 }
 
 extension View {

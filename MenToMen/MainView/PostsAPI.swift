@@ -11,4 +11,5 @@ struct PostTypes {
     let date: String
     let time: String
     let type: String
+    let thumb: String
 }
