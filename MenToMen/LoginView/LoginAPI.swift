@@ -13,7 +13,7 @@ struct CodeData: Decodable {
 
 struct CodeDatas: Decodable {
     let name: String
-    let profileImage: String
+    let profileImage: String?
     let location: String
 }
 

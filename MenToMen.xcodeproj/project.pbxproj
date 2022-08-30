@@ -19,6 +19,7 @@
 		9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD628BCB92400B1867B /* NotifyAPI.swift */; };
 		9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD928BCC10D00B1867B /* LoginView.swift */; };
 		9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9379692C28BCCC1000FB707F /* LoginAPI.swift */; };
+		93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B5842728BE0C1A00A50787 /* ProfileAPI.swift */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
@@ -66,6 +67,7 @@
 		9370ABD928BCC10D00B1867B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		9379692C28BCCC1000FB707F /* LoginAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
 		9379692E28BCD36500FB707F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		93B5842728BE0C1A00A50787 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
 		93F41EAC28BB3F9B000172C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
@@ -156,6 +158,15 @@
 			path = MainView;
 			sourceTree = "<group>";
 		};
+		93B5842428BE0BFA00A50787 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				931644E728B8396B001E5243 /* ProfileView.swift */,
+				93B5842728BE0C1A00A50787 /* ProfileAPI.swift */,
+			);
+			path = ProfileView;
+			sourceTree = "<group>";
+		};
 		93FA23ED28B797B7000C8D64 = {
 			isa = PBXGroup;
 			children = (
@@ -190,7 +201,7 @@
 				9370ABDB28BCC23C00B1867B /* MainView */,
 				9370ABCD28BCB38300B1867B /* PostView */,
 				9370ABCC28BCA4E900B1867B /* WriteView */,
-				931644E728B8396B001E5243 /* ProfileView.swift */,
+				93B5842428BE0BFA00A50787 /* ProfileView */,
 				93FA23FF28B797B8000C8D64 /* Preview Content */,
 			);
 			path = MenToMen;
@@ -494,6 +505,7 @@
 				9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */,
 				9370ABC928BCA49400B1867B /* PostsCell.swift in Sources */,
 				9370ABD528BCB7AD00B1867B /* NotifyCell.swift in Sources */,
+				93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */,
 				93FA242428B797E8000C8D64 /* PostsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

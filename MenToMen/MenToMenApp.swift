@@ -9,7 +9,7 @@ import SwiftUI
 import Alamofire
 import KeychainAccess
 
-public let api = "http://10.80.162.9:8080"
+public let api = "http://10.80.161.252:8080"
 
 @main
 struct MenToMenApp: App {

@@ -83,6 +83,7 @@ struct LoginView: View {
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 Spacer()
+                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     AF.request("http://dauth.b1nd.com/api/auth/login",
                                method: .post,
@@ -97,6 +98,7 @@ struct LoginView: View {
                                headers: ["Content-Type": "application/json"]
                     )
                             .responseData { response in
+                                print(String(decoding: response.data!, as: UTF8.self))
                                 switch response.result {
                                 case .success:
                                     if (response.response?.statusCode)! == 200 {
