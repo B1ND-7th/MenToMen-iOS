@@ -26,7 +26,22 @@ struct PostsCell: View {
                 Spacer()
             }
             VStack {
-                Text(data.title)
+                HStack {
+                    Text(data.title)
+                    Spacer()
+                    AsyncImage(url: URL(string: data.thumb)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 40, height: 40)
+                            .clipShape(RoundedRectangle(cornerRadius: 7))
+                    } placeholder: {
+                        Rectangle()
+                            .opacity(0)
+                            .frame(width: 40, height: 40)
+                    }
+                        .isHidden(data.thumb.isEmpty, remove: true)
+                }
                 Spacer()
             }
             .padding(.top, 45)

@@ -8,6 +8,7 @@
 import SwiftUI
 import CryptoKit
 import Alamofire
+import KeychainAccess
 
 struct ShakeEffect: GeometryEffect {
     var travelDistance: CGFloat = 6
@@ -55,6 +56,7 @@ struct AndroidTextField: View {
 }
 
 struct LoginView: View {
+    fileprivate let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
     let decoder: JSONDecoder = JSONDecoder()
     @State var invalidMessage: String = "ID 또는 비밀번호가 틀렸습니다"
     @State var loginId: String = ""
@@ -116,7 +118,7 @@ struct LoginView: View {
                                                     guard let value = response.value else { return }
                                                     guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
                                                     UserDefaults.standard.set(result.data.accessToken, forKey: "accessToken")
-                                                    UserDefaults.standard.set(result.data.accessToken, forKey: "refreshToken")
+                                                    UserDefaults.standard.set(result.data.refreshToken, forKey: "refreshToken")
                                                     success.toggle()
                                                 } else {
                                                         withAnimation(.default) {
@@ -141,6 +143,7 @@ struct LoginView: View {
                 }) {
                     AndroidButton(text: "로그인", color: .accentColor)
                 }
+                .disabled(loginId.isEmpty || loginPw.isEmpty)
                 VStack {
                     Text("DEVELOPER MENU")
                         .foregroundColor(.gray)
@@ -152,6 +155,8 @@ struct LoginView: View {
                 .isHidden(!devmenu, remove: true)
             }
             .padding(20)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
         }
     }
 }
