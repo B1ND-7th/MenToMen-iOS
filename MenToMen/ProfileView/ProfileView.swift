@@ -18,9 +18,10 @@ struct ProfileView: View {
         AF.request("\(api)/user/my",
                    method: .get,
                    encoding: URLEncoding.default,
-                   headers: ["Content-Type": "application/json",
-                             "Authorization": "Bearer \(try! getToken("accessToken"))"]
-        )
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 10 }
+        .validate()
         .responseData { response in
             switch response.result {
             case .success:

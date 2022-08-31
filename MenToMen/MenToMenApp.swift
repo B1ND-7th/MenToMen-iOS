@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Alamofire
 import KeychainAccess
 
 public let api = "http://10.80.161.173:8080"
@@ -22,6 +21,11 @@ func getToken(_ key: String) throws -> String {
     return token!
 }
 
+func removeToken(_ key: String) throws {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    try keychain.remove(key)
+}
+
 @main
 struct MenToMenApp: App {
     var body: some Scene {
@@ -31,10 +35,6 @@ struct MenToMenApp: App {
             } else { ContentView() }
         }
     }
-}
-
-func checkResponse(_ response: DataResponse<Data, AFError>) {
-    print(String(decoding: response.data!, as: UTF8.self))
 }
 
 extension View {
