@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PostsView: View {
+    @Binding var navbarHidden: Bool
+    @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     let postTypeArray: [PostTypes] = [
@@ -152,7 +154,20 @@ struct PostsView: View {
                     ForEach(0..<postTypeArray.count, id: \.self) { idx in
                         ZStack {
                             PostsCell(data: postTypeArray[idx])
-                            NavigationLink(destination: PostView()) { }
+                            NavigationLink(destination: PostView()
+                                .onAppear {
+                                    navbarUpdown = true
+                                    withAnimation(.default) {
+                                        navbarHidden = true
+                                    }
+                                }
+                                .onDisappear {
+                                    withAnimation(.default) {
+                                        navbarHidden = false
+                                        navbarUpdown = false
+                                    }
+                            }
+                            ) { }
                                 .buttonStyle(PlainButtonStyle()).frame(width:0).opacity(0)
                         }
                         .buttonStyle(PlainButtonStyle())

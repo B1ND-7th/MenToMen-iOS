@@ -20,6 +20,8 @@ struct RoundedCorner: Shape {
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
+    @State var navbarHidden: Bool = false
+    @State var navbarUpdown: Bool = false
     var body: some View {
         ZStack {
             Rectangle()
@@ -27,9 +29,10 @@ struct ContentView: View {
                 .ignoresSafeArea()
             VStack {
                 switch(selectedView) {
-                    case 0: PostsView()
-                    case 1: WriteView()
-                    default: ProfileView()
+                case 0: PostsView(navbarHidden: $navbarHidden,
+                                  navbarUpdown: $navbarUpdown)
+                case 1: WriteView()
+                default: ProfileView()
                 }
                 HStack {
                     Spacer()
@@ -38,6 +41,7 @@ struct ContentView: View {
                             VStack(spacing: 2) {
                                 Image(["home", "add-circle", "user"][idx])
                                     .resizable()
+                                
                                     .renderingMode(.template)
                                     .frame(width: 25, height: 25)
                                 Text(["홈", "등록", "마이"][idx])
@@ -50,8 +54,10 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
-               // .isHidden(true, remove: true)
+                .opacity(navbarHidden ? 0 : 1)
+                .isHidden(navbarUpdown, remove: true)
             }
+            .background(Color(.secondarySystemGroupedBackground))
             .navigationBarHidden(true)
         }
     }
