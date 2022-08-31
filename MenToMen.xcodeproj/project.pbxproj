@@ -152,6 +152,7 @@
 		9370ABDB28BCC23C00B1867B /* MainView */ = {
 			isa = PBXGroup;
 			children = (
+				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
 				93FA242328B797E8000C8D64 /* PostsView.swift */,
 				9370ABC828BCA49400B1867B /* PostsCell.swift */,
 				9370ABCA28BCA4C100B1867B /* PostsAPI.swift */,
@@ -200,7 +201,6 @@
 				93B5842928BE2A4900A50787 /* Launch Screen.storyboard */,
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
 				9370ABD828BCC10200B1867B /* LoginView */,
-				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
 				9370ABDB28BCC23C00B1867B /* MainView */,
 				9370ABCD28BCB38300B1867B /* PostView */,
 				9370ABCC28BCA4E900B1867B /* WriteView */,

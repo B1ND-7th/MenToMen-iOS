@@ -9,7 +9,7 @@ import SwiftUI
 import Alamofire
 import KeychainAccess
 
-public let api = "http://10.80.161.252:8080"
+public let api = "http://10.80.161.173:8080"
 
 @main
 struct MenToMenApp: App {
@@ -18,6 +18,10 @@ struct MenToMenApp: App {
             LoginView()
         }
     }
+}
+
+func checkResponse(_ response: DataResponse<Data, AFError>) {
+    print(String(decoding: response.data!, as: UTF8.self))
 }
 
 func saveToken(_ token: String) throws {
