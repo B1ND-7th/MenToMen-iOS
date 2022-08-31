@@ -11,19 +11,6 @@ import KeychainAccess
 
 public let api = "http://10.80.161.173:8080"
 
-@main
-struct MenToMenApp: App {
-    var body: some Scene {
-        WindowGroup {
-            LoginView()
-        }
-    }
-}
-
-func checkResponse(_ response: DataResponse<Data, AFError>) {
-    print(String(decoding: response.data!, as: UTF8.self))
-}
-
 func saveToken(_ token: String) throws {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
     try keychain.set(token, key: "token")
@@ -33,6 +20,21 @@ func getToken() throws -> String {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
     let token = try? keychain.getString("token")!
     return token!
+}
+
+@main
+struct MenToMenApp: App {
+    var body: some Scene {
+        WindowGroup {
+            if (try? getToken())!.isEmpty {
+                LoginView()
+            } else { ContentView() }
+        }
+    }
+}
+
+func checkResponse(_ response: DataResponse<Data, AFError>) {
+    print(String(decoding: response.data!, as: UTF8.self))
 }
 
 extension View {

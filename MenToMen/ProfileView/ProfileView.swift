@@ -37,32 +37,35 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        HStack {
-            AsyncImage(url: URL(string: profileImage)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                switch profileImage.count {
-                case 0: Image("profile")
+        List {
+            HStack {
+                AsyncImage(url: URL(string: profileImage)) { image in
+                    image
                         .resizable()
-                default: ProgressView()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    switch profileImage.count {
+                    case 0: Image("profile")
+                            .resizable()
+                    default: ProgressView()
+                    }
                 }
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                VStack(alignment: .leading) {
+                    Text(info)
+                    Text("\(name)님, 환영합니다!")
+                        .fontWeight(.bold)
+                        .font(.title2)
+                    Text(email)
+                        .fontWeight(.light)
+                }
+                Spacer()
             }
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
-            VStack(alignment: .leading) {
-                Text(info)
-                Text("\(name)님, 환영합니다!")
-                    .fontWeight(.bold)
-                    .font(.title2)
-                Text(email)
-                    .fontWeight(.light)
-            }
-            
-            Spacer()
+            .padding(.trailing, 20)
         }
-        .padding(20)
+        .listStyle(PlainListStyle())
+        .background(Color("M2MBackground"))
         .onAppear { load() }
         .refreshable { load() }
     }
