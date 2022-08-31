@@ -17,11 +17,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="M2MLogo2" translatesAutoresizingMaskIntoConstraints="NO" id="36b-Of-QS4">
-                                <rect key="frame" x="45" y="272" width="300" height="300"/>
+                                <rect key="frame" x="95" y="322" width="200" height="200"/>
                                 <color key="tintColor" name="AccentColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="300" id="RRB-Ic-jI3"/>
-                                    <constraint firstAttribute="width" constant="300" id="tFO-BS-m9Q"/>
+                                    <constraint firstAttribute="height" constant="200" id="RRB-Ic-jI3"/>
+                                    <constraint firstAttribute="width" constant="200" id="tFO-BS-m9Q"/>
                                 </constraints>
                             </imageView>
                         </subviews>

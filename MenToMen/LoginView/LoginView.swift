@@ -137,7 +137,8 @@ struct LoginView: View {
                                         case .success:
                                             guard let value = response.value else { return }
                                             guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
-                                            try? saveToken(result.data.accessToken)
+                                            try? saveToken(result.data.accessToken, "accessToken")
+                                            try? saveToken(result.data.refreshToken, "refreshToken")
                                             success.toggle()
                                         case .failure:
                                             toggleFailure(0)

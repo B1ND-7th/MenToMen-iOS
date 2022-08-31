@@ -19,7 +19,7 @@ struct ProfileView: View {
                    method: .get,
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json",
-                             "Authorization": "Bearer \(try! getToken())"]
+                             "Authorization": "Bearer \(try! getToken("accessToken"))"]
         )
         .responseData { response in
             switch response.result {
