@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PostsView: View {
+    @Binding var navbarHidden: Bool
+    @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     let postTypeArray: [PostTypes] = [
@@ -84,7 +86,7 @@ struct PostsView: View {
     ]
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 HStack(spacing: 15) {
                     Image("M2MLogo")
                         .resizable()
@@ -114,8 +116,9 @@ struct PostsView: View {
                     .frame(width: 25, height: 25)
                 }
                 .padding([.leading, .trailing], 20)
-                .padding(.bottom, 6)
+                .padding(.bottom, 16)
                 .padding(.top, 12)
+                .background(Color(.secondarySystemGroupedBackground))
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
@@ -147,12 +150,24 @@ struct PostsView: View {
                     .listRowSeparator(.hidden)
                     .frame(maxWidth: .infinity)
                     .listRowInsets(EdgeInsets())
-                    .background(Color(.systemGroupedBackground))
-                    .listRowBackground(Color(.systemGroupedBackground))
+                    .background(Color("M2MBackground"))
                     ForEach(0..<postTypeArray.count, id: \.self) { idx in
                         ZStack {
                             PostsCell(data: postTypeArray[idx])
-                            NavigationLink(destination: PostView()) { }
+                            NavigationLink(destination: PostView()
+                                .onAppear {
+                                    navbarUpdown = true
+                                    withAnimation(.default) {
+                                        navbarHidden = true
+                                    }
+                                }
+                                .onDisappear {
+                                    withAnimation(.default) {
+                                        navbarHidden = false
+                                        navbarUpdown = false
+                                    }
+                            }
+                            ) { }
                                 .buttonStyle(PlainButtonStyle()).frame(width:0).opacity(0)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -163,12 +178,15 @@ struct PostsView: View {
                         .cornerRadius(15)
                         .padding([.bottom, .leading, .trailing], 20)
                         .listRowInsets(EdgeInsets())
-                        .background(Color(.systemGroupedBackground))
+                        .background(Color("M2MBackground"))
                         .isHidden(postTypeArray[idx].type != TypeArray[selectedFilter] && selectedFilter != 5, remove: true)
                     }
                 }
                 .listStyle(PlainListStyle())
                 .background(Color("M2MBackground"))
+                .refreshable {
+                    
+                }
             }
             .navigationBarHidden(true)
             .navigationTitle("")

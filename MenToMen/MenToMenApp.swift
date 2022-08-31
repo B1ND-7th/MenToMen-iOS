@@ -6,29 +6,35 @@
 //
 
 import SwiftUI
-import Alamofire
 import KeychainAccess
 
-public let api = "http://10.80.161.252:8080"
+public let api = "http://10.80.161.173:8080"
+
+func saveToken(_ token: String, _ key: String) throws {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    try keychain.set(token, key: key)
+}
+
+func getToken(_ key: String) throws -> String {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    let token = try? keychain.getString(key) ?? ""
+    return token!
+}
+
+func removeToken(_ key: String) throws {
+    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
+    try keychain.remove(key)
+}
 
 @main
 struct MenToMenApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            if (try? getToken("accessToken"))!.isEmpty {
+                LoginView()
+            } else { ContentView() }
         }
     }
-}
-
-func saveToken(_ token: String) throws {
-    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
-    try keychain.set(token, key: "token")
-}
-
-func getToken() throws -> String {
-    let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
-    let token = try? keychain.getString("token")!
-    return token!
 }
 
 extension View {
@@ -42,38 +48,5 @@ extension View {
         if hidden {
             if !remove { self.hidden() }
         } else { self }
-    }
-}
-
-final class MyRequestInterceptor: RequestInterceptor {
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        guard urlRequest.url?.absoluteString.hasPrefix(api) == true,
-              let accessToken = UserDefaults.standard.string(forKey: "accessToken") else {
-                  completion(.success(urlRequest))
-                  return
-              }
-
-        var urlRequest = urlRequest
-        urlRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
-        completion(.success(urlRequest))
-    }
-
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
-            completion(.doNotRetryWithError(error))
-            return
-        }
-
-        /* TODO
-        RefreshTokenAPI.refreshToken { result in
-            switch result {
-            case .success(let accessToken):
-                KeychainServiceImpl.shared.accessToken = accessToken
-                completion(.retry)
-            case .failure(let error):
-                completion(.doNotRetryWithError(error))
-            }
-        }
-        */
     }
 }

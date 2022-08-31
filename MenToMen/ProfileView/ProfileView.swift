@@ -18,9 +18,10 @@ struct ProfileView: View {
         AF.request("\(api)/user/my",
                    method: .get,
                    encoding: URLEncoding.default,
-                   headers: ["Content-Type": "application/json",
-                             "Authorization": "Bearer \(try! getToken())"]
-        )
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 10 }
+        .validate()
         .responseData { response in
             switch response.result {
             case .success:
@@ -37,25 +38,35 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        VStack {
-            AsyncImage(url: URL(string: profileImage)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                switch profileImage.count {
-                case 0: Image("profile")
+        List {
+            HStack {
+                AsyncImage(url: URL(string: profileImage)) { image in
+                    image
                         .resizable()
-                default: ProgressView()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    switch profileImage.count {
+                    case 0: Image("profile")
+                            .resizable()
+                    default: ProgressView()
+                    }
                 }
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                VStack(alignment: .leading) {
+                    Text(info)
+                    Text("\(name)님, 환영합니다!")
+                        .fontWeight(.bold)
+                        .font(.title2)
+                    Text(email)
+                        .fontWeight(.light)
+                }
+                Spacer()
             }
-                .frame(width: 80, height: 80)
-                .clipShape(RoundedRectangle(cornerRadius: 7))
-            Text(name)
-            Text(info)
-            Text(email)
-            Spacer()
+            .padding(.trailing, 20)
         }
+        .listStyle(PlainListStyle())
+        .background(Color("M2MBackground"))
         .onAppear { load() }
         .refreshable { load() }
     }

@@ -36,13 +36,22 @@ struct AndroidButton: View {
 struct AndroidTextField: View {
     @FocusState private var focus: Bool
     @Binding var text: String
+    @Binding var state: Bool
     let type: Int
+    func toggleReset() {
+        withAnimation(.default) {
+            state = false
+        }
+    }
     var body: some View {
         VStack {
             switch(type) {
             case 0: TextField("도담도담 ID", text: $text)
+                    .onChange(of: text) { _ in toggleReset() }
                     .focused($focus)
+                    .autocapitalization(.none)
             default: SecureField("비밀번호", text: $text)
+                    .onChange(of: text) { _ in toggleReset() }
                     .focused($focus)
             }
             Rectangle()
@@ -56,12 +65,22 @@ struct AndroidTextField: View {
 
 struct LoginView: View {
     let decoder: JSONDecoder = JSONDecoder()
-    @State var invalidMessage: String = "ID 또는 비밀번호가 틀렸습니다"
+    @State var invalidMessage: String = ""
     @State var loginId: String = ""
     @State var loginPw: String = ""
     @State var invalid: Int = 0
     @State var success: Bool = false
     @State var devmenu: Bool = false
+    @State var request: Bool = false
+    @State var tfstate: Bool = false
+    func toggleFailure(_ messageType: Int) {
+        invalidMessage = messageType == 1 ? "ID 또는 비밀번호가 틀렸습니다" : "서버에 연결할 수 없습니다"
+        withAnimation(.default) {
+            tfstate = true
+            request = false
+            invalid += 1
+        }
+    }
     var body: some View {
         NavigationView {
             VStack {
@@ -75,16 +94,17 @@ struct LoginView: View {
                         devmenu.toggle()
                     }
                 VStack(alignment: .leading) {
-                    AndroidTextField(text: $loginId, type: 0)
-                    AndroidTextField(text: $loginPw, type: 1)
+                    AndroidTextField(text: $loginId, state: $tfstate, type: 0)
+                    AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
                     Text(invalidMessage)
                         .foregroundColor(.accentColor)
-                        .isHidden(invalid == 0)
+                        .isHidden(invalid == 0 || !tfstate, remove: true)
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 Spacer()
                 NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
                 Button(action: {
+                    request = true
                     AF.request("http://dauth.b1nd.com/api/auth/login",
                                method: .post,
                                parameters: ["id": loginId, "pw":
@@ -96,53 +116,42 @@ struct LoginView: View {
                                            ],
                                encoding: JSONEncoding.default,
                                headers: ["Content-Type": "application/json"]
-                    )
+                    ) { $0.timeoutInterval = 10 }
+                            .validate()
                             .responseData { response in
-                                print(String(decoding: response.data!, as: UTF8.self))
+                                checkResponse(response)
                                 switch response.result {
                                 case .success:
-                                    if (response.response?.statusCode)! == 200 {
-                                        guard let value = response.value else { return }
-                                        guard let result = try? decoder.decode(CodeData.self, from: value) else { return }
-                                        let code = result.data.location.components(separatedBy: ["=", "&"])[1]
-                                        AF.request("\(api)/auth/code",
-                                                   method: .post,
-                                                   parameters: ["code": code],
-                                                   encoding: JSONEncoding.default,
-                                                   headers: ["Content-Type": "application/json"]
-                                        )
+                                    guard let value = response.value else { return }
+                                    guard let result = try? decoder.decode(CodeData.self, from: value) else { return }
+                                    let code = result.data.location.components(separatedBy: ["=", "&"])[1]
+                                    AF.request("\(api)/auth/code",
+                                               method: .post,
+                                               parameters: ["code": code],
+                                               encoding: JSONEncoding.default,
+                                               headers: ["Content-Type": "application/json"]
+                                    ) { $0.timeoutInterval = 10 }
+                                        .validate()
                                         .responseData { response in
-                                            switch response.result {
-                                            case .success:
-                                                if (response.response?.statusCode)! == 200 {
-                                                    guard let value = response.value else { return }
-                                                    guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
-                                                    try? saveToken(result.data.accessToken)
-                                                    success.toggle()
-                                                } else {
-                                                        withAnimation(.default) {
-                                                            self.invalidMessage = "통신 오류가 발생했습니다"
-                                                            self.invalid += 1
-                                                    }
-                                                }
-                                            case .failure(let error):
-                                                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
-                                            }
+                                        switch response.result {
+                                        case .success:
+                                            guard let value = response.value else { return }
+                                            guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
+                                            try? saveToken(result.data.accessToken, "accessToken")
+                                            try? saveToken(result.data.refreshToken, "refreshToken")
+                                            success.toggle()
+                                        case .failure:
+                                            toggleFailure(0)
                                         }
-                                    } else {
-                                        withAnimation(.default) {
-                                        self.invalidMessage = "ID 또는 비밀번호가 틀렸습니다"
-                                        self.invalid += 1
                                     }
-                                }
-                                case .failure(let error):
-                                    print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                                case .failure:
+                                    toggleFailure((response.response?.statusCode)! == 401 ? 1 : 0)
                                 }
                         }
                 }) {
                     AndroidButton(text: "로그인", color: .accentColor)
                 }
-                .disabled(loginId.isEmpty || loginPw.isEmpty)
+                .disabled(loginId.isEmpty || loginPw.isEmpty || request)
                 VStack {
                     Text("DEVELOPER MENU")
                         .foregroundColor(.gray)

@@ -14,7 +14,6 @@ struct ProfileData: Decodable {
 }
 
 struct ProfileDatas: Decodable {
-    let id: Int
     let name: String
     let email: String
     let profileImage: String?
