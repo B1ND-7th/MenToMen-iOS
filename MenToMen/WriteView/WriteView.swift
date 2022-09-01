@@ -22,12 +22,6 @@ struct WriteView: View {
                 }
                 TextEditor(text: $text)
                 Spacer()
-                Image(uiImage: selectedImage ?? UIImage(named: "null")!)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 200)
-                    .clipShape(RoundedRectangle(cornerRadius: 7))
-                    .isHidden(selectedImage == nil, remove: true)
                 HStack {
                     ForEach(0..<5, id: \.self) { idx in
                         Button(action: {
@@ -67,15 +61,35 @@ struct WriteView: View {
                     .frame(height: 55)
                     .background(Color.accentColor)
                 }
-                Button(action: { imagePickerToggle.toggle() }) {
-                    HStack {
+                Button(action: {
+                    if selectedImage == nil {
+                        imagePickerToggle.toggle()
+                    } else {
+                        selectedImage = nil
+                    }
+                }) {
+                    ZStack {
+                        ZStack {
+                            Image(uiImage: selectedImage ?? UIImage(named: "null")!)
+                                .resizable()
+                                .aspectRatio(contentMode: (selectedImage ?? UIImage(named: "null")!).size.height
+                                             >= (selectedImage ?? UIImage(named: "null")!).size.width ? .fit : .fill)
+                                .frame(width: 55)
+                                .clipped()
+                                .ignoresSafeArea()
+                                .overlay(.black.opacity(0.5))
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title3)
+                                .foregroundColor(.white)
+                        }
+                        .isHidden(selectedImage == nil, remove: true)
                         Image("photo")
                             .resizable()
                             .renderingMode(.template)
                             .frame(width: 20, height: 20)
+                            .isHidden(selectedImage != nil, remove: true)
                     }
                     .foregroundColor(Color(.systemBackground))
-                    .frame(maxWidth: .infinity)
                     .frame(width: 55, height: 55)
                     .background(Color(.label))
                 }
