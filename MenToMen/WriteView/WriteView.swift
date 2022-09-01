@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct WriteView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State var text: String = ""
     var body: some View {
         VStack {
+            Button("Dismiss Modal") {
+                presentationMode.wrappedValue.dismiss()
+            }
+            TextEditor(text: $text)
+                .padding(20)
             Spacer()
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            Spacer()
+            Button(action: { print("a") }) {
+                HStack {
+                    Image("write")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 20, height: 20)
+                    Text("멘토 요청하기")
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 55)
+                .background(Color.accentColor)
+            }
         }
     }
 }

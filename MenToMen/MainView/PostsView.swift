@@ -140,7 +140,6 @@ struct PostsView: View {
                                 }
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 25)
-                                    
                             }
                         }
                     }
