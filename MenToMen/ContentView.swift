@@ -17,11 +17,25 @@ struct RoundedCorner: Shape {
     }
 }
 
+struct FullScreenModalView: View {
+    @Environment(\.presentationMode) var presentationMode
+
+    var body: some View {
+        ZStack {
+            Color.primary.edgesIgnoringSafeArea(.all)
+            Button("Dismiss Modal") {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
+    }
+}
+
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
     @State var navbarHidden: Bool = false
     @State var navbarUpdown: Bool = false
+    @State var writeToggles: Bool = false
     var body: some View {
         ZStack {
             Rectangle()
@@ -31,17 +45,21 @@ struct ContentView: View {
                 switch(selectedView) {
                 case 0: PostsView(navbarHidden: $navbarHidden,
                                   navbarUpdown: $navbarUpdown)
-                case 1: WriteView()
                 default: ProfileView()
                 }
                 HStack {
                     Spacer()
                     ForEach(0..<3, id: \.self) { idx in
-                        Button(action: { selectedView = idx }) {
+                        Button(action: {
+                            if idx == 1 {
+                                writeToggles.toggle()
+                            } else {
+                                selectedView = idx
+                            }
+                        }) {
                             VStack(spacing: 2) {
                                 Image(["home", "add-circle", "user"][idx])
                                     .resizable()
-                                
                                     .renderingMode(.template)
                                     .frame(width: 25, height: 25)
                                 Text(["홈", "등록", "마이"][idx])
@@ -60,6 +78,7 @@ struct ContentView: View {
             .background(Color(.secondarySystemGroupedBackground))
             .navigationBarHidden(true)
         }
+        .fullScreenCover(isPresented: $writeToggles, content: WriteView.init)
     }
 }
 
