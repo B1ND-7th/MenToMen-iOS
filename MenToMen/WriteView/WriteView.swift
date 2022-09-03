@@ -19,15 +19,35 @@ struct WriteView: View {
     }
     var body: some View {
         VStack(spacing: 0) {
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Image(systemName: "xmark")
-                    .font(Font.system(size: 20, weight: .regular))
+            HStack {
+                Spacer()
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "xmark")
+                        .font(Font.system(size: 25, weight: .regular))
+                }
+                .padding([.top, .trailing], 20)
             }
-            VStack {
-                TextEditor(text: $text)
-                    .font(.title3)
+            VStack(alignment: .center) {
+                ZStack(alignment: .leading) {
+                    if text.isEmpty {
+                       VStack {
+                            Text("멘토에게 부탁할 내용을 입력하세요.")
+                                .font(.title3)
+                                .padding(.top, 8)
+                                .padding(.leading, 6)
+                                .opacity(0.3)
+                            Spacer()
+                        }
+                    }
+                    VStack {
+                        TextEditor(text: $text)
+                            .font(.title3)
+                            .opacity(text.isEmpty ? 0.85 : 1)
+                        Spacer()
+                    }
+                }
                 Spacer()
                 HStack {
                     ForEach(0..<5, id: \.self) { idx in
