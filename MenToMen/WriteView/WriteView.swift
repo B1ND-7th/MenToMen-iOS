@@ -14,13 +14,20 @@ struct WriteView: View {
     @State var text: String = ""
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
+    init() {
+        UITextView.appearance().backgroundColor = .clear
+    }
     var body: some View {
         VStack(spacing: 0) {
+            Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "xmark")
+                    .font(Font.system(size: 20, weight: .regular))
+            }
             VStack {
-                Button("Dismiss Modal") {
-                    presentationMode.wrappedValue.dismiss()
-                }
                 TextEditor(text: $text)
+                    .font(.title3)
                 Spacer()
                 HStack {
                     ForEach(0..<5, id: \.self) { idx in
@@ -72,12 +79,11 @@ struct WriteView: View {
                         ZStack {
                             Image(uiImage: selectedImage ?? UIImage(named: "null")!)
                                 .resizable()
-                                .aspectRatio(contentMode: (selectedImage ?? UIImage(named: "null")!).size.height
-                                             >= (selectedImage ?? UIImage(named: "null")!).size.width ? .fit : .fill)
-                                .frame(width: 55)
+                                .scaledToFill()
+                                .frame(width: 55, height: 55)
                                 .clipped()
-                                .ignoresSafeArea()
-                                .overlay(.black.opacity(0.5))
+                                //.ignoresSafeArea()
+                                .overlay(.black.opacity(0.3))
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title3)
                                 .foregroundColor(.white)
@@ -94,6 +100,7 @@ struct WriteView: View {
                     .background(Color(.label))
                 }
             }
+            .padding(.bottom, 0.1)
         }
         .sheet(isPresented: $imagePickerToggle) {
             ImagePicker(image: $selectedImage)
