@@ -116,7 +116,7 @@ struct WriteView: View {
                                 case .success:
                                     guard let value = response.value else { return }
                                     guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
-                                    reqParam["imageUrl"] = result.data[0].imgUrl
+                                    reqParam["imgUrl"] = result.data[0].imgUrl
                                     submit(reqParam)
                                 case .failure: imageUploadFailed.toggle()
                                 }

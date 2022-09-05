@@ -8,9 +8,28 @@
 import SwiftUI
 
 struct PostView: View {
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .navigationBarHidden(true)
+        VStack {
+            HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image("back")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(Color(.label))
+                }
+                .frame(width: 30, height: 30)
+                .padding(.leading, 10)
+                Spacer()
+            }
+            .frame(height: 61)
+            ScrollView {
+                
+            }
+        }
+        .navigationBarHidden(true)
     }
 }
 
