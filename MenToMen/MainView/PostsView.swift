@@ -6,84 +6,35 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct PostsView: View {
     @Binding var navbarHidden: Bool
     @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
+    @State var datas = [PostDatas]()
+    let decoder: JSONDecoder = JSONDecoder()
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
-    let postTypeArray: [PostTypes] = [
-        PostTypes(title: "나르샤 iOS 대신 만들어주실 분 구해요~~ 상은선배님이면 좋아용 ㅎㅎ",
-                    name: "이민규",
-                    date: "8월 26일",
-                    time: "1분 전",
-                    type: "iOS",
-                    thumb: "http://nater.com/nater_riding.jpg"
-                 ),
-        PostTypes(title: "김종윤한테 디자인알려줄 선배님 구해요 급하지는 않아요 ㅎㅎㅎ + 서버",
-                    name: "김종윤",
-                    date: "8월 26일",
-                    time: "12분 전",
-                    type: "Server",
-                    thumb: ""
-                 ),
-        PostTypes(title: "바닐라 JS 도와주실 선배님 찾습니다ㅠㅠ 급합니다",
-                    name: "조상영",
-                    date: "8월 26일",
-                    time: "18분 전",
-                    type: "Web",
-                    thumb: ""
-                 ),
-        PostTypes(title: "안드로이드 한번 배워보고 싶은데 첫 걸음을 도와주실 선배님을 구합니다.",
-                    name: "이석호",
-                    date: "8월 26일",
-                    time: "30분 전",
-                    type: "Android",
-                    thumb: ""
-                 ),
-        PostTypes(title: "피그마나 일러스트레이터 알려주실분 급구합니다 우리 사이트 디자인 망했어요",
-                    name: "배경민",
-                    date: "8월 26일",
-                    time: "35분 전",
-                    type: "Design",
-                    thumb: ""
-                 ),
-        PostTypes(title: "자프링이나 코프링 시작해보려고 하는데 너무 어려워요 도움이 필요합니다",
-                    name: "강지석",
-                    date: "8월 26일",
-                    time: "37분 전",
-                    type: "Server",
-                    thumb: ""
-                 ),
-        PostTypes(title: "안뇽~",
-                    name: "이재건",
-                    date: "8월 26일",
-                    time: "40분 전",
-                    type: "Web",
-                    thumb: ""
-                 ),
-        PostTypes(title: "플러터에서 안드로 넘어왔는데 이 오류 때문에 막혀서 못하겠어요ㅠㅠ",
-                    name: "조승완",
-                    date: "8월 26일",
-                    time: "42분 전",
-                    type: "Android",
-                    thumb: ""
-                 ),
-        PostTypes(title: "임베에서 iOS입문한 초보입니다 SwiftUI 하시는 선배님 있으면 연락주세요",
-                    name: "황주완",
-                    date: "8월 26일",
-                    time: "50분 전",
-                    type: "iOS",
-                    thumb: ""
-                 ),
-        PostTypes(title: "디자인 좀 도와주실 분 구합니다! 나르샤 프로젝트에요!! 급함",
-                    name: "윤석규",
-                    date: "8월 26일",
-                    time: "56분 전",
-                    type: "Design",
-                    thumb: ""
-                 )
-    ]
+    func load() {
+        AF.request("\(api)/post/readAll",
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 10 }
+        .validate()
+        .responseData { response in
+            checkResponse(response)
+            switch response.result {
+            case .success:
+                guard let value = response.value else { return }
+                guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                datas = result.data
+            case .failure(let error):
+                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+            }
+        }
+    }
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -150,9 +101,9 @@ struct PostsView: View {
                     .frame(maxWidth: .infinity)
                     .listRowInsets(EdgeInsets())
                     .background(Color("M2MBackground"))
-                    ForEach(0..<postTypeArray.count, id: \.self) { idx in
+                    ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
-                            PostsCell(data: postTypeArray[idx])
+                            PostsCell(data: datas[idx])
                             NavigationLink(destination: PostView()
                                 .onAppear {
                                     navbarUpdown = true
@@ -178,14 +129,13 @@ struct PostsView: View {
                         .padding([.bottom, .leading, .trailing], 20)
                         .listRowInsets(EdgeInsets())
                         .background(Color("M2MBackground"))
-                        .isHidden(postTypeArray[idx].type != TypeArray[selectedFilter] && selectedFilter != 5, remove: true)
+                        .isHidden(datas[idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
                 .listStyle(PlainListStyle())
                 .background(Color("M2MBackground"))
-                .refreshable {
-                    
-                }
+                .onAppear { load() }
+                .refreshable { load() }
             }
             .navigationBarHidden(true)
             .navigationTitle("")

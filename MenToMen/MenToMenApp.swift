@@ -8,7 +8,7 @@
 import SwiftUI
 import KeychainAccess
 
-public let api = "http://10.80.161.225:8080"
+public let api = "http://10.80.162.20:8080"
 
 func saveToken(_ token: String, _ key: String) throws {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
@@ -24,6 +24,17 @@ func getToken(_ key: String) throws -> String {
 func removeToken(_ key: String) throws {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
     try keychain.remove(key)
+}
+
+extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return viewControllers.count > 1
+    }
 }
 
 @main

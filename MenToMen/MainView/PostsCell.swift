@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct PostsCell: View {
-    let data: PostTypes
+    let data: PostDatas
+    let TypeDict: [String: String] = ["DESIGN": "Design",
+                                      "WEB": "Web",
+                                      "ANDROID": "Android",
+                                      "SERVER": "Server",
+                                      "IOS": "iOS"]
     var body: some View {
         ZStack(alignment: .leading) {
             VStack {
                 HStack {
-                    Image("\(data.type)BM")
+                    Image("\(TypeDict[data.tags!] ?? "Null")BM")
                         .resizable()
                         .frame(width: 27, height: 39)
                         .padding(.leading, 15)
                     Spacer()
-                    Text("\(data.name) · \(data.date)")
+                    Text("\(data.userName) · \(data.localDateTime)")
                         .font(.caption)
                         .padding(.trailing, 10)
                         .foregroundColor(.gray)
@@ -27,9 +32,9 @@ struct PostsCell: View {
             }
             VStack {
                 HStack {
-                    Text(data.title)
+                    Text(data.content)
                     Spacer()
-                    AsyncImage(url: URL(string: data.thumb)) { image in
+                    AsyncImage(url: URL(string: data.imgUrl!)) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -40,7 +45,7 @@ struct PostsCell: View {
                             .opacity(0)
                             .frame(width: 40, height: 40)
                     }
-                        .isHidden(data.thumb.isEmpty, remove: true)
+                        .isHidden(data.imgUrl == nil, remove: true)
                 }
                 Spacer()
             }

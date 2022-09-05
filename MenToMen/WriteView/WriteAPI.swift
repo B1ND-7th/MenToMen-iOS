@@ -8,9 +8,9 @@
 struct ImageData: Decodable {
     let status: Int
     let message: String
-    let data: ImageDatas
+    let data: [ImageDatas]
 }
 
 struct ImageDatas: Decodable {
-    let imageUrl: String
+    let imgUrl: String
 }

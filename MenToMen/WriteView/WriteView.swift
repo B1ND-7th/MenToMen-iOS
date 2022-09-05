@@ -14,11 +14,29 @@ struct WriteView: View {
     @State private var selectedImage: UIImage?
     @State var imagePickerToggle: Bool = false
     @State var imageUploadFailed: Bool = false
+    @State var writingFailed: Bool = false
     @State var text: String = ""
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     init() {
         UITextView.appearance().backgroundColor = .clear
+    }
+    func submit(_ params: [String: Any]) {
+        AF.request("\(api)/post/submit",
+                   method: .post,
+                   parameters: params,
+                   encoding: JSONEncoding.default,
+                   headers: ["Content-Type": "application/json"]
+        ) { $0.timeoutInterval = 10 }
+            .validate()
+            .responseData { response in
+                print(params)
+                checkResponse(response)
+                switch response.result {
+                case .success: presentationMode.wrappedValue.dismiss()
+                case .failure: writingFailed.toggle()
+                }
+            }
     }
     var body: some View {
         VStack(spacing: 0) {
@@ -79,33 +97,33 @@ struct WriteView: View {
             .padding(20)
             HStack(spacing: 0) {
                 Button(action: {
-                    var imageUrl: String = ""
+                    let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
+                    var reqParam: [String: Any] = ["content": text]
+                    if selectedFilter != 5 {
+                        reqParam["tags"] = TypeArray[selectedFilter].uppercased()
+                    }
                     if selectedImage != nil {
                         AF.upload(multipartFormData: { MultipartFormData in
                             MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 1)!,
-                                                     withName: "photos[1]", fileName: "swift_file.jpeg", mimeType: "image/jpeg")
-                        }, to: "\(api)/imageUpload") { $0.timeoutInterval = 10 }
+                                                     withName: "file",
+                                                     fileName: fileName,
+                                                     mimeType: "image/jpeg")
+                        }, to: "\(api)/file/upload") { $0.timeoutInterval = 10 }
                             .validate()
                             .responseData { response in
+                                checkResponse(response)
                                 switch response.result {
                                 case .success:
                                     guard let value = response.value else { return }
                                     guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
-                                    imageUrl = result.data.imageUrl
+                                    reqParam["imageUrl"] = result.data[0].imgUrl
+                                    submit(reqParam)
                                 case .failure: imageUploadFailed.toggle()
                                 }
                             }
+                    } else {
+                        submit(reqParam)
                     }
-                    AF.request("\(api)/upload",
-                               method: .post,
-                               parameters: imageUrl.isEmpty ? [:] : ["imageUrl": imageUrl],
-                               encoding: JSONEncoding.default,
-                               headers: ["Content-Type": "application/json"]
-                    ) { $0.timeoutInterval = 10 }
-                        .validate()
-                        .responseData { response in
-                            
-                        }
                 }) {
                     HStack {
                         Image("write")
@@ -159,6 +177,9 @@ struct WriteView: View {
         }
         .alert(isPresented: $imageUploadFailed) {
             Alert(title: Text("오류"), message: Text("이미지 업로드에 실패했습니다"), dismissButton: .default(Text("확인")))
+        }
+        .alert(isPresented: $writingFailed) {
+            Alert(title: Text("오류"), message: Text("멘토 요청에 실패했습니다"), dismissButton: .default(Text("확인")))
         }
     }
 }
