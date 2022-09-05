@@ -26,7 +26,8 @@ struct WriteView: View {
                    method: .post,
                    parameters: params,
                    encoding: JSONEncoding.default,
-                   headers: ["Content-Type": "application/json"]
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
         ) { $0.timeoutInterval = 10 }
             .validate()
             .responseData { response in
@@ -104,7 +105,7 @@ struct WriteView: View {
                     }
                     if selectedImage != nil {
                         AF.upload(multipartFormData: { MultipartFormData in
-                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 1)!,
+                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 0.6)!,
                                                      withName: "file",
                                                      fileName: fileName,
                                                      mimeType: "image/jpeg")
