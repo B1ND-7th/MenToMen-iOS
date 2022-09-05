@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct WriteView: View {
     @Environment(\.presentationMode) var presentationMode
+    let decoder: JSONDecoder = JSONDecoder()
     @State private var selectedImage: UIImage?
     @State var imagePickerToggle: Bool = false
+    @State var imageUploadFailed: Bool = false
     @State var text: String = ""
     @State var selectedFilter: Int = 5
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
@@ -37,7 +40,7 @@ struct WriteView: View {
                                 .font(.title3)
                                 .padding(.top, 8)
                                 .padding(.leading, 6)
-                                .opacity(0.3)
+                                .opacity(0.5)
                             Spacer()
                         }
                     }
@@ -75,7 +78,35 @@ struct WriteView: View {
             }
             .padding(20)
             HStack(spacing: 0) {
-                Button(action: { print("a") }) {
+                Button(action: {
+                    var imageUrl: String = ""
+                    if selectedImage != nil {
+                        AF.upload(multipartFormData: { MultipartFormData in
+                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 1)!,
+                                                     withName: "photos[1]", fileName: "swift_file.jpeg", mimeType: "image/jpeg")
+                        }, to: "\(api)/imageUpload") { $0.timeoutInterval = 10 }
+                            .validate()
+                            .responseData { response in
+                                switch response.result {
+                                case .success:
+                                    guard let value = response.value else { return }
+                                    guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
+                                    imageUrl = result.data.imageUrl
+                                case .failure: imageUploadFailed.toggle()
+                                }
+                            }
+                    }
+                    AF.request("\(api)/upload",
+                               method: .post,
+                               parameters: imageUrl.isEmpty ? [:] : ["imageUrl": imageUrl],
+                               encoding: JSONEncoding.default,
+                               headers: ["Content-Type": "application/json"]
+                    ) { $0.timeoutInterval = 10 }
+                        .validate()
+                        .responseData { response in
+                            
+                        }
+                }) {
                     HStack {
                         Image("write")
                             .resizable()
@@ -88,6 +119,7 @@ struct WriteView: View {
                     .frame(height: 55)
                     .background(Color.accentColor)
                 }
+                .disabled(text.isEmpty)
                 Button(action: {
                     if selectedImage == nil {
                         imagePickerToggle.toggle()
@@ -124,6 +156,9 @@ struct WriteView: View {
         }
         .sheet(isPresented: $imagePickerToggle) {
             ImagePicker(image: $selectedImage)
+        }
+        .alert(isPresented: $imageUploadFailed) {
+            Alert(title: Text("오류"), message: Text("이미지 업로드에 실패했습니다"), dismissButton: .default(Text("확인")))
         }
     }
 }

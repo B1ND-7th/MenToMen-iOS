@@ -24,6 +24,7 @@
 		9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9379692C28BCCC1000FB707F /* LoginAPI.swift */; };
 		93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B5842728BE0C1A00A50787 /* ProfileAPI.swift */; };
 		93B5842A28BE2A4900A50787 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93B5842928BE2A4900A50787 /* Launch Screen.storyboard */; };
+		93D458A928C591C100A3F565 /* WriteAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D458A828C591C100A3F565 /* WriteAPI.swift */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
@@ -76,6 +77,7 @@
 		9379692E28BCD36500FB707F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		93B5842728BE0C1A00A50787 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
 		93B5842928BE2A4900A50787 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "MenToMen/Launch Screen.storyboard"; sourceTree = SOURCE_ROOT; };
+		93D458A828C591C100A3F565 /* WriteAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteAPI.swift; sourceTree = "<group>"; };
 		93F41EAC28BB3F9B000172C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				931644E928B83983001E5243 /* WriteView.swift */,
 				93387DE028C0A5A300F0BD19 /* WriteImageView.swift */,
+				93D458A828C591C100A3F565 /* WriteAPI.swift */,
 			);
 			path = WriteView;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
 				9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */,
 				9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */,
+				93D458A928C591C100A3F565 /* WriteAPI.swift in Sources */,
 				9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */,
 				93387DE128C0A5A300F0BD19 /* WriteImageView.swift in Sources */,
 				9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */,
