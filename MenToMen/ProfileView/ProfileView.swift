@@ -23,6 +23,7 @@ struct ProfileView: View {
         ) { $0.timeoutInterval = 10 }
         .validate()
         .responseData { response in
+            checkResponse(response)
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
