@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+extension Date {
+    var relative: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
+}
+
 struct PostsCell: View {
     let data: PostDatas
     let TypeDict: [String: String] = ["DESIGN": "Design",
@@ -14,6 +22,14 @@ struct PostsCell: View {
                                       "ANDROID": "Android",
                                       "SERVER": "Server",
                                       "IOS": "iOS"]
+    func timeParser(_ original: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let date = formatter.date(from: original
+            .components(separatedBy: ".")[0])
+        let result = date!.relative
+        return result == "0초 후" ? "방금 전" : result
+    }
     var body: some View {
         ZStack(alignment: .leading) {
             VStack {
@@ -23,7 +39,7 @@ struct PostsCell: View {
                         .frame(width: 27, height: 39)
                         .padding(.leading, 15)
                     Spacer()
-                    Text("\(data.userName) · \(data.localDateTime)")
+                    Text("\(timeParser(data.localDateTime)) · \(data.userName)")
                         .font(.caption)
                         .padding(.trailing, 10)
                         .foregroundColor(.gray)
@@ -34,7 +50,7 @@ struct PostsCell: View {
                 HStack {
                     Text(data.content)
                     Spacer()
-                    AsyncImage(url: URL(string: data.imgUrl!)) { image in
+                    AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)

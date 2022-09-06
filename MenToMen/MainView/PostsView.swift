@@ -103,8 +103,8 @@ struct PostsView: View {
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
-                            PostsCell(data: datas[idx])
-                            NavigationLink(destination: PostView()
+                            PostsCell(data: datas[datas.count-1-idx])
+                            NavigationLink(destination: PostView(data: datas[datas.count-1-idx])
                                 .onAppear {
                                     navbarUpdown = true
                                     withAnimation(.default) {
@@ -118,7 +118,9 @@ struct PostsView: View {
                                     }
                             }
                             ) { }
-                                .buttonStyle(PlainButtonStyle()).frame(width:0).opacity(0)
+                                .buttonStyle(PlainButtonStyle())
+                                .frame(width: 0)
+                                .opacity(0)
                         }
                         .buttonStyle(PlainButtonStyle())
                         .listRowSeparator(.hidden)
@@ -129,7 +131,7 @@ struct PostsView: View {
                         .padding([.bottom, .leading, .trailing], 20)
                         .listRowInsets(EdgeInsets())
                         .background(Color("M2MBackground"))
-                        .isHidden(datas[idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
+                        .isHidden(datas[datas.count-1-idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
                 .listStyle(PlainListStyle())

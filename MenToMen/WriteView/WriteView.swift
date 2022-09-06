@@ -26,7 +26,8 @@ struct WriteView: View {
                    method: .post,
                    parameters: params,
                    encoding: JSONEncoding.default,
-                   headers: ["Content-Type": "application/json"]
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
         ) { $0.timeoutInterval = 10 }
             .validate()
             .responseData { response in
@@ -104,7 +105,7 @@ struct WriteView: View {
                     }
                     if selectedImage != nil {
                         AF.upload(multipartFormData: { MultipartFormData in
-                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 1)!,
+                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 0.6)!,
                                                      withName: "file",
                                                      fileName: fileName,
                                                      mimeType: "image/jpeg")
@@ -116,7 +117,7 @@ struct WriteView: View {
                                 case .success:
                                     guard let value = response.value else { return }
                                     guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
-                                    reqParam["imageUrl"] = result.data[0].imgUrl
+                                    reqParam["imgUrl"] = result.data.imgUrl
                                     submit(reqParam)
                                 case .failure: imageUploadFailed.toggle()
                                 }
