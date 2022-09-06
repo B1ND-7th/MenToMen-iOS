@@ -104,7 +104,7 @@ struct PostsView: View {
                     ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
                             PostsCell(data: datas[datas.count-1-idx])
-                            NavigationLink(destination: PostView()
+                            NavigationLink(destination: PostView(data: datas[datas.count-1-idx])
                                 .onAppear {
                                     navbarUpdown = true
                                     withAnimation(.default) {
