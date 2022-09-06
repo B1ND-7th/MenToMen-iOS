@@ -10,7 +10,7 @@ import SwiftUI
 struct PostView: View {
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -25,9 +25,22 @@ struct PostView: View {
                 Spacer()
             }
             .frame(height: 61)
-            ScrollView {
-                
+            List {
+                VStack {
+                    Text("안뇽")
+                }
+                .buttonStyle(PlainButtonStyle())
+                .listRowSeparator(.hidden)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 100)
+                .background(Color(.secondarySystemGroupedBackground))
+                .cornerRadius(15)
+                .padding([.top, .leading, .trailing], 20)
+                .listRowInsets(EdgeInsets())
+                .background(Color("M2MBackground"))
             }
+            .listStyle(PlainListStyle())
+            .background(Color("M2MBackground"))
         }
         .navigationBarHidden(true)
     }

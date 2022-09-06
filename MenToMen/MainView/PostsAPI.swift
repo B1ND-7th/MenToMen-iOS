@@ -18,6 +18,5 @@ struct PostDatas: Decodable {
     let postId: Int
     let profileUrl: String?
     let tags: String?
-    let userId: Int
     let userName: String
 }
