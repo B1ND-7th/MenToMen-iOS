@@ -25,6 +25,7 @@ struct PostsView: View {
         .validate()
         .responseData { response in
             checkResponse(response)
+            print(checkStatus(response))
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
@@ -38,38 +39,7 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                HStack(spacing: 15) {
-                    Image("M2MLogo")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(Color(.label))
-                        .frame(width: 100, height: 33.8)
-                    Spacer()
-                    Button(action: { }) {
-                        Image("search-normal")
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(Color(.label))
-                    }
-                    .frame(width: 25, height: 25)
-                    NavigationLink(destination: NotifyView()) {
-                        ZStack {
-                            Circle()
-                                .fill(.red)
-                                .frame(width: 8, height: 8)
-                                .position(x: 22, y: 0)
-                            Image("notification")
-                                .resizable()
-                                .renderingMode(.template)
-                                .foregroundColor(Color(.label))
-                        }
-                    }
-                    .frame(width: 25, height: 25)
-                }
-                .padding([.leading, .trailing], 20)
-                .padding(.bottom, 16)
-                .padding(.top, 12)
-                .background(Color(.secondarySystemGroupedBackground))
+                BarView(searchButton: true)
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
@@ -116,21 +86,13 @@ struct PostsView: View {
                                         navbarHidden = false
                                         navbarUpdown = false
                                     }
-                            }
+                                }
                             ) { }
                                 .buttonStyle(PlainButtonStyle())
                                 .frame(width: 0)
                                 .opacity(0)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .listRowSeparator(.hidden)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 100)
-                        .background(Color(.secondarySystemGroupedBackground))
-                        .cornerRadius(15)
-                        .padding([.bottom, .leading, .trailing], 20)
-                        .listRowInsets(EdgeInsets())
-                        .background(Color("M2MBackground"))
+                        .customCell(true)
                         .isHidden(datas[datas.count-1-idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 import Alamofire
 
 struct ProfileView: View {
+    @Binding var logout: Bool
     @State var name: String = ""
     @State var profileImage: String = "null"
     @State var info: String = ""
@@ -39,42 +40,67 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        List {
-            HStack {
-                AsyncImage(url: URL(string: profileImage)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    switch profileImage.count {
-                    case 0: Image("profile")
-                            .resizable()
-                    default: ProgressView()
+        NavigationView {
+            VStack(spacing: 0) {
+                BarView(searchButton: false)
+                List {
+                    VStack(spacing: 0) {
+                        HStack {
+                            AsyncImage(url: URL(string: profileImage)) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } placeholder: {
+                                switch profileImage.count {
+                                case 0: Image("profile")
+                                        .resizable()
+                                default: ProgressView()
+                                }
+                            }
+                                .frame(width: 70, height: 70)
+                                .clipShape(Circle())
+                            VStack(alignment: .leading) {
+                                Text(info)
+                                Text("\(name)님, 환영합니다!")
+                                    .fontWeight(.bold)
+                                    .font(.title2)
+                                Text(email)
+                                    .fontWeight(.light)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        Rectangle()
+                            .fill(Color("M2MBackground"))
+                            .frame(height: 1)
+                        Button(action: {
+                            try! removeToken("accessToken")
+                            try! removeToken("refreshToken")
+                            logout.toggle()
+                        }) {
+                            Text("로그아웃")
+                                .foregroundColor(.red)
+                                .padding(.leading, 20)
+                                .setAlignment(for: .leading)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 45)
                     }
+                    .customCell()
                 }
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                VStack(alignment: .leading) {
-                    Text(info)
-                    Text("\(name)님, 환영합니다!")
-                        .fontWeight(.bold)
-                        .font(.title2)
-                    Text(email)
-                        .fontWeight(.light)
-                }
-                Spacer()
+                .listStyle(PlainListStyle())
+                .background(Color("M2MBackground"))
+                .onAppear { load() }
+                .refreshable { load() }
             }
-            .padding(.trailing, 20)
+            .navigationBarHidden(true)
+            .navigationTitle("")
         }
-        .listStyle(PlainListStyle())
-        .background(Color("M2MBackground"))
-        .onAppear { load() }
-        .refreshable { load() }
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfileView()
+//    }
+//}

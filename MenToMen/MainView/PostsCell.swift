@@ -11,6 +11,7 @@ extension Date {
     var relative: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
+        formatter.locale = Locale(identifier: "ko_KR")
         return formatter.localizedString(for: self, relativeTo: Date())
     }
 }
@@ -47,7 +48,7 @@ struct PostsCell: View {
                 Spacer()
             }
             VStack {
-                HStack {
+                HStack(alignment: .top) {
                     Text(data.content)
                     Spacer()
                     AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in

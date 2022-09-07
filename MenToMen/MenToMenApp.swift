@@ -49,15 +49,53 @@ struct MenToMenApp: App {
 }
 
 extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
-    }
-}
-
-extension View {
     @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
         if hidden {
             if !remove { self.hidden() }
         } else { self }
+    }
+}
+
+extension View {
+    @ViewBuilder func customCell(_ invert: Bool = false) -> some View {
+        self
+            .listRowSeparator(.hidden)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 100)
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(15)
+            .padding([invert ? .bottom : .top, .leading, .trailing], 20)
+            .listRowInsets(EdgeInsets())
+            .background(Color("M2MBackground"))
+    }
+}
+
+enum Alignments {
+    case top
+    case bottom
+    case leading
+    case trailing
+}
+
+extension View {
+    @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
+        switch alignment {
+        case .top: VStack {
+            self
+            Spacer()
+        }
+        case .bottom: VStack {
+            Spacer()
+            self
+        }
+        case .leading: HStack {
+            self
+            Spacer()
+        }
+        case .trailing: HStack {
+            Spacer()
+            self
+        }
+        }
     }
 }
