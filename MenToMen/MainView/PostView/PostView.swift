@@ -67,14 +67,7 @@ struct PostView: View {
                         
                 }
                 .padding()
-                .buttonStyle(PlainButtonStyle())
-                .listRowSeparator(.hidden)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.secondarySystemGroupedBackground))
-                .cornerRadius(15)
-                .padding([.top, .leading, .trailing], 20)
-                .listRowInsets(EdgeInsets())
-                .background(Color("M2MBackground"))
+                .customCell()
             }
             .listStyle(PlainListStyle())
             .background(Color("M2MBackground"))

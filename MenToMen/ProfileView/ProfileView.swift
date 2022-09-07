@@ -67,7 +67,7 @@ struct ProfileView: View {
                         }
                         Spacer()
                     }
-                    .padding(.trailing, 20)
+                    .customCell()
                 }
                 .listStyle(PlainListStyle())
                 .background(Color("M2MBackground"))
@@ -75,8 +75,6 @@ struct ProfileView: View {
             .navigationBarHidden(true)
             .navigationTitle("")
         }
-//        .onAppear { load() }
-//        .refreshable { load() }
     }
 }
 

@@ -55,3 +55,17 @@ extension View {
         } else { self }
     }
 }
+
+extension View {
+    @ViewBuilder func customCell(_ invert: Bool = false) -> some View {
+        self
+            .listRowSeparator(.hidden)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 100)
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(15)
+            .padding([invert ? .bottom : .top, .leading, .trailing], 20)
+            .listRowInsets(EdgeInsets())
+            .background(Color("M2MBackground"))
+    }
+}

@@ -85,21 +85,13 @@ struct PostsView: View {
                                         navbarHidden = false
                                         navbarUpdown = false
                                     }
-                            }
+                                }
                             ) { }
                                 .buttonStyle(PlainButtonStyle())
                                 .frame(width: 0)
                                 .opacity(0)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .listRowSeparator(.hidden)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 100)
-                        .background(Color(.secondarySystemGroupedBackground))
-                        .cornerRadius(15)
-                        .padding([.bottom, .leading, .trailing], 20)
-                        .listRowInsets(EdgeInsets())
-                        .background(Color("M2MBackground"))
+                        .customCell(true)
                         .isHidden(datas[datas.count-1-idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
