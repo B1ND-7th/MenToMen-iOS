@@ -21,6 +21,16 @@ struct WriteView: View {
     init() {
         UITextView.appearance().backgroundColor = .clear
     }
+    func rotateImage(_ image: UIImage) -> UIImage? {
+        if image.imageOrientation == UIImage.Orientation.up {
+            return image
+        }
+        UIGraphicsBeginImageContext(image.size)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
+        let copy = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return copy
+    }
     func submit(_ params: [String: Any]) {
         AF.request("\(api)/post/submit",
                    method: .post,
@@ -105,7 +115,7 @@ struct WriteView: View {
                     }
                     if selectedImage != nil {
                         AF.upload(multipartFormData: { MultipartFormData in
-                            MultipartFormData.append(selectedImage!.jpegData(compressionQuality: 0.6)!,
+                            MultipartFormData.append(rotateImage(selectedImage!)!.jpegData(compressionQuality: 0.6)!,
                                                      withName: "file",
                                                      fileName: fileName,
                                                      mimeType: "image/jpeg")

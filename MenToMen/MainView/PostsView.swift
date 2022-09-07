@@ -25,6 +25,7 @@ struct PostsView: View {
         .validate()
         .responseData { response in
             checkResponse(response)
+            print(checkStatus(response))
             switch response.result {
             case .success:
                 guard let value = response.value else { return }

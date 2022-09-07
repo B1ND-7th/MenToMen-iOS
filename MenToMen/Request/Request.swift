@@ -6,9 +6,14 @@
 //
 
 import Alamofire
+import SwiftyJSON
 
 func checkResponse(_ response: DataResponse<Data, AFError>) {
     print(String(decoding: response.data!, as: UTF8.self))
+}
+
+func checkStatus(_ response: DataResponse<Data, AFError>) -> Int {
+    return JSON(response.data!)["status"].int!
 }
 
 final class Requester: RequestInterceptor {
