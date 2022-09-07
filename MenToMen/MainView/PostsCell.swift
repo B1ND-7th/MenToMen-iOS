@@ -11,6 +11,7 @@ extension Date {
     var relative: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
+        formatter.locale = Locale(identifier: "ko_KR")
         return formatter.localizedString(for: self, relativeTo: Date())
     }
 }

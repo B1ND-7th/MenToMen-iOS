@@ -9,10 +9,10 @@ import SwiftUI
 import Alamofire
 
 struct ProfileView: View {
-    @State var name: String = ""
+    @State var name: String = "이석호"
     @State var profileImage: String = "null"
-    @State var info: String = ""
-    @State var email: String = ""
+    @State var info: String = "1학년 2반 11번"
+    @State var email: String = "mercen@mercen.net"
     let decoder: JSONDecoder = JSONDecoder()
     func load() {
         AF.request("\(api)/user/my",
@@ -39,37 +39,44 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        List {
-            HStack {
-                AsyncImage(url: URL(string: profileImage)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    switch profileImage.count {
-                    case 0: Image("profile")
-                            .resizable()
-                    default: ProgressView()
+        NavigationView {
+            VStack(spacing: 0) {
+                BarView(searchButton: false)
+                List {
+                    HStack {
+                        AsyncImage(url: URL(string: profileImage)) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            switch profileImage.count {
+                            case 0: Image("profile")
+                                    .resizable()
+                            default: ProgressView()
+                            }
+                        }
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                        VStack(alignment: .leading) {
+                            Text(info)
+                            Text("\(name)님, 환영합니다!")
+                                .fontWeight(.bold)
+                                .font(.title2)
+                            Text(email)
+                                .fontWeight(.light)
+                        }
+                        Spacer()
                     }
+                    .padding(.trailing, 20)
                 }
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                VStack(alignment: .leading) {
-                    Text(info)
-                    Text("\(name)님, 환영합니다!")
-                        .fontWeight(.bold)
-                        .font(.title2)
-                    Text(email)
-                        .fontWeight(.light)
-                }
-                Spacer()
+                .listStyle(PlainListStyle())
+                .background(Color("M2MBackground"))
             }
-            .padding(.trailing, 20)
+            .navigationBarHidden(true)
+            .navigationTitle("")
         }
-        .listStyle(PlainListStyle())
-        .background(Color("M2MBackground"))
-        .onAppear { load() }
-        .refreshable { load() }
+//        .onAppear { load() }
+//        .refreshable { load() }
     }
 }
 
