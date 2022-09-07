@@ -19,21 +19,6 @@ struct ShakeEffect: GeometryEffect {
     }
 }
 
-struct AndroidButton: View {
-    let text: String
-    let color: Color
-    var body: some View {
-        Text(text)
-            .font(.title3)
-            .fontWeight(.bold)
-            .frame(maxWidth: .infinity)
-            .frame(height: 60)
-            .background(color)
-            .foregroundColor(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-    }
-}
-
 struct AndroidTextField: View {
     @FocusState private var focus: Bool
     @Binding var text: String
@@ -59,7 +44,7 @@ struct AndroidTextField: View {
                 .fill(focus ? .accentColor : Color(.systemGray3))
                 .frame(height: 1.3)
         }
-        .font(.title2)
+        .font(.title3)
         .padding(.top, 25)
     }
 }
@@ -71,7 +56,6 @@ struct LoginView: View {
     @State var loginPw: String = ""
     @State var invalid: Int = 0
     @State var success: Bool = false
-    @State var devmenu: Bool = false
     @State var request: Bool = false
     @State var tfstate: Bool = false
     func toggleFailure(_ messageType: Int) {
@@ -85,25 +69,25 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Spacer()
-                Image("M2MLogo")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(.accentColor)
-                    .frame(width: 250, height: 84.5)
-                    .onLongPressGesture(minimumDuration: 0.5) {
-                        devmenu.toggle()
-                    }
-                VStack(alignment: .leading) {
-                    AndroidTextField(text: $loginId, state: $tfstate, type: 0)
-                    AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
-                    Text(invalidMessage)
+                VStack {
+                    Spacer()
+                    Image("M2MLogo")
+                        .resizable()
+                        .renderingMode(.template)
                         .foregroundColor(.accentColor)
-                        .isHidden(invalid == 0 || !tfstate, remove: true)
+                        .frame(width: 250, height: 84.5)
+                    VStack(alignment: .leading) {
+                        AndroidTextField(text: $loginId, state: $tfstate, type: 0)
+                        AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
+                        Text(invalidMessage)
+                            .foregroundColor(.accentColor)
+                            .isHidden(invalid == 0 || !tfstate, remove: true)
+                    }
+                    .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
+                    Spacer()
+                    NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
                 }
-                .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
-                Spacer()
-                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
+                .padding()
                 Button(action: {
                     request = true
                     AF.request("http://dauth.b1nd.com/api/auth/login",
@@ -150,20 +134,15 @@ struct LoginView: View {
                                 }
                         }
                 }) {
-                    AndroidButton(text: "로그인", color: .accentColor)
+                    Text("로그인")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 55)
+                        .background(Color.accentColor)
                 }
                 .disabled(loginId.isEmpty || loginPw.isEmpty || request)
-                VStack {
-                    Text("DEVELOPER MENU")
-                        .foregroundColor(.gray)
-                        .padding(.top, 10)
-                    NavigationLink(destination: ContentView()) {
-                        AndroidButton(text: "MainScreen", color: .gray)
-                    }
-                }
-                .isHidden(!devmenu, remove: true)
+                .padding(.bottom, 0.1)
             }
-            .padding(20)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }

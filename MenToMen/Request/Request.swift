@@ -48,8 +48,8 @@ final class Requester: RequestInterceptor {
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                 try? removeToken("accessToken")
                 try? removeToken("refreshToken")
-                // 로그아웃 시켜야함 (숙제)
                 completion(.doNotRetryWithError(error))
+                exit(0)
             }
         }
     }
