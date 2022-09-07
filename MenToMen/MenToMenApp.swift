@@ -69,3 +69,33 @@ extension View {
             .background(Color("M2MBackground"))
     }
 }
+
+enum Alignments {
+    case top
+    case bottom
+    case leading
+    case trailing
+}
+
+extension View {
+    @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
+        switch alignment {
+        case .top: VStack {
+            self
+            Spacer()
+        }
+        case .bottom: VStack {
+            Spacer()
+            self
+        }
+        case .leading: HStack {
+            self
+            Spacer()
+        }
+        case .trailing: HStack {
+            Spacer()
+            self
+        }
+        }
+    }
+}

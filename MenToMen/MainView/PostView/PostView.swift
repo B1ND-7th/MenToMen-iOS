@@ -11,21 +11,28 @@ struct PostView: View {
     let data: PostDatas
     let profileImage: String = ""
     @Environment(\.presentationMode) var presentationMode
+    func timeParser(_ original: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let date = formatter.date(from: original
+            .components(separatedBy: ".")[0])
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy년 M월 d일 a h:mm"
+        return formatter.string(from: date!)
+    }
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image("back")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(Color(.label))
-                }
-                .frame(width: 30, height: 30)
-                .padding(.leading, 10)
-                Spacer()
+            Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image("back")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(Color(.label))
             }
+            .frame(width: 30, height: 30)
+            .padding(.leading, 10)
+            .setAlignment(for: .leading)
             .frame(height: 61)
             .background(Color(.secondarySystemGroupedBackground))
             List {
@@ -64,7 +71,11 @@ struct PostView: View {
                         ProgressView()
                     }
                     .isHidden(data.imgUrl == nil, remove: true)
-                        
+                    Text(timeParser(data.localDateTime))
+                        .font(.caption)
+                        .padding([.top, .trailing], 10)
+                        .foregroundColor(.gray)
+                        .setAlignment(for: .trailing)
                 }
                 .padding()
                 .customCell()

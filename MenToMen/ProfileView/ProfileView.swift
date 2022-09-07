@@ -78,12 +78,10 @@ struct ProfileView: View {
                             try! removeToken("refreshToken")
                             logout.toggle()
                         }) {
-                            HStack {
-                                Text("로그아웃")
-                                    .foregroundColor(.red)
-                                    .padding(.leading, 20)
-                                Spacer()
-                            }
+                            Text("로그아웃")
+                                .foregroundColor(.red)
+                                .padding(.leading, 20)
+                                .setAlignment(for: .leading)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 45)
