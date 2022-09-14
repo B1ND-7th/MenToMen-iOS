@@ -175,7 +175,7 @@ struct WriteView: View {
                     .background(Color(.label))
                 }
             }
-            .padding(.bottom, 0.1)
+            .clipped()
         }
         .sheet(isPresented: $imagePickerToggle) {
             ImagePicker(image: $selectedImage)
