@@ -13,10 +13,9 @@ struct PostsView: View {
     @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
     @State var datas = [PostDatas]()
-    let decoder: JSONDecoder = JSONDecoder()
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func load() {
-        AF.request("\(api)/post/readAll",
+        AF.request("\(api)/post/read-all",
                    method: .get,
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
@@ -29,7 +28,7 @@ struct PostsView: View {
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
-                guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
                 datas = result.data
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -47,12 +46,11 @@ struct PostsView: View {
                                     selectedFilter = selectedFilter == idx ? 5 : idx
                             }) {
                                 ZStack {
-                                    switch(selectedFilter) {
-                                        case idx: Capsule()
+                                    if selectedFilter == idx || selectedFilter == 5 {
+                                        Capsule()
                                             .fill(Color("\(TypeArray[idx])CR"))
-                                        case 5: Capsule()
-                                            .fill(Color("\(TypeArray[idx])CR"))
-                                        default: Capsule()
+                                    } else {
+                                        Capsule()
                                             .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
                                     }
                                     Text(TypeArray[idx])
@@ -73,8 +71,8 @@ struct PostsView: View {
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
-                            PostsCell(data: datas[datas.count-1-idx])
-                            NavigationLink(destination: PostView(data: datas[datas.count-1-idx])
+                            PostsCell(data: datas[idx])
+                            NavigationLink(destination: PostView(data: datas[idx])
                                 .onAppear {
                                     navbarUpdown = true
                                     withAnimation(.default) {
@@ -93,11 +91,10 @@ struct PostsView: View {
                                 .opacity(0)
                         }
                         .customCell(true)
-                        .isHidden(datas[datas.count-1-idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
+                        .isHidden(datas[idx].tag != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
-                .listStyle(PlainListStyle())
-                .background(Color("M2MBackground"))
+                .customList()
                 .onAppear { load() }
                 .refreshable { load() }
             }
