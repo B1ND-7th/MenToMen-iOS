@@ -80,8 +80,7 @@ struct PostView: View {
                 .padding()
                 .customCell()
             }
-            .listStyle(PlainListStyle())
-            .background(Color("M2MBackground"))
+            .customList()
         }
         .navigationBarHidden(true)
     }

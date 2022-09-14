@@ -111,7 +111,7 @@ struct WriteView: View {
                     let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
                     var reqParam: [String: Any] = ["content": text]
                     if selectedFilter != 5 {
-                        reqParam["tags"] = TypeArray[selectedFilter].uppercased()
+                        reqParam["tag"] = TypeArray[selectedFilter].uppercased()
                     }
                     if selectedImage != nil {
                         AF.upload(multipartFormData: { MultipartFormData in

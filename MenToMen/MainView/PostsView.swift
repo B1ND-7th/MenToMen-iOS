@@ -47,12 +47,11 @@ struct PostsView: View {
                                     selectedFilter = selectedFilter == idx ? 5 : idx
                             }) {
                                 ZStack {
-                                    switch(selectedFilter) {
-                                        case idx: Capsule()
+                                    if selectedFilter == idx || selectedFilter == 5 {
+                                        Capsule()
                                             .fill(Color("\(TypeArray[idx])CR"))
-                                        case 5: Capsule()
-                                            .fill(Color("\(TypeArray[idx])CR"))
-                                        default: Capsule()
+                                    } else {
+                                        Capsule()
                                             .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
                                     }
                                     Text(TypeArray[idx])
@@ -93,11 +92,10 @@ struct PostsView: View {
                                 .opacity(0)
                         }
                         .customCell(true)
-                        .isHidden(datas[idx].tags != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
+                        .isHidden(datas[idx].tag != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
-                .listStyle(PlainListStyle())
-                .background(Color("M2MBackground"))
+                .customList()
                 .onAppear { load() }
                 .refreshable { load() }
             }

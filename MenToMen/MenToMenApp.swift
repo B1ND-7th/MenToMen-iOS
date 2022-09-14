@@ -8,7 +8,7 @@
 import SwiftUI
 import KeychainAccess
 
-public let api = "http://10.80.162.20:8080"
+public let api = "http://10.80.162.75:8080"
 
 func saveToken(_ token: String, _ key: String) throws {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")
@@ -26,17 +26,6 @@ func removeToken(_ key: String) throws {
     try keychain.remove(key)
 }
 
-extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
-    }
-}
-
 @main
 struct MenToMenApp: App {
     var body: some Scene {
@@ -44,58 +33,6 @@ struct MenToMenApp: App {
             if (try? getToken("accessToken"))!.isEmpty {
                 LoginView()
             } else { ContentView() }
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
-        if hidden {
-            if !remove { self.hidden() }
-        } else { self }
-    }
-}
-
-extension View {
-    @ViewBuilder func customCell(_ invert: Bool = false) -> some View {
-        self
-            .listRowSeparator(.hidden)
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: 100)
-            .background(Color(.secondarySystemGroupedBackground))
-            .cornerRadius(15)
-            .padding([invert ? .bottom : .top, .leading, .trailing], 20)
-            .listRowInsets(EdgeInsets())
-            .background(Color("M2MBackground"))
-    }
-}
-
-enum Alignments {
-    case top
-    case bottom
-    case leading
-    case trailing
-}
-
-extension View {
-    @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
-        switch alignment {
-        case .top: VStack {
-            self
-            Spacer()
-        }
-        case .bottom: VStack {
-            Spacer()
-            self
-        }
-        case .leading: HStack {
-            self
-            Spacer()
-        }
-        case .trailing: HStack {
-            Spacer()
-            self
-        }
         }
     }
 }

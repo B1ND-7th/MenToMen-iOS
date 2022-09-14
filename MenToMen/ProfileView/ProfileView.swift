@@ -88,8 +88,7 @@ struct ProfileView: View {
                     }
                     .customCell()
                 }
-                .listStyle(PlainListStyle())
-                .background(Color("M2MBackground"))
+                .customList()
                 .onAppear { load() }
                 .refreshable { load() }
             }

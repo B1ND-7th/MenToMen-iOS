@@ -35,7 +35,7 @@ struct PostsCell: View {
         ZStack(alignment: .leading) {
             VStack {
                 HStack {
-                    Image("\(TypeDict[data.tags!] ?? "Null")BM")
+                    Image("\(TypeDict[data.tag!] ?? "Null")BM")
                         .resizable()
                         .frame(width: 27, height: 39)
                         .padding(.leading, 15)
