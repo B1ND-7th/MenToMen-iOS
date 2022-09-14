@@ -39,7 +39,9 @@ struct ContentView: View {
                     switch(selectedView) {
                     case 0: PostsView(navbarHidden: $navbarHidden,
                                       navbarUpdown: $navbarUpdown)
-                    default: ProfileView(logout: $logout)
+                    default: ProfileView(navbarHidden: $navbarHidden,
+                                         navbarUpdown: $navbarUpdown,
+                                         logout: $logout)
                     }
                     HStack {
                         Spacer()
