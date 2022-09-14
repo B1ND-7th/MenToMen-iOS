@@ -14,7 +14,6 @@ struct ProfileView: View {
     @State var profileImage: String = "null"
     @State var info: String = ""
     @State var email: String = ""
-    let decoder: JSONDecoder = JSONDecoder()
     func load() {
         AF.request("\(api)/user/my",
                    method: .get,

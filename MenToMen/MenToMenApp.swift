@@ -9,6 +9,7 @@ import SwiftUI
 import KeychainAccess
 
 public let api = "http://10.80.162.75:8080"
+public let decoder: JSONDecoder = JSONDecoder()
 
 func saveToken(_ token: String, _ key: String) throws {
     let keychain = Keychain(service: "B1ND-7th.MenToMen-iOS")

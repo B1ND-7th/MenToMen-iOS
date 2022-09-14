@@ -50,7 +50,6 @@ struct AndroidTextField: View {
 }
 
 struct LoginView: View {
-    let decoder: JSONDecoder = JSONDecoder()
     @State var invalidMessage: String = ""
     @State var loginId: String = ""
     @State var loginPw: String = ""

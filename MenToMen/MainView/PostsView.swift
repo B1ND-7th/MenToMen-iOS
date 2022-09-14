@@ -13,10 +13,9 @@ struct PostsView: View {
     @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
     @State var datas = [PostDatas]()
-    let decoder: JSONDecoder = JSONDecoder()
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func load() {
-        AF.request("\(api)/post/readAll",
+        AF.request("\(api)/post/read-all",
                    method: .get,
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
@@ -29,7 +28,7 @@ struct PostsView: View {
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
-                guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
                 datas = result.data
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")

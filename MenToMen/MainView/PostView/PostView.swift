@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct PostView: View {
-    let data: PostDatas
+    @State var data: PostDatas
     let profileImage: String = ""
     @Environment(\.presentationMode) var presentationMode
     func timeParser(_ original: String) -> String {
@@ -81,6 +82,27 @@ struct PostView: View {
                 .customCell()
             }
             .customList()
+            .refreshable {
+                AF.request("\(api)/post/read-one/\(data.postId)",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 10 }
+                .validate()
+                .responseData { response in
+                    checkResponse(response)
+                    print(checkStatus(response))
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                        data = result.data
+                    case .failure(let error):
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
+            }
         }
         .navigationBarHidden(true)
     }

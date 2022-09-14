@@ -10,7 +10,6 @@ import Alamofire
 
 struct WriteView: View {
     @Environment(\.presentationMode) var presentationMode
-    let decoder: JSONDecoder = JSONDecoder()
     @State private var selectedImage: UIImage?
     @State var imagePickerToggle: Bool = false
     @State var imageUploadFailed: Bool = false
@@ -143,7 +142,7 @@ struct WriteView: View {
                     .frame(height: 55)
                     .background(Color.accentColor)
                 }
-                .disabled(text.isEmpty)
+                .disabled(text.isEmpty || selectedFilter == 5)
                 Button(action: {
                     if selectedImage == nil {
                         imagePickerToggle.toggle()
