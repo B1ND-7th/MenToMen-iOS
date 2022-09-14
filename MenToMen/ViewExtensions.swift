@@ -25,6 +25,15 @@ enum Alignments {
     case trailing
 }
 
+extension Date {
+    var relative: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
+}
+
 extension View {
     @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
         if hidden {
