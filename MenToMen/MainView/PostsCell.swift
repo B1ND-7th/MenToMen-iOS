@@ -7,17 +7,8 @@
 
 import SwiftUI
 
-extension Date {
-    var relative: String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.localizedString(for: self, relativeTo: Date())
-    }
-}
-
 struct PostsCell: View {
-    let data: PostDatas
+    @Binding var data: PostDatas
     let TypeDict: [String: String] = ["DESIGN": "Design",
                                       "WEB": "Web",
                                       "ANDROID": "Android",
@@ -50,6 +41,7 @@ struct PostsCell: View {
             VStack {
                 HStack(alignment: .top) {
                     Text(data.content)
+                        .lineLimit(2)
                     Spacer()
                     AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
                         image
@@ -62,7 +54,7 @@ struct PostsCell: View {
                             .opacity(0)
                             .frame(width: 40, height: 40)
                     }
-                        .isHidden(data.imgUrl == nil, remove: true)
+                    .isHidden(data.imgUrl == nil, remove: true)
                 }
                 Spacer()
             }

@@ -71,7 +71,7 @@ struct PostsView: View {
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
-                            PostsCell(data: datas[idx])
+                            PostsCell(data: $datas[idx])
                             NavigationLink(destination: PostView(data: datas[idx])
                                 .onAppear {
                                     navbarUpdown = true

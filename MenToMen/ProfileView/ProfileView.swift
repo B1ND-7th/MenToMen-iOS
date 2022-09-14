@@ -9,11 +9,14 @@ import SwiftUI
 import Alamofire
 
 struct ProfileView: View {
+    @Binding var navbarHidden: Bool
+    @Binding var navbarUpdown: Bool
     @Binding var logout: Bool
     @State var name: String = ""
     @State var profileImage: String = "null"
     @State var info: String = ""
     @State var email: String = ""
+    @State var datas = [PostDatas]()
     func load() {
         AF.request("\(api)/user/my",
                    method: .get,
@@ -33,6 +36,25 @@ struct ProfileView: View {
                 self.profileImage = data.profileImage ?? ""
                 self.info = "\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번"
                 self.email = data.email
+                AF.request("\(api)/user/post",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 10 }
+                .validate()
+                .responseData { response in
+                    checkResponse(response)
+                    print(checkStatus(response))
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
+                        datas = result.data
+                    case .failure(let error):
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
@@ -86,6 +108,29 @@ struct ProfileView: View {
                         .frame(height: 45)
                     }
                     .customCell()
+                    ForEach(0..<datas.count, id: \.self) { idx in
+                        ZStack {
+                            PostsCell(data: $datas[idx])
+                            NavigationLink(destination: PostView(data: datas[idx])
+                                .onAppear {
+                                    navbarUpdown = true
+                                    withAnimation(.default) {
+                                        navbarHidden = true
+                                    }
+                                }
+                                .onDisappear {
+                                    withAnimation(.default) {
+                                        navbarHidden = false
+                                        navbarUpdown = false
+                                    }
+                                }
+                            ) { }
+                                .buttonStyle(PlainButtonStyle())
+                                .frame(width: 0)
+                                .opacity(0)
+                        }
+                        .customCell(bottom: datas.count-1 == idx)
+                    }
                 }
                 .customList()
                 .onAppear { load() }

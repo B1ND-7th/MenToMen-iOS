@@ -7,22 +7,31 @@
 
 import SwiftUI
 
-extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
-    }
-}
+//extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
+//    override open func viewDidLoad() {
+//        super.viewDidLoad()
+//        interactivePopGestureRecognizer?.delegate = self
+//    }
+//
+//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return viewControllers.count > 1
+//    }
+//}
 
 enum Alignments {
     case top
     case bottom
     case leading
     case trailing
+}
+
+extension Date {
+    var relative: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
 }
 
 extension View {
@@ -32,14 +41,25 @@ extension View {
         } else { self }
     }
     
-    @ViewBuilder func customCell(_ invert: Bool = false) -> some View {
+    @ViewBuilder func dragGesture(_ dismiss: DismissAction, _ dragOffset: GestureState<CGSize>) -> some View {
+        self
+            .gesture(DragGesture().updating(dragOffset, body: { (value, state, transaction) in
+                 if(value.startLocation.x < 20 &&
+                            value.translation.width > 100) {
+                     dismiss()
+                 }
+            }))
+    }
+    
+    @ViewBuilder func customCell(_ invert: Bool = false, bottom: Bool = false) -> some View {
         self
             .listRowSeparator(.hidden)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 100)
+            //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(15)
             .padding([invert ? .bottom : .top, .leading, .trailing], 20)
+            .padding(.bottom, bottom ? 20 : 0)
             .listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }

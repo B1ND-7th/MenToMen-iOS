@@ -9,9 +9,10 @@ import SwiftUI
 import Alamofire
 
 struct PostView: View {
+    @Environment(\.dismiss) private var dismiss
+    @GestureState private var dragOffset = CGSize.zero
     @State var data: PostDatas
     let profileImage: String = ""
-    @Environment(\.presentationMode) var presentationMode
     func timeParser(_ original: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -24,7 +25,7 @@ struct PostView: View {
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             }) {
                 Image("back")
                     .resizable()
@@ -104,6 +105,7 @@ struct PostView: View {
                 }
             }
         }
+        .dragGesture(dismiss, $dragOffset)
         .navigationBarHidden(true)
     }
 }
