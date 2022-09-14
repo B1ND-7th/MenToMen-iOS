@@ -69,25 +69,22 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack {
-                VStack {
-                    Spacer()
-                    Image("M2MLogo")
-                        .resizable()
-                        .renderingMode(.template)
+                Spacer()
+                Image("M2MLogo")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.accentColor)
+                    .frame(width: 250, height: 84.5)
+                VStack(alignment: .leading) {
+                    AndroidTextField(text: $loginId, state: $tfstate, type: 0)
+                    AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
+                    Text(invalidMessage)
                         .foregroundColor(.accentColor)
-                        .frame(width: 250, height: 84.5)
-                    VStack(alignment: .leading) {
-                        AndroidTextField(text: $loginId, state: $tfstate, type: 0)
-                        AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
-                        Text(invalidMessage)
-                            .foregroundColor(.accentColor)
-                            .isHidden(invalid == 0 || !tfstate, remove: true)
-                    }
-                    .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
-                    Spacer()
-                    NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
+                        .isHidden(invalid == 0 || !tfstate, remove: true)
                 }
-                .padding()
+                .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
+                .padding(.bottom, 40)
+                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     request = true
                     AF.request("http://dauth.b1nd.com/api/auth/login",
@@ -135,14 +132,17 @@ struct LoginView: View {
                         }
                 }) {
                     Text("로그인")
+                        .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 55)
                         .background(Color.accentColor)
+                        .clipShape(Capsule())
                 }
                 .disabled(loginId.isEmpty || loginPw.isEmpty || request)
-                .padding(.bottom, 0.1)
+                Spacer()
             }
+            .padding(40)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }

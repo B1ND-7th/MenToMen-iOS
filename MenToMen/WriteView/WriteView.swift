@@ -63,21 +63,16 @@ struct WriteView: View {
             }
             VStack(alignment: .center) {
                 ZStack(alignment: .leading) {
+                    TextEditor(text: $text)
+                        .font(.title3)
+                        .setAlignment(for: .top)
                     if text.isEmpty {
-                       VStack {
-                            Text("멘토에게 부탁할 내용을 입력하세요.")
-                                .font(.title3)
-                                .padding(.top, 8)
-                                .padding(.leading, 6)
-                                .opacity(0.5)
-                            Spacer()
-                        }
-                    }
-                    VStack {
-                        TextEditor(text: $text)
+                        Text("멘토에게 부탁할 내용을 입력하세요.")
+                            .foregroundColor(.gray)
                             .font(.title3)
-                            .opacity(text.isEmpty ? 0.85 : 1)
-                        Spacer()
+                            .padding(.top, 8)
+                            .padding(.leading, 6)
+                            .setAlignment(for: .top)
                     }
                 }
                 Spacer()
@@ -105,7 +100,7 @@ struct WriteView: View {
                     }
                 }
             }
-            .padding(20)
+            .padding()
             HStack(spacing: 0) {
                 Button(action: {
                     let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
