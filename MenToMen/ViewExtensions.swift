@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
-    }
-}
+//extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
+//    override open func viewDidLoad() {
+//        super.viewDidLoad()
+//        interactivePopGestureRecognizer?.delegate = self
+//    }
+//
+//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return viewControllers.count > 1
+//    }
+//}
 
 enum Alignments {
     case top
@@ -32,11 +32,21 @@ extension View {
         } else { self }
     }
     
+    @ViewBuilder func dragGesture(_ dismiss: DismissAction, _ dragOffset: GestureState<CGSize>) -> some View {
+        self
+            .gesture(DragGesture().updating(dragOffset, body: { (value, state, transaction) in
+                 if(value.startLocation.x < 20 &&
+                            value.translation.width > 100) {
+                     dismiss()
+                 }
+            }))
+    }
+    
     @ViewBuilder func customCell(_ invert: Bool = false) -> some View {
         self
             .listRowSeparator(.hidden)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 100)
+            //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(15)
             .padding([invert ? .bottom : .top, .leading, .trailing], 20)

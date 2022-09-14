@@ -50,6 +50,7 @@ struct PostsCell: View {
             VStack {
                 HStack(alignment: .top) {
                     Text(data.content)
+                        .lineLimit(2)
                     Spacer()
                     AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
                         image
