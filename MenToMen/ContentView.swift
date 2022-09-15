@@ -47,6 +47,7 @@ struct ContentView: View {
                         Spacer()
                         ForEach(0..<3, id: \.self) { idx in
                             Button(action: {
+                                HapticManager.instance.impact(style: .light)
                                 if idx == 1 {
                                     writeToggles.toggle()
                                 } else {

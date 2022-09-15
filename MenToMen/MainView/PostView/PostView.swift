@@ -11,7 +11,9 @@ import Alamofire
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @State var currentImage: Image = Image("null")
     @State var data: PostDatas
+    @State var tap: Bool = false
     let profileImage: String = ""
     func timeParser(_ original: String) -> String {
         let formatter = DateFormatter()
@@ -21,6 +23,11 @@ struct PostView: View {
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "yyyy년 M월 d일 a h:mm"
         return formatter.string(from: date!)
+    }
+    func tapper(_ state: Bool) {
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+            tap = state
+        }
     }
     var body: some View {
         VStack(spacing: 0) {
@@ -69,6 +76,12 @@ struct PostView: View {
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 7))
                             .padding(.top, 10)
+                            .scaleEffect(tap ? 0.95 : 1)
+                            .onLongPressGesture(minimumDuration: 0.1) {
+                                HapticManager.instance.impact(style: .medium)
+                                currentImage = image
+                                tapper(true)
+                            }
                     } placeholder: {
                         ProgressView()
                     }
@@ -105,6 +118,15 @@ struct PostView: View {
                 }
             }
         }
+        .confirmationDialog("사진을 저장하시겠습니까?", isPresented: $tap) {
+              Button("사진 앨범에 추가") {
+                  tapper(false)
+                  UIImageWriteToSavedPhotosAlbum(currentImage.asUIImage(), nil, nil, nil)
+              }
+              Button("취소", role: .cancel) {
+                  tapper(false)
+              }
+            }
         .dragGesture(dismiss, $dragOffset)
         .navigationBarHidden(true)
     }
