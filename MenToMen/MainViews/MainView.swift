@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  MenToMen
 //
 //  Created by Mercen on 2022/08/25.
@@ -7,26 +7,14 @@
 
 import SwiftUI
 
-struct FullScreenModalView: View {
-    @Environment(\.presentationMode) var presentationMode
-
-    var body: some View {
-        ZStack {
-            Color.primary.edgesIgnoringSafeArea(.all)
-            Button("Dismiss Modal") {
-                presentationMode.wrappedValue.dismiss()
-            }
-        }
-    }
-}
-
-struct ContentView: View {
+struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
     @State var navbarHidden: Bool = false
     @State var navbarUpdown: Bool = false
     @State var writeToggles: Bool = false
     @State var logout: Bool = false
+    @State var status: [Int] = [0, 70, 0, 0, 0]
     var body: some View {
         NavigationView {
             ZStack {
@@ -47,6 +35,7 @@ struct ContentView: View {
                         Spacer()
                         ForEach(0..<3, id: \.self) { idx in
                             Button(action: {
+                                HapticManager.instance.impact(style: .light)
                                 if idx == 1 {
                                     writeToggles.toggle()
                                 } else {
@@ -72,6 +61,31 @@ struct ContentView: View {
                     .isHidden(navbarUpdown, remove: true)
                 }
                 .background(Color(.secondarySystemGroupedBackground))
+//                VStack(spacing: 0) {
+//                    Color.black
+//                        .opacity(0.5)
+//                        .frame(height: CGFloat(status[1]))
+//                        .padding(.bottom, CGFloat(status[2]))
+//                    Color.black
+//                        .opacity(0.5)
+//                }
+//                Button(action: {
+//                    withAnimation(.default) {
+//                        switch(status[0]) {
+//                        case 0:
+//                            status[2] = 40
+//                        case 1:
+//                            status[2] = 400
+//                        case 2:
+//                            status[2] = 40
+//                        default:
+//                            status[2] = 0
+//                        }
+//                    }
+//                    status[0] += 1
+//                }) {
+//                    Text("Next")
+//                }
             }
             .fullScreenCover(isPresented: $writeToggles, content: WriteView.init)
             .navigationBarHidden(true)
@@ -80,9 +94,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MainView()
             //.preferredColorScheme(.dark)
     }
 }

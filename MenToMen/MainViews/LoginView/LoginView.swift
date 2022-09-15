@@ -58,6 +58,7 @@ struct LoginView: View {
     @State var request: Bool = false
     @State var tfstate: Bool = false
     func toggleFailure(_ messageType: Int) {
+        HapticManager.instance.notification(type: .error)
         invalidMessage = messageType == 1 ? "ID 또는 비밀번호가 틀렸습니다" : "서버에 연결할 수 없습니다"
         withAnimation(.default) {
             tfstate = true
@@ -73,7 +74,8 @@ struct LoginView: View {
                     .resizable()
                     .renderingMode(.template)
                     .foregroundColor(.accentColor)
-                    .frame(width: 250, height: 84.5)
+                    .scaledToFit()
+                    .frame(width: 250)
                 VStack(alignment: .leading) {
                     AndroidTextField(text: $loginId, state: $tfstate, type: 0)
                     AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
@@ -83,7 +85,7 @@ struct LoginView: View {
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 .padding(.bottom, 40)
-                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
+                NavigationLink(destination: MainView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     request = true
                     AF.request("http://dauth.b1nd.com/api/auth/login",
@@ -120,6 +122,7 @@ struct LoginView: View {
                                             guard let result = try? decoder.decode(LoginData.self, from: value) else { return }
                                             try? saveToken(result.data.accessToken, "accessToken")
                                             try? saveToken(result.data.refreshToken, "refreshToken")
+                                            HapticManager.instance.notification(type: .success)
                                             success.toggle()
                                         case .failure:
                                             toggleFailure(0)
@@ -131,10 +134,9 @@ struct LoginView: View {
                         }
                 }) {
                     Text("로그인")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(.systemBackground))
                         .frame(maxWidth: .infinity)
-                        .frame(height: 55)
+                        .frame(height: 50)
                         .background(Color.accentColor)
                         .clipShape(Capsule())
                 }

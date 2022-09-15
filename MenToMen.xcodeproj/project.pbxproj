@@ -15,6 +15,8 @@
 		931644EA28B83983001E5243 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931644E928B83983001E5243 /* WriteView.swift */; };
 		93387DE128C0A5A300F0BD19 /* WriteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93387DE028C0A5A300F0BD19 /* WriteImageView.swift */; };
 		934051F828D1F7BB000DD49E /* PostsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051F728D1F7BB000DD49E /* PostsCell.swift */; };
+		934051FA28D2CAEC000DD49E /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051F928D2CAEC000DD49E /* Keychain.swift */; };
+		934051FD28D2CB6B000DD49E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051FC28D2CB6B000DD49E /* Extensions.swift */; };
 		9348E76A28C87196001ABA1B /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9348E76928C87196001ABA1B /* BarView.swift */; };
 		9348E76C28C871A3001ABA1B /* BarAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9348E76B28C871A3001ABA1B /* BarAPI.swift */; };
 		9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABCA28BCA4C100B1867B /* PostsAPI.swift */; };
@@ -30,7 +32,7 @@
 		93D786D828D1B34000F869AA /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D786D728D1B34000F869AA /* ViewExtensions.swift */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
-		93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* ContentView.swift */; };
+		93FA23FC28B797B7000C8D64 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* MainView.swift */; };
 		93FA240128B797B8000C8D64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93FA240028B797B8000C8D64 /* Preview Assets.xcassets */; };
 		93FA240B28B797B8000C8D64 /* MenToMenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA240A28B797B8000C8D64 /* MenToMenTests.swift */; };
 		93FA241528B797B8000C8D64 /* MenToMenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA241428B797B8000C8D64 /* MenToMenUITests.swift */; };
@@ -70,6 +72,8 @@
 		931644E928B83983001E5243 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
 		93387DE028C0A5A300F0BD19 /* WriteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteImageView.swift; sourceTree = "<group>"; };
 		934051F728D1F7BB000DD49E /* PostsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCell.swift; sourceTree = "<group>"; };
+		934051F928D2CAEC000DD49E /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		934051FC28D2CB6B000DD49E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9348E76928C87196001ABA1B /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		9348E76B28C871A3001ABA1B /* BarAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarAPI.swift; sourceTree = "<group>"; };
 		9370ABCA28BCA4C100B1867B /* PostsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsAPI.swift; sourceTree = "<group>"; };
@@ -87,7 +91,7 @@
 		93F41EAC28BB3F9B000172C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93FA23F628B797B7000C8D64 /* 멘투멘.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멘투멘.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA23F928B797B7000C8D64 /* MenToMenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenApp.swift; sourceTree = "<group>"; };
-		93FA23FB28B797B7000C8D64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		93FA23FB28B797B7000C8D64 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		93FA240028B797B8000C8D64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		93FA240628B797B8000C8D64 /* MenToMenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenToMenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93FA240A28B797B8000C8D64 /* MenToMenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenToMenTests.swift; sourceTree = "<group>"; };
@@ -137,6 +141,48 @@
 			path = Request;
 			sourceTree = "<group>";
 		};
+		934051FB28D2CAFC000DD49E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				93D786D728D1B34000F869AA /* ViewExtensions.swift */,
+				934051F928D2CAEC000DD49E /* Keychain.swift */,
+				934051FC28D2CB6B000DD49E /* Extensions.swift */,
+				9308E8D828BF808A003AB02D /* Request */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		934051FE28D2CBDC000DD49E /* PostsView */ = {
+			isa = PBXGroup;
+			children = (
+				93FA242328B797E8000C8D64 /* PostsView.swift */,
+				934051F728D1F7BB000DD49E /* PostsCell.swift */,
+				9370ABCA28BCA4C100B1867B /* PostsAPI.swift */,
+			);
+			path = PostsView;
+			sourceTree = "<group>";
+		};
+		934051FF28D2CC86000DD49E /* PostViews */ = {
+			isa = PBXGroup;
+			children = (
+				934051FE28D2CBDC000DD49E /* PostsView */,
+				9370ABCD28BCB38300B1867B /* PostView */,
+				9370ABCC28BCA4E900B1867B /* WriteView */,
+			);
+			path = PostViews;
+			sourceTree = "<group>";
+		};
+		9340520028D2CCC3000DD49E /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				9370ABD828BCC10200B1867B /* LoginView */,
+				93FA23FB28B797B7000C8D64 /* MainView.swift */,
+				9348E76828C87188001ABA1B /* BarView */,
+				9370ABD128BCB44400B1867B /* NotifyView */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
 		9348E76828C87188001ABA1B /* BarView */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,19 +229,6 @@
 			path = LoginView;
 			sourceTree = "<group>";
 		};
-		9370ABDB28BCC23C00B1867B /* MainView */ = {
-			isa = PBXGroup;
-			children = (
-				93FA242328B797E8000C8D64 /* PostsView.swift */,
-				934051F728D1F7BB000DD49E /* PostsCell.swift */,
-				9370ABCA28BCA4C100B1867B /* PostsAPI.swift */,
-				9348E76828C87188001ABA1B /* BarView */,
-				9370ABD128BCB44400B1867B /* NotifyView */,
-				9370ABCD28BCB38300B1867B /* PostView */,
-			);
-			path = MainView;
-			sourceTree = "<group>";
-		};
 		93B5842428BE0BFA00A50787 /* ProfileView */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,16 +265,13 @@
 			isa = PBXGroup;
 			children = (
 				9379692E28BCD36500FB707F /* Info.plist */,
-				93F41EAC28BB3F9B000172C9 /* Assets.xcassets */,
 				93B5842928BE2A4900A50787 /* Launch Screen.storyboard */,
 				93FA23F928B797B7000C8D64 /* MenToMenApp.swift */,
-				93D786D728D1B34000F869AA /* ViewExtensions.swift */,
-				93FA23FB28B797B7000C8D64 /* ContentView.swift */,
-				9308E8D828BF808A003AB02D /* Request */,
-				9370ABD828BCC10200B1867B /* LoginView */,
-				9370ABDB28BCC23C00B1867B /* MainView */,
-				9370ABCC28BCA4E900B1867B /* WriteView */,
+				934051FB28D2CAFC000DD49E /* Extensions */,
+				9340520028D2CCC3000DD49E /* MainViews */,
+				934051FF28D2CC86000DD49E /* PostViews */,
 				93B5842428BE0BFA00A50787 /* ProfileView */,
+				93F41EAC28BB3F9B000172C9 /* Assets.xcassets */,
 				93FA23FF28B797B8000C8D64 /* Preview Content */,
 			);
 			path = MenToMen;
@@ -534,11 +564,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				934051FD28D2CB6B000DD49E /* Extensions.swift in Sources */,
 				93D786D828D1B34000F869AA /* ViewExtensions.swift in Sources */,
 				931644E828B8396B001E5243 /* ProfileView.swift in Sources */,
 				9308E8DC28BF80A5003AB02D /* Request.swift in Sources */,
 				93D458AB28C60B7E00A3F565 /* PostAPI.swift in Sources */,
-				93FA23FC28B797B7000C8D64 /* ContentView.swift in Sources */,
+				93FA23FC28B797B7000C8D64 /* MainView.swift in Sources */,
 				9348E76A28C87196001ABA1B /* BarView.swift in Sources */,
 				9370ABCF28BCB38D00B1867B /* PostView.swift in Sources */,
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
@@ -547,6 +578,7 @@
 				9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */,
 				93D458A928C591C100A3F565 /* WriteAPI.swift in Sources */,
 				9370ABDA28BCC10D00B1867B /* LoginView.swift in Sources */,
+				934051FA28D2CAEC000DD49E /* Keychain.swift in Sources */,
 				93387DE128C0A5A300F0BD19 /* WriteImageView.swift in Sources */,
 				934051F828D1F7BB000DD49E /* PostsCell.swift in Sources */,
 				9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */,
@@ -641,7 +673,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -695,7 +727,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -718,6 +750,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MenToMen/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 저장하기 위해 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -751,6 +784,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MenToMen/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 저장하기 위해 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

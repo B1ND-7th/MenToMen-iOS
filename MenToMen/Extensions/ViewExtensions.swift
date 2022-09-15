@@ -7,31 +7,11 @@
 
 import SwiftUI
 
-//extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
-//    override open func viewDidLoad() {
-//        super.viewDidLoad()
-//        interactivePopGestureRecognizer?.delegate = self
-//    }
-//
-//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return viewControllers.count > 1
-//    }
-//}
-
 enum Alignments {
     case top
     case bottom
     case leading
     case trailing
-}
-
-extension Date {
-    var relative: String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.localizedString(for: self, relativeTo: Date())
-    }
 }
 
 extension View {

@@ -11,7 +11,9 @@ import Alamofire
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @State var deleteAlert: Bool = false
     @State var data: PostDatas
+    @State var tap: Bool = false
     let profileImage: String = ""
     func timeParser(_ original: String) -> String {
         let formatter = DateFormatter()
@@ -21,6 +23,11 @@ struct PostView: View {
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "yyyy년 M월 d일 a h:mm"
         return formatter.string(from: date!)
+    }
+    func tapper(_ state: Bool) {
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+            tap = state
+        }
     }
     var body: some View {
         VStack(spacing: 0) {
@@ -56,8 +63,26 @@ struct PostView: View {
                         VStack(alignment: .leading) {
                             Text(data.userName)
                             Text("\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번")
+                                .foregroundColor(.gray)
                         }
                         Spacer()
+                        if data.author == 1 {
+                            Button(action: {
+                                print("Hello")
+                            }) {
+                                Image("write")
+                                    .renderIcon()
+                            }
+                            .frame(width: 25, height: 25)
+                            Button(action: {
+                                deleteAlert.toggle()
+                            }) {
+                                Image("trash")
+                                    .renderIcon()
+                            }
+                            .frame(width: 25, height: 25)
+                            .padding([.leading, .trailing], 5)
+                        }
                     }
                     .padding(.bottom, 10)
                     Text(data.content)
@@ -69,13 +94,18 @@ struct PostView: View {
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 7))
                             .padding(.top, 10)
+                            .scaleEffect(tap ? 0.95 : 1)
+                            .onLongPressGesture(minimumDuration: 0.3) {
+                                HapticManager.instance.impact(style: .medium)
+                                tapper(true)
+                            }
                     } placeholder: {
                         ProgressView()
                     }
                     .isHidden(data.imgUrl == nil, remove: true)
                     Text(timeParser(data.localDateTime))
                         .font(.caption)
-                        .padding([.top, .trailing], 10)
+                        .padding([.top], 10)
                         .foregroundColor(.gray)
                         .setAlignment(for: .trailing)
                 }
@@ -104,6 +134,41 @@ struct PostView: View {
                     }
                 }
             }
+        }
+        .buttonStyle(BorderlessButtonStyle())
+        .confirmationDialog("저장", isPresented: $tap) {
+            Button("사진 앨범에 추가") {
+                tapper(false)
+                DispatchQueue.global().async {
+                    let data = try? Data(contentsOf: URL(string: data.imgUrl!)!)
+                    DispatchQueue.main.async {
+                        if data != nil {
+                            UIImageWriteToSavedPhotosAlbum(UIImage(data: data!)!, nil, nil, nil)
+                        }
+                    }
+                }
+            }
+            Button("취소", role: .cancel) {
+                tapper(false)
+            }
+        }
+        .confirmationDialog("삭제", isPresented: $deleteAlert) {
+            Button("정말 삭제하시겠습니까?", role: .destructive) {
+                AF.request("\(api)/post/delete/\(data.postId)",
+                           method: .delete,
+                           encoding: JSONEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 10 }
+                        .validate()
+                        .responseData { response in
+                            checkResponse(response)
+                            dismiss()
+                    }
+            } 
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("삭제한 게시글은 복구할 수 없습니다")
         }
         .dragGesture(dismiss, $dragOffset)
         .navigationBarHidden(true)

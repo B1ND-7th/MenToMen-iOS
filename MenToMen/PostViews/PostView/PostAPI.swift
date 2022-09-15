@@ -12,6 +12,7 @@ struct PostData: Decodable {
 }
 
 struct PostDatas: Decodable {
+    let author: Int
     let content: String
     let imgUrl: String?
     let localDateTime: String
