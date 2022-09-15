@@ -17,14 +17,13 @@ struct BarView: View {
                 .foregroundColor(Color(.label))
                 .frame(width: 100, height: 33.8)
             Spacer()
-            Button(action: { }) {
-                Image("search-normal")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(Color(.label))
+            if searchButton {
+                Button(action: { }) {
+                    Image("search-normal")
+                        .renderIcon()
+                }
+                .frame(width: 25, height: 25)
             }
-            .frame(width: 25, height: 25)
-            .isHidden(!searchButton, remove: true)
             NavigationLink(destination: NotifyView()) {
                 ZStack {
                     Circle()
@@ -32,9 +31,7 @@ struct BarView: View {
                         .frame(width: 8, height: 8)
                         .position(x: 22, y: 0)
                     Image("notification")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(Color(.label))
+                        .renderIcon()
                 }
             }
             .frame(width: 25, height: 25)

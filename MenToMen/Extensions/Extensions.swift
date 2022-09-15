@@ -16,6 +16,15 @@ extension Date {
     }
 }
 
+extension Image {
+    public func renderIcon() -> some View {
+        self
+            .resizable()
+            .renderingMode(.template)
+            .foregroundColor(Color(.label))
+    }
+}
+
 class HapticManager {
     static let instance = HapticManager()
     
