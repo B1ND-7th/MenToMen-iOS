@@ -81,27 +81,4 @@ extension View {
         }
         }
     }
-    
-    public func asUIImage() -> UIImage {
-        let controller = UIHostingController(rootView: self)
-        controller.view.frame = CGRect(x: 0, y: CGFloat(Int.max), width: 1, height: 1)
-        
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        window!.rootViewController?.view.addSubview(controller.view)
-        
-        let size = controller.sizeThatFits(in: UIScreen.main.bounds.size)
-        controller.view.bounds = CGRect(origin: .zero, size: size)
-        controller.view.sizeToFit()
-        
-        let view = controller.view
-        let renderer = UIGraphicsImageRenderer(bounds: view!.bounds)
-        let image = renderer.image { rendererContext in
-            view!.layer.render(in: rendererContext.cgContext)
-        }
-        
-        controller.view.removeFromSuperview()
-        return image
-    }
 }
