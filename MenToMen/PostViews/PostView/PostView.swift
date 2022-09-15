@@ -111,7 +111,6 @@ struct PostView: View {
                 }
                 .padding()
                 .customCell()
-                .buttonStyle(BorderlessButtonStyle())
             }
             .customList()
             .refreshable {
@@ -136,6 +135,7 @@ struct PostView: View {
                 }
             }
         }
+        .buttonStyle(BorderlessButtonStyle())
         .confirmationDialog("저장", isPresented: $tap) {
             Button("사진 앨범에 추가") {
                 tapper(false)

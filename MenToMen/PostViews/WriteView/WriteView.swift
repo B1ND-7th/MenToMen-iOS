@@ -9,7 +9,7 @@ import SwiftUI
 import Alamofire
 
 struct WriteView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var selectedImage: UIImage?
     @State var imagePickerToggle: Bool = false
     @State var imageUploadFailed: Bool = false
@@ -43,7 +43,7 @@ struct WriteView: View {
                 print(params)
                 checkResponse(response)
                 switch response.result {
-                case .success: presentationMode.wrappedValue.dismiss()
+                case .success: dismiss()
                 case .failure: writingFailed.toggle()
                 }
             }
@@ -53,7 +53,7 @@ struct WriteView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }) {
                     Image(systemName: "xmark")
                         .font(Font.system(size: 25, weight: .regular))
