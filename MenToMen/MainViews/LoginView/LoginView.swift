@@ -83,7 +83,7 @@ struct LoginView: View {
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 .padding(.bottom, 40)
-                NavigationLink(destination: ContentView(), isActive: $success) { EmptyView() }
+                NavigationLink(destination: MainView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     request = true
                     AF.request("http://dauth.b1nd.com/api/auth/login",

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  MenToMen
 //
 //  Created by Mercen on 2022/08/25.
@@ -20,7 +20,7 @@ struct FullScreenModalView: View {
     }
 }
 
-struct ContentView: View {
+struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
     @State var navbarHidden: Bool = false
@@ -81,9 +81,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MainView()
             //.preferredColorScheme(.dark)
     }
 }
