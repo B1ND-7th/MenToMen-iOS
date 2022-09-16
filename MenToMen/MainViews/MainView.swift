@@ -64,7 +64,9 @@ struct MainView: View {
                 }
                 .background(Color(.secondarySystemGroupedBackground))
             }
-            .fullScreenCover(isPresented: $writeToggles, content: WriteView.init)
+            .fullScreenCover(isPresented: $writeToggles, content: {
+                WriteView(data: nil)
+            })
             .navigationBarHidden(true)
             .slideOverCard(isPresented: $tutorial, options: [.hideDismissButton,
                                                              .disableDragToDismiss]) {
@@ -74,13 +76,29 @@ struct MainView: View {
                         TutorialView(title: "홈 둘러보기",
                                      description: "멘토 요청 게시글을 확인해보세요",
                                      image: "Dog")
+                    case 1:
+                        TutorialView(title: "홈 둘러보기",
+                                     description: "게시글 분야 필터를 사용해보세요",
+                                     image: "Dog")
+                    case 2:
+                        TutorialView(title: "홈 둘러보기",
+                                     description: "게시글 검색 기능을 사용해보세요",
+                                     image: "Dog")
+                    case 3:
+                        TutorialView(title: "홈 둘러보기",
+                                     description: "알림 메시지 목록을 확인해보세요",
+                                     image: "Dog")
                     default:
                         EmptyView()
                     }
                     Button(action: {
-                        status += 1
+                        if status != 3 {
+                            status += 1
+                        } else {
+                            SOCManager.dismiss(isPresented: $tutorial)
+                        }
                     }) {
-                        Text("다음")
+                        Text(status != 3 ? "다음" : "완료")
                             .frame(height: 50)
                             .frame(maxWidth: .infinity)
                             .foregroundColor(Color(.systemBackground))
@@ -88,11 +106,13 @@ struct MainView: View {
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .padding(.bottom, 5)
-                    Button(action: {
-                        SOCManager.dismiss(isPresented: $tutorial)
-                    }) {
-                        Text("건너뛰기")
-                            .fontWeight(.bold)
+                    if status != 3 {
+                        Button(action: {
+                            SOCManager.dismiss(isPresented: $tutorial)
+                        }) {
+                            Text("건너뛰기")
+                                .fontWeight(.bold)
+                        }
                     }
                 }
             }

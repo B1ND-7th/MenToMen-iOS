@@ -16,10 +16,9 @@ struct WriteView: View {
     @State var writingFailed: Bool = false
     @State var text: String = ""
     @State var selectedFilter: Int = 5
+    @State var imageEdited: Bool = false
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
-    init() {
-        UITextView.appearance().backgroundColor = .clear
-    }
+    let data: PostDatas?
     func rotateImage(_ image: UIImage) -> UIImage? {
         if image.imageOrientation == UIImage.Orientation.up {
             return image
@@ -31,8 +30,8 @@ struct WriteView: View {
         return copy
     }
     func submit(_ params: [String: Any]) {
-        AF.request("\(api)/post/submit",
-                   method: .post,
+        AF.request("\(api)/post/\(data == nil ? "submit" : "update")",
+                   method: data == nil ? .post : .patch,
                    parameters: params,
                    encoding: JSONEncoding.default,
                    headers: ["Content-Type": "application/json"],
@@ -107,7 +106,11 @@ struct WriteView: View {
                     if selectedFilter != 5 {
                         reqParam["tag"] = TypeArray[selectedFilter].uppercased()
                     }
-                    if selectedImage != nil {
+                    if data != nil {
+                        reqParam["postId"] = data!.postId
+                    }
+                    if selectedImage != nil ||
+                        (selectedImage != nil && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
                             MultipartFormData.append(rotateImage(selectedImage!)!.jpegData(compressionQuality: 0.6)!,
                                                      withName: "file",
@@ -126,6 +129,8 @@ struct WriteView: View {
                                 case .failure: imageUploadFailed.toggle()
                                 }
                             }
+                    } else if data != nil && !imageEdited && data!.imgUrl != nil {
+                        reqParam["imgUrl"] = data!.imgUrl!
                     } else {
                         submit(reqParam)
                     }
@@ -135,7 +140,7 @@ struct WriteView: View {
                             .resizable()
                             .renderingMode(.template)
                             .frame(width: 20, height: 20)
-                        Text("멘토 요청하기")
+                        Text(data == nil ? "멘토 요청하기" : "요청 수정하기")
                     }
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -149,26 +154,27 @@ struct WriteView: View {
                     } else {
                         selectedImage = nil
                     }
+                    imageEdited = true
                 }) {
                     ZStack {
-                        ZStack {
-                            Image(uiImage: selectedImage ?? UIImage(named: "null")!)
+                        if selectedImage != nil {
+                            ZStack {
+                                Image(uiImage: selectedImage ?? UIImage(named: "null")!)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 55, height: 55)
+                                    .clipped()
+                                    .overlay(.black.opacity(0.3))
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title3)
+                                    .foregroundColor(.white)
+                            }
+                        } else {
+                            Image("photo")
                                 .resizable()
-                                .scaledToFill()
-                                .frame(width: 55, height: 55)
-                                .clipped()
-                                //.ignoresSafeArea()
-                                .overlay(.black.opacity(0.3))
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title3)
-                                .foregroundColor(.white)
+                                .renderingMode(.template)
+                                .frame(width: 20, height: 20)
                         }
-                        .isHidden(selectedImage == nil, remove: true)
-                        Image("photo")
-                            .resizable()
-                            .renderingMode(.template)
-                            .frame(width: 20, height: 20)
-                            .isHidden(selectedImage != nil, remove: true)
                     }
                     .foregroundColor(Color(.systemBackground))
                     .frame(width: 55, height: 55)
@@ -176,6 +182,27 @@ struct WriteView: View {
                 }
             }
             .clipped()
+        }
+        .onAppear {
+            UITextView.appearance().backgroundColor = .clear
+            if data != nil {
+                text = data!.content
+                for idx in 0..<TypeArray.count {
+                    if data!.tag == TypeArray[idx].uppercased() {
+                        selectedFilter = idx
+                    }
+                }
+                if data!.imgUrl != nil {
+                    DispatchQueue.global().async {
+                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
+                        DispatchQueue.main.async {
+                            if data != nil {
+                                selectedImage = UIImage(data: data!)
+                            }
+                        }
+                    }
+                }
+            }
         }
         .sheet(isPresented: $imagePickerToggle) {
             ImagePicker(image: $selectedImage)
@@ -186,11 +213,5 @@ struct WriteView: View {
         .alert(isPresented: $writingFailed) {
             Alert(title: Text("오류"), message: Text("멘토 요청에 실패했습니다"), dismissButton: .default(Text("확인")))
         }
-    }
-}
-
-struct WriteView_Previews: PreviewProvider {
-    static var previews: some View {
-        WriteView()
     }
 }

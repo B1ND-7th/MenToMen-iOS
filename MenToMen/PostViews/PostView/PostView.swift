@@ -12,6 +12,7 @@ struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
     @State var deleteAlert: Bool = false
+    @State var writeToggles: Bool = false
     @State var data: PostDatas
     @State var tap: Bool = false
     let profileImage: String = ""
@@ -68,7 +69,7 @@ struct PostView: View {
                         Spacer()
                         if data.author == 1 {
                             Button(action: {
-                                print("Hello")
+                                writeToggles.toggle()
                             }) {
                                 Image("write")
                                     .renderIcon()
@@ -136,6 +137,9 @@ struct PostView: View {
             }
         }
         .buttonStyle(BorderlessButtonStyle())
+        .fullScreenCover(isPresented: $writeToggles, content: {
+            WriteView(data: data)
+        })
         .confirmationDialog("저장", isPresented: $tap) {
             Button("사진 앨범에 추가") {
                 tapper(false)
