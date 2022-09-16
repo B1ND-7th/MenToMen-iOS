@@ -38,3 +38,11 @@ class HapticManager {
         generator.impactOccurred()
     }
 }
+
+extension AnyTransition {
+    static var backslide: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading))
+    }
+}
