@@ -16,7 +16,11 @@ struct MainView: View {
     @State var writeToggles: Bool = false
     @State var logout: Bool = false
     @State var status: Int = 0
-    @State var tutorial: Bool = true
+    @State var tutorial: Bool = false
+    func tutorialFinished() {
+        UserDefaults.standard.set(true, forKey: "homeTutorial")
+        SOCManager.dismiss(isPresented: $tutorial)
+    }
     var body: some View {
         NavigationView {
             ZStack {
@@ -68,8 +72,16 @@ struct MainView: View {
                 WriteView(data: nil)
             })
             .navigationBarHidden(true)
-            .slideOverCard(isPresented: $tutorial, options: [.hideDismissButton,
-                                                             .disableDragToDismiss]) {
+            .onAppear {
+                if !UserDefaults.standard.bool(forKey: "homeTutorial") {
+                    tutorial.toggle()
+                }
+            }
+            .slideOverCard(isPresented: $tutorial,
+                           options: [.hideDismissButton, .disableDragToDismiss],
+                           style: SOCStyle(continuous: false,
+                                           innerPadding: 16.0, outerPadding: 4.0,
+                                           style: Color("M2MBackground"))) {
                 VStack {
                     VStack(spacing: 5) {
                         Text("멘투멘 둘러보기")
@@ -97,7 +109,7 @@ struct MainView: View {
                         if status != 3 {
                             status += 1
                         } else {
-                            SOCManager.dismiss(isPresented: $tutorial)
+                            tutorialFinished()
                         }
                     }) {
                         Text(status != 3 ? "다음" : "완료")
@@ -109,9 +121,7 @@ struct MainView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .padding(.bottom, 5)
                     if status != 3 {
-                        Button(action: {
-                            SOCManager.dismiss(isPresented: $tutorial)
-                        }) {
+                        Button(action: tutorialFinished) {
                             Text("건너뛰기")
                                 .fontWeight(.bold)
                         }
