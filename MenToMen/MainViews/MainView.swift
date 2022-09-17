@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SlideOverCard
 
 struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -14,7 +15,12 @@ struct MainView: View {
     @State var navbarUpdown: Bool = false
     @State var writeToggles: Bool = false
     @State var logout: Bool = false
-    @State var status: [Int] = [0, 70, 0, 0, 0]
+    @State var status: Int = 0
+    @State var tutorial: Bool = false
+    func tutorialFinished() {
+        UserDefaults.standard.set(true, forKey: "homeTutorial")
+        SOCManager.dismiss(isPresented: $tutorial)
+    }
     var body: some View {
         NavigationView {
             ZStack {
@@ -61,34 +67,67 @@ struct MainView: View {
                     .isHidden(navbarUpdown, remove: true)
                 }
                 .background(Color(.secondarySystemGroupedBackground))
-//                VStack(spacing: 0) {
-//                    Color.black
-//                        .opacity(0.5)
-//                        .frame(height: CGFloat(status[1]))
-//                        .padding(.bottom, CGFloat(status[2]))
-//                    Color.black
-//                        .opacity(0.5)
-//                }
-//                Button(action: {
-//                    withAnimation(.default) {
-//                        switch(status[0]) {
-//                        case 0:
-//                            status[2] = 40
-//                        case 1:
-//                            status[2] = 400
-//                        case 2:
-//                            status[2] = 40
-//                        default:
-//                            status[2] = 0
-//                        }
-//                    }
-//                    status[0] += 1
-//                }) {
-//                    Text("Next")
-//                }
             }
-            .fullScreenCover(isPresented: $writeToggles, content: WriteView.init)
+            .fullScreenCover(isPresented: $writeToggles, content: {
+                WriteView(data: nil)
+            })
             .navigationBarHidden(true)
+            .onAppear {
+                if !UserDefaults.standard.bool(forKey: "homeTutorial") {
+                    tutorial.toggle()
+                }
+            }
+            .slideOverCard(isPresented: $tutorial,
+                           options: [.hideDismissButton, .disableDragToDismiss],
+                           style: SOCStyle(continuous: false,
+                                           innerPadding: 16.0, outerPadding: 4.0,
+                                           style: Color("M2MBackground"))) {
+                VStack {
+                    VStack(spacing: 5) {
+                        Text("멘투멘 둘러보기")
+                            .font(.largeTitle)
+                            .fontWeight(.black)
+                        Text(["멘토 요청 게시글을 확인해보세요",
+                              "게시글 분야 필터를 사용해보세요",
+                              "게시글 검색 기능을 사용해보세요",
+                              "알림 메시지 목록을 확인해보세요"][status])
+                        if status == 0 {
+                            GifView(fileName: "homeTutorial1")
+                                .tutorialFrame()
+                        } else if status == 1 {
+                            GifView(fileName: "homeTutorial2")
+                                .tutorialFrame()
+                        } else if status == 2 {
+                            GifView(fileName: "homeTutorial3")
+                                .tutorialFrame()
+                        } else {
+                            GifView(fileName: "homeTutorial4")
+                                .tutorialFrame()
+                        }
+                    }
+                    Button(action: {
+                        if status != 3 {
+                            status += 1
+                        } else {
+                            tutorialFinished()
+                        }
+                    }) {
+                        Text(status != 3 ? "다음" : "완료")
+                            .frame(height: 50)
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(Color(.systemBackground))
+                            .background(Color.accentColor)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .padding(.bottom, 5)
+                    if status != 3 {
+                        Button(action: tutorialFinished) {
+                            Text("건너뛰기")
+                                .fontWeight(.bold)
+                        }
+                    }
+                }
+            }
         }
         .navigationBarHidden(true)
     }

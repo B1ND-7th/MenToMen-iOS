@@ -81,4 +81,13 @@ extension View {
         }
         }
     }
+    
+    @ViewBuilder func tutorialFrame() -> some View {
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .scaledToFit()
+            .clipShape(RoundedRectangle(cornerRadius: 25))
+            .shadow(color: Color.black.opacity(0.15), radius: 15, x: 0, y: 15)
+            .padding([.top, .bottom], 15)
+    }
 }

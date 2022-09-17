@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="M2MLogo" translatesAutoresizingMaskIntoConstraints="NO" id="36b-Of-QS4">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="M2MLogo2" translatesAutoresizingMaskIntoConstraints="NO" id="36b-Of-QS4">
                                 <rect key="frame" x="95" y="322" width="200" height="200"/>
                                 <color key="tintColor" name="AccentColor"/>
                                 <constraints>
@@ -41,7 +41,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="M2MLogo" width="1586" height="569"/>
+        <image name="M2MLogo2" width="499" height="499"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.3919999897480011" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
