@@ -71,25 +71,27 @@ struct MainView: View {
             .slideOverCard(isPresented: $tutorial, options: [.hideDismissButton,
                                                              .disableDragToDismiss]) {
                 VStack {
-                    switch(status) {
-                    case 0:
-                        TutorialView(title: "홈 둘러보기",
-                                     description: "멘토 요청 게시글을 확인해보세요",
-                                     image: "Dog")
-                    case 1:
-                        TutorialView(title: "홈 둘러보기",
-                                     description: "게시글 분야 필터를 사용해보세요",
-                                     image: "Dog")
-                    case 2:
-                        TutorialView(title: "홈 둘러보기",
-                                     description: "게시글 검색 기능을 사용해보세요",
-                                     image: "Dog")
-                    case 3:
-                        TutorialView(title: "홈 둘러보기",
-                                     description: "알림 메시지 목록을 확인해보세요",
-                                     image: "Dog")
-                    default:
-                        EmptyView()
+                    VStack(spacing: 5) {
+                        Text("멘투멘 둘러보기")
+                            .font(.largeTitle)
+                            .fontWeight(.black)
+                        Text(["멘토 요청 게시글을 확인해보세요",
+                              "게시글 분야 필터를 사용해보세요",
+                              "게시글 검색 기능을 사용해보세요",
+                              "알림 메시지 목록을 확인해보세요"][status])
+                        if status == 0 {
+                            GifView(fileName: "homeTutorial1")
+                                .tutorialFrame()
+                        } else if status == 1 {
+                            GifView(fileName: "homeTutorial2")
+                                .tutorialFrame()
+                        } else if status == 2 {
+                            GifView(fileName: "homeTutorial3")
+                                .tutorialFrame()
+                        } else {
+                            GifView(fileName: "homeTutorial4")
+                                .tutorialFrame()
+                        }
                     }
                     Button(action: {
                         if status != 3 {
