@@ -13,9 +13,10 @@ struct PostsView: View {
     @Binding var navbarUpdown: Bool
     @State var selectedFilter: Int = 5
     @State var datas = [PostDatas]()
+    @State var userId: Int = 0
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func load() {
-        AF.request("\(api)/post/read-all",
+        AF.request("\(api)/user/my",
                    method: .get,
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
@@ -23,13 +24,28 @@ struct PostsView: View {
         ) { $0.timeoutInterval = 10 }
         .validate()
         .responseData { response in
-            checkResponse(response)
-            print(checkStatus(response))
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
-                guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
-                datas = result.data
+                guard let result = try? decoder.decode(ProfileData.self, from: value) else { return }
+                userId = result.data.userId
+                AF.request("\(api)/post/read-all",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 10 }
+                .validate()
+                .responseData { response in
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
+                        datas = result.data
+                    case .failure(let error):
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
@@ -72,7 +88,7 @@ struct PostsView: View {
                     ForEach(0..<datas.count, id: \.self) { idx in
                         ZStack {
                             PostsCell(data: $datas[idx])
-                            NavigationLink(destination: PostView(data: datas[idx])
+                            NavigationLink(destination: PostView(data: datas[idx], userId: userId)
                                 .onAppear {
                                     navbarUpdown = true
                                     withAnimation(.default) {

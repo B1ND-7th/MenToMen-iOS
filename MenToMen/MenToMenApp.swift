@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public let api = "http://10.80.162.51:8080"
+public let api = "http://10.80.161.249:8080"
 public let decoder: JSONDecoder = JSONDecoder()
 
 @main

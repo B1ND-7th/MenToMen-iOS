@@ -16,6 +16,7 @@ struct PostView: View {
     @State var data: PostDatas
     @State var tap: Bool = false
     let profileImage: String = ""
+    let userId: Int
     func timeParser(_ original: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -67,7 +68,7 @@ struct PostView: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
-                        if data.author == 1 {
+                        if data.author == userId {
                             Button(action: {
                                 writeToggles.toggle()
                             }) {
