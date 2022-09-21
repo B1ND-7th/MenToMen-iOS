@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import CachedAsyncImage
 
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
@@ -50,7 +51,7 @@ struct PostView: View {
             List {
                 VStack(spacing: 0) {
                     HStack {
-                        AsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
+                        CachedAsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
                             image
                                 .resizable()
                         } placeholder: {
@@ -58,7 +59,7 @@ struct PostView: View {
                                 Image("profile")
                                     .resizable()
                             } else {
-                                ProgressView()
+                                NothingView()
                             }
                         }
                         .frame(width: 50, height: 50)
@@ -92,7 +93,7 @@ struct PostView: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     if data.imgUrl != nil {
-                        AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
+                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
                             image
                                 .resizable()
                                 .scaledToFit()

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import CachedAsyncImage
 
 struct ProfileView: View {
     @Binding var logout: Bool
@@ -70,7 +71,7 @@ struct ProfileView: View {
                 List {
                     VStack(spacing: 0) {
                         HStack {
-                            AsyncImage(url: URL(string: profileImage)) { image in
+                            CachedAsyncImage(url: URL(string: profileImage)) { image in
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
@@ -78,7 +79,7 @@ struct ProfileView: View {
                                 switch profileImage.count {
                                 case 0: Image("profile")
                                         .resizable()
-                                default: ProgressView()
+                                default: NothingView()
                                 }
                             }
                                 .frame(width: 70, height: 70)

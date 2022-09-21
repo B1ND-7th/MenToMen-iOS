@@ -35,6 +35,7 @@
 		93D458A928C591C100A3F565 /* WriteAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D458A828C591C100A3F565 /* WriteAPI.swift */; };
 		93D458AB28C60B7E00A3F565 /* PostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D458AA28C60B7E00A3F565 /* PostAPI.swift */; };
 		93D786D828D1B34000F869AA /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D786D728D1B34000F869AA /* ViewExtensions.swift */; };
+		93EE6C8728DB38F600173430 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 93EE6C8628DB38F600173430 /* CachedAsyncImage */; };
 		93F41EAD28BB3F9B000172C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F41EAC28BB3F9B000172C9 /* Assets.xcassets */; };
 		93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23F928B797B7000C8D64 /* MenToMenApp.swift */; };
 		93FA23FC28B797B7000C8D64 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA23FB28B797B7000C8D64 /* MainView.swift */; };
@@ -118,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93EE6C8728DB38F600173430 /* CachedAsyncImage in Frameworks */,
 				9376378E28D477F40080EDBD /* SlideOverCard in Frameworks */,
 				72B1A13A946699633F541E11 /* Pods_MenToMen.framework in Frameworks */,
 			);
@@ -367,6 +369,7 @@
 			name = MenToMen;
 			packageProductDependencies = (
 				9376378D28D477F40080EDBD /* SlideOverCard */,
+				93EE6C8628DB38F600173430 /* CachedAsyncImage */,
 			);
 			productName = MenToMen;
 			productReference = 93FA23F628B797B7000C8D64 /* 멘투멘.app */;
@@ -445,6 +448,7 @@
 			mainGroup = 93FA23ED28B797B7000C8D64;
 			packageReferences = (
 				9376378C28D477F40080EDBD /* XCRemoteSwiftPackageReference "SlideOverCard" */,
+				93EE6C8528DB38F600173430 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = 93FA23F728B797B7000C8D64 /* Products */;
 			projectDirPath = "";
@@ -967,6 +971,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		93EE6C8528DB38F600173430 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -974,6 +986,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9376378C28D477F40080EDBD /* XCRemoteSwiftPackageReference "SlideOverCard" */;
 			productName = SlideOverCard;
+		};
+		93EE6C8628DB38F600173430 /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 93EE6C8528DB38F600173430 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

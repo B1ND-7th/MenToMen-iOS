@@ -77,7 +77,9 @@ struct WriteView: View {
                 HStack {
                     ForEach(0..<5, id: \.self) { idx in
                         Button(action: {
+                            withAnimation(.default) {
                                 selectedFilter = selectedFilter == idx ? 5 : idx
+                            }
                         }) {
                             ZStack {
                                 switch(selectedFilter) {

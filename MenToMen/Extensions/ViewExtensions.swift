@@ -95,3 +95,11 @@ extension View {
             }
     }
 }
+
+struct NothingView: View {
+    var body: some View {
+        Rectangle()
+            .fill(.gray)
+            .opacity(0.3)
+    }
+}
