@@ -11,6 +11,7 @@ import Alamofire
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @State var errorToggle: Bool = false
     @State var deleteAlert: Bool = false
     @State var writeToggles: Bool = false
     @State var data: PostDatas
@@ -135,6 +136,7 @@ struct PostView: View {
                         guard let result = try? decoder.decode(PostData.self, from: value) else { return }
                         data = result.data
                     case .failure(let error):
+                        errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
                 }
@@ -179,6 +181,7 @@ struct PostView: View {
             Text("삭제한 게시글은 복구할 수 없습니다")
         }
         .dragGesture(dismiss, $dragOffset)
+        .exitAlert($errorToggle)
         .navigationBarHidden(true)
     }
 }

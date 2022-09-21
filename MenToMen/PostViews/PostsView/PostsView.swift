@@ -11,6 +11,7 @@ import Alamofire
 struct PostsView: View {
     @Binding var navbarHidden: Bool
     @Binding var navbarUpdown: Bool
+    @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
     @State var datas = [PostDatas]()
     @State var userId: Int = 0
@@ -43,10 +44,12 @@ struct PostsView: View {
                         guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
                         datas = result.data
                     case .failure(let error):
+                        errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
                 }
             case .failure(let error):
+                errorToggle.toggle()
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
         }
@@ -114,6 +117,7 @@ struct PostsView: View {
                 .onAppear { load() }
                 .refreshable { load() }
             }
+            .exitAlert($errorToggle)
             .navigationBarHidden(true)
             .navigationTitle("")
         }

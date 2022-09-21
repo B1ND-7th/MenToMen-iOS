@@ -90,4 +90,14 @@ extension View {
             .shadow(color: Color.black.opacity(0.15), radius: 15, x: 0, y: 15)
             .padding([.top, .bottom], 15)
     }
+    
+    @ViewBuilder func exitAlert(_ status: Binding<Bool>) -> some View {
+        self
+            .alert(isPresented: status) {
+                Alert(title: Text("오류"), message: Text("서버에 연결할 수 없습니다"),
+                      dismissButton: Alert.Button.default(Text("확인"), action: {
+                    exitHandler()
+                }))
+            }
+    }
 }
