@@ -7,8 +7,15 @@
 
 import SwiftUI
 
-public let api = "http://10.80.162.51:8080"
+public let api = "http://10.80.163.171:8080"
 public let decoder: JSONDecoder = JSONDecoder()
+
+func exitHandler() {
+    UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        exit(0)
+    }
+}
 
 @main
 struct MenToMenApp: App {

@@ -9,7 +9,11 @@ import Alamofire
 import SwiftyJSON
 
 func checkResponse(_ response: DataResponse<Data, AFError>) {
-    print(String(decoding: response.data!, as: UTF8.self))
+    if response.data == nil {
+        print("RESPONSE DATA IS NIL")
+    } else {
+        print(String(decoding: response.data!, as: UTF8.self))
+    }
 }
 
 func checkStatus(_ response: DataResponse<Data, AFError>) -> Int {

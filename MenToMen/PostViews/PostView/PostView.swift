@@ -11,11 +11,13 @@ import Alamofire
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @State var errorToggle: Bool = false
     @State var deleteAlert: Bool = false
     @State var writeToggles: Bool = false
     @State var data: PostDatas
     @State var tap: Bool = false
     let profileImage: String = ""
+    let userId: Int
     func timeParser(_ original: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -67,7 +69,7 @@ struct PostView: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
-                        if data.author == 1 {
+                        if data.author == userId {
                             Button(action: {
                                 writeToggles.toggle()
                             }) {
@@ -104,7 +106,10 @@ struct PostView: View {
                         ProgressView()
                     }
                     .isHidden(data.imgUrl == nil, remove: true)
-                    Text(timeParser(data.localDateTime))
+                    Text("""
+                         \(timeParser(data.createDateTime)) 작성\
+                         \(data.updateStatus == "UPDATE" ? "\n\(timeParser(data.updateDateTime)) 수정" : "")
+                         """)
                         .font(.caption)
                         .padding([.top], 10)
                         .foregroundColor(.gray)
@@ -131,6 +136,7 @@ struct PostView: View {
                         guard let result = try? decoder.decode(PostData.self, from: value) else { return }
                         data = result.data
                     case .failure(let error):
+                        errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
                 }
@@ -175,6 +181,7 @@ struct PostView: View {
             Text("삭제한 게시글은 복구할 수 없습니다")
         }
         .dragGesture(dismiss, $dragOffset)
+        .exitAlert($errorToggle)
         .navigationBarHidden(true)
     }
 }

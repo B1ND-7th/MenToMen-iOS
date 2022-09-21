@@ -11,12 +11,14 @@ import SlideOverCard
 struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var selectedView: Int = 0
-    @State var navbarHidden: Bool = false
-    @State var navbarUpdown: Bool = false
     @State var writeToggles: Bool = false
     @State var logout: Bool = false
     @State var status: Int = 0
     @State var tutorial: Bool = false
+    @State var postdata: PostDatas = PostDatas(author: 0, content: "", imgUrl: "", createDateTime: "", updateDateTime: "", updateStatus: "", postId: 0, profileUrl: "", tag: "", userName: "", stdInfo: InfoDatas(grade: 1, room: 1, number: 1))
+
+    @State var postlink: Bool = false
+    @State var postuser: Int = 0
     func tutorialFinished() {
         UserDefaults.standard.set(true, forKey: "homeTutorial")
         SOCManager.dismiss(isPresented: $tutorial)
@@ -30,12 +32,16 @@ struct MainView: View {
                 VStack {
                     NavigationLink(destination: LoginView()
                         .navigationBarHidden(true), isActive: $logout) { EmptyView() }
+                    NavigationLink(destination: PostView(data: postdata, userId: postuser)
+                        .navigationBarHidden(true), isActive: $postlink) { EmptyView() }
                     switch(selectedView) {
-                    case 0: PostsView(navbarHidden: $navbarHidden,
-                                      navbarUpdown: $navbarUpdown)
-                    default: ProfileView(navbarHidden: $navbarHidden,
-                                         navbarUpdown: $navbarUpdown,
-                                         logout: $logout)
+                    case 0: PostsView(postdata: $postdata,
+                                      postlink: $postlink,
+                                      postuser: $postuser)
+                    default: ProfileView(logout: $logout,
+                                         postdata: $postdata,
+                                         postlink: $postlink,
+                                         postuser: $postuser)
                     }
                     HStack {
                         Spacer()
@@ -63,8 +69,6 @@ struct MainView: View {
                             Spacer()
                         }
                     }
-                    .opacity(navbarHidden ? 0 : 1)
-                    .isHidden(navbarUpdown, remove: true)
                 }
                 .background(Color(.secondarySystemGroupedBackground))
             }

@@ -18,6 +18,7 @@ struct ProfileDatas: Decodable {
     let email: String
     let profileImage: String?
     let stdInfo: InfoDatas
+    let userId: Int
 }
 
 struct InfoDatas: Decodable {

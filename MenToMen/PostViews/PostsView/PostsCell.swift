@@ -31,7 +31,11 @@ struct PostsCell: View {
                         .frame(width: 27, height: 39)
                         .padding(.leading, 15)
                     Spacer()
-                    Text("\(timeParser(data.localDateTime)) · \(data.userName)")
+                    Text("""
+                         \(timeParser(data.createDateTime))\
+                         \(data.updateStatus == "UPDATE" ? "(수정됨)" : "") \
+                         · \(data.userName)
+                         """)
                         .font(.caption)
                         .padding(.trailing, 10)
                         .foregroundColor(.gray)
@@ -41,7 +45,7 @@ struct PostsCell: View {
             VStack {
                 HStack(alignment: .top) {
                     Text(data.content)
-                        .lineLimit(2)
+                        .lineLimit(7)
                     Spacer()
                     AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
                         image

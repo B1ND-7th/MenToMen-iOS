@@ -9,14 +9,16 @@ import SwiftUI
 import Alamofire
 
 struct ProfileView: View {
-    @Binding var navbarHidden: Bool
-    @Binding var navbarUpdown: Bool
     @Binding var logout: Bool
+    @Binding var postdata: PostDatas
+    @Binding var postlink: Bool
+    @Binding var postuser: Int
     @State var name: String = ""
     @State var profileImage: String = "null"
     @State var info: String = ""
     @State var email: String = ""
     @State var datas = [PostDatas]()
+    @State var userId: Int = 0
     func load() {
         AF.request("\(api)/user/my",
                    method: .get,
@@ -32,10 +34,11 @@ struct ProfileView: View {
                 guard let value = response.value else { return }
                 guard let result = try? decoder.decode(ProfileData.self, from: value) else { return }
                 let data = result.data
-                self.name = data.name
-                self.profileImage = data.profileImage ?? ""
-                self.info = "\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번"
-                self.email = data.email
+                name = data.name
+                profileImage = data.profileImage ?? ""
+                info = "\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번"
+                email = data.email
+                userId = data.userId
                 AF.request("\(api)/user/post",
                            method: .get,
                            encoding: URLEncoding.default,
@@ -109,25 +112,12 @@ struct ProfileView: View {
                     }
                     .customCell()
                     ForEach(0..<datas.count, id: \.self) { idx in
-                        ZStack {
+                        Button(action: {
+                            postdata = datas[idx]
+                            postuser = userId
+                            postlink = true
+                        }) {
                             PostsCell(data: $datas[idx])
-                            NavigationLink(destination: PostView(data: datas[idx])
-                                .onAppear {
-                                    navbarUpdown = true
-                                    withAnimation(.default) {
-                                        navbarHidden = true
-                                    }
-                                }
-                                .onDisappear {
-                                    withAnimation(.default) {
-                                        navbarHidden = false
-                                        navbarUpdown = false
-                                    }
-                                }
-                            ) { }
-                                .buttonStyle(PlainButtonStyle())
-                                .frame(width: 0)
-                                .opacity(0)
                         }
                         .customCell(bottom: datas.count-1 == idx)
                     }
