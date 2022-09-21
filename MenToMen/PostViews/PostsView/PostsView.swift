@@ -9,8 +9,9 @@ import SwiftUI
 import Alamofire
 
 struct PostsView: View {
-    @Binding var navbarHidden: Bool
-    @Binding var navbarUpdown: Bool
+    @Binding var postdata: PostDatas
+    @Binding var postlink: Bool
+    @Binding var postuser: Int
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
     @State var datas = [PostDatas]()
@@ -89,25 +90,12 @@ struct PostsView: View {
                     .listRowInsets(EdgeInsets())
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
-                        ZStack {
+                        Button(action: {
+                            postdata = datas[idx]
+                            postuser = userId
+                            postlink = true
+                        }) {
                             PostsCell(data: $datas[idx])
-                            NavigationLink(destination: PostView(data: datas[idx], userId: userId)
-                                .onAppear {
-                                    navbarUpdown = true
-                                    withAnimation(.default) {
-                                        navbarHidden = true
-                                    }
-                                }
-                                .onDisappear {
-                                    withAnimation(.default) {
-                                        navbarHidden = false
-                                        navbarUpdown = false
-                                    }
-                                }
-                            ) { }
-                                .buttonStyle(PlainButtonStyle())
-                                .frame(width: 0)
-                                .opacity(0)
                         }
                         .customCell(true)
                         .isHidden(datas[idx].tag != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)

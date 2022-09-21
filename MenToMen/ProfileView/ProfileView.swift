@@ -9,9 +9,10 @@ import SwiftUI
 import Alamofire
 
 struct ProfileView: View {
-    @Binding var navbarHidden: Bool
-    @Binding var navbarUpdown: Bool
     @Binding var logout: Bool
+    @Binding var postdata: PostDatas
+    @Binding var postlink: Bool
+    @Binding var postuser: Int
     @State var name: String = ""
     @State var profileImage: String = "null"
     @State var info: String = ""
@@ -111,25 +112,12 @@ struct ProfileView: View {
                     }
                     .customCell()
                     ForEach(0..<datas.count, id: \.self) { idx in
-                        ZStack {
+                        Button(action: {
+                            postdata = datas[idx]
+                            postuser = userId
+                            postlink = true
+                        }) {
                             PostsCell(data: $datas[idx])
-                            NavigationLink(destination: PostView(data: datas[idx], userId: userId)
-                                .onAppear {
-                                    navbarUpdown = true
-                                    withAnimation(.default) {
-                                        navbarHidden = true
-                                    }
-                                }
-                                .onDisappear {
-                                    withAnimation(.default) {
-                                        navbarHidden = false
-                                        navbarUpdown = false
-                                    }
-                                }
-                            ) { }
-                                .buttonStyle(PlainButtonStyle())
-                                .frame(width: 0)
-                                .opacity(0)
                         }
                         .customCell(bottom: datas.count-1 == idx)
                     }
