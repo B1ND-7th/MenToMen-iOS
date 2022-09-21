@@ -90,15 +90,16 @@ struct PostsView: View {
                     .listRowInsets(EdgeInsets())
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
-                        Button(action: {
-                            postdata = datas[idx]
-                            postuser = userId
-                            postlink = true
-                        }) {
-                            PostsCell(data: $datas[idx])
+                        if datas[idx].tag == TypeArray[selectedFilter].uppercased() || selectedFilter == 5 {
+                            Button(action: {
+                                postdata = datas[idx]
+                                postuser = userId
+                                postlink = true
+                            }) {
+                                PostsCell(data: $datas[idx])
+                            }
+                            .customCell(true)
                         }
-                        .customCell(true)
-                        .isHidden(datas[idx].tag != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
                 .customList()

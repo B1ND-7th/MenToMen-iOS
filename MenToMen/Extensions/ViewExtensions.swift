@@ -15,12 +15,6 @@ enum Alignments {
 }
 
 extension View {
-    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
-        if hidden {
-            if !remove { self.hidden() }
-        } else { self }
-    }
-    
     @ViewBuilder func dragGesture(_ dismiss: DismissAction, _ dragOffset: GestureState<CGSize>) -> some View {
         self
             .gesture(DragGesture().updating(dragOffset, body: { (value, state, transaction) in

@@ -85,7 +85,7 @@ struct MainView: View {
                            options: [.hideDismissButton, .disableDragToDismiss],
                            style: SOCStyle(continuous: false,
                                            innerPadding: 16.0, outerPadding: 4.0,
-                                           style: Color("M2MBackground"))) {
+                                           style: Color(.secondarySystemGroupedBackground))) {
                 VStack {
                     VStack(spacing: 5) {
                         Text("멘투멘 둘러보기")

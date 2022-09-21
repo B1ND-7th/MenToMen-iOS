@@ -8,6 +8,7 @@
 import SwiftUI
 import CryptoKit
 import Alamofire
+import AVFoundation
 
 struct ShakeEffect: GeometryEffect {
     var travelDistance: CGFloat = 6
@@ -79,9 +80,10 @@ struct LoginView: View {
                 VStack(alignment: .leading) {
                     AndroidTextField(text: $loginId, state: $tfstate, type: 0)
                     AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
-                    Text(invalidMessage)
-                        .foregroundColor(.accentColor)
-                        .isHidden(invalid == 0 || !tfstate, remove: true)
+                    if invalid != 0 && tfstate {
+                        Text(invalidMessage)
+                            .foregroundColor(.accentColor)
+                    }
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
                 .padding(.bottom, 40)
@@ -123,6 +125,7 @@ struct LoginView: View {
                                             try? saveToken(result.data.accessToken, "accessToken")
                                             try? saveToken(result.data.refreshToken, "refreshToken")
                                             HapticManager.instance.notification(type: .success)
+                                            AudioServicesPlaySystemSound(1407)
                                             success.toggle()
                                         case .failure:
                                             toggleFailure(0)
@@ -147,11 +150,5 @@ struct LoginView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }
-    }
-}
-
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView()
     }
 }

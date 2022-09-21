@@ -91,21 +91,23 @@ struct PostView: View {
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
-                            .padding(.top, 10)
-                            .scaleEffect(tap ? 0.95 : 1)
-                            .onLongPressGesture(minimumDuration: 0.3) {
-                                HapticManager.instance.impact(style: .medium)
-                                tapper(true)
-                            }
-                    } placeholder: {
-                        ProgressView()
+                    if data.imgUrl != nil {
+                        AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 7))
+                                .padding(.top, 10)
+                                .scaleEffect(tap ? 0.95 : 1)
+                                .onTapGesture { }
+                                .onLongPressGesture(minimumDuration: 0.3) {
+                                    HapticManager.instance.impact(style: .medium)
+                                    tapper(true)
+                                }
+                        } placeholder: {
+                            ProgressView()
+                        }
                     }
-                    .isHidden(data.imgUrl == nil, remove: true)
                     Text("""
                          \(timeParser(data.createDateTime)) 작성\
                          \(data.updateStatus == "UPDATE" ? "\n\(timeParser(data.updateDateTime)) 수정" : "")
