@@ -15,7 +15,9 @@ struct PostDatas: Decodable {
     let author: Int
     let content: String
     let imgUrl: String?
-    let localDateTime: String
+    let createDateTime: String
+    let updateDateTime: String
+    let updateStatus: String
     let postId: Int
     let profileUrl: String?
     let tag: String?

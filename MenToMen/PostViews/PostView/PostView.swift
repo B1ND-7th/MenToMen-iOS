@@ -105,7 +105,10 @@ struct PostView: View {
                         ProgressView()
                     }
                     .isHidden(data.imgUrl == nil, remove: true)
-                    Text(timeParser(data.localDateTime))
+                    Text("""
+                         \(timeParser(data.createDateTime)) 작성\
+                         \(data.updateStatus == "UPDATE" ? "\n\(timeParser(data.updateDateTime)) 수정" : "")
+                         """)
                         .font(.caption)
                         .padding([.top], 10)
                         .foregroundColor(.gray)
