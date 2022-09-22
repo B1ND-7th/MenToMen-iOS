@@ -22,11 +22,13 @@ struct PostsView: View {
     @State var userId: Int = 0
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func dataSearch() {
-        if searchText.isEmpty {
-            datas = originalDatas
-        } else {
-            datas = originalDatas.filter {
-                $0.content.localizedCaseInsensitiveContains(searchText)
+        withAnimation(.default) {
+            if searchText.isEmpty {
+                datas = originalDatas
+            } else {
+                datas = originalDatas.filter {
+                    $0.content.localizedCaseInsensitiveContains(searchText)
+                }
             }
         }
     }
@@ -79,16 +81,10 @@ struct PostsView: View {
                             .font(.title3)
                             .frame(height: 33.8)
                             .onChange(of: searchText) { text in
-                                withAnimation(.default) {
-                                    dataSearch()
-                                }
+                                dataSearch()
                             }
                     } else {
-                        Image("M2MLogo")
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(Color(.label))
-                            .frame(width: 100, height: 33.8)
+                        LogoView()
                         Spacer()
                     }
                     Button(action: {
@@ -107,22 +103,12 @@ struct PostsView: View {
                     .frame(width: 25, height: 25)
                     if !searchToggle {
                         NavigationLink(destination: NotifyView()) {
-                            ZStack {
-                                Circle()
-                                    .fill(.red)
-                                    .frame(width: 8, height: 8)
-                                    .position(x: 22, y: 0)
-                                Image("notification")
-                                    .renderIcon()
-                            }
+                            NotifyIconView(notice: true)
                         }
                         .frame(width: 25, height: 25)
                     }
                 }
-                .padding([.leading, .trailing], 20)
-                .padding(.bottom, 16)
-                .padding(.top, 12)
-                .background(Color(.secondarySystemGroupedBackground))
+                .customNavigation()
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in

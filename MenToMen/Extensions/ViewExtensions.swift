@@ -55,6 +55,14 @@ extension View {
         }
     }
     
+    @ViewBuilder func customNavigation() -> some View {
+        self
+            .padding([.leading, .trailing], 20)
+            .padding(.bottom, 16)
+            .padding(.top, 12)
+            .background(Color(.secondarySystemGroupedBackground))
+    }
+    
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
         switch alignment {
         case .top: VStack {
@@ -101,5 +109,31 @@ struct NothingView: View {
         Rectangle()
             .fill(.gray)
             .opacity(0.3)
+    }
+}
+
+struct LogoView: View {
+    var body: some View {
+        Image("M2MLogo")
+            .resizable()
+            .renderingMode(.template)
+            .foregroundColor(Color(.label))
+            .frame(width: 100, height: 33.8)
+    }
+}
+
+struct NotifyIconView: View {
+    let notice: Bool
+    var body: some View {
+        ZStack {
+            if notice {
+                Circle()
+                    .fill(.red)
+                    .frame(width: 8, height: 8)
+                    .position(x: 22, y: 0)
+            }
+            Image("notification")
+                .renderIcon()
+        }
     }
 }

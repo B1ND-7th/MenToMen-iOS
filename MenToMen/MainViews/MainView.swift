@@ -19,6 +19,7 @@ struct MainView: View {
 
     @State var postlink: Bool = false
     @State var postuser: Int = 0
+    @State var transition: AnyTransition = .slide
     func tutorialFinished() {
         UserDefaults.standard.set(true, forKey: "homeTutorial")
         SOCManager.dismiss(isPresented: $tutorial)
@@ -38,10 +39,12 @@ struct MainView: View {
                     case 0: PostsView(postdata: $postdata,
                                       postlink: $postlink,
                                       postuser: $postuser)
+                    .transition(transition)
                     default: ProfileView(logout: $logout,
                                          postdata: $postdata,
                                          postlink: $postlink,
                                          postuser: $postuser)
+                    .transition(transition)
                     }
                     HStack {
                         Spacer()
@@ -51,7 +54,13 @@ struct MainView: View {
                                 if idx == 1 {
                                     writeToggles.toggle()
                                 } else {
-                                    selectedView = idx
+                                    switch(idx) {
+                                    case 0: transition = .slide
+                                    default: transition = .backslide
+                                    }
+                                    withAnimation(.easeInOut) {
+                                        selectedView = idx
+                                    }
                                 }
                             }) {
                                 VStack(spacing: 2) {
