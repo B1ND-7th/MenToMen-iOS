@@ -26,22 +26,31 @@
                                     <constraint firstAttribute="width" constant="200" id="tFO-BS-m9Q"/>
                                 </constraints>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="b1ndlogo" translatesAutoresizingMaskIntoConstraints="NO" id="2nC-u1-gAM">
+                                <rect key="frame" x="120" y="725" width="150" height="85"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="85" id="2pC-5l-TY5"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="36b-Of-QS4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="0fh-Qc-pRq"/>
                             <constraint firstItem="36b-Of-QS4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="MzI-Pd-VcI"/>
+                            <constraint firstItem="2nC-u1-gAM" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="TG9-iE-NeV"/>
+                            <constraint firstItem="2nC-u1-gAM" firstAttribute="bottom" secondItem="Bcu-3y-fUS" secondAttribute="bottom" id="Xrx-BI-jlK"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52.173913043478265" y="375"/>
+            <point key="canvasLocation" x="50.769230769230766" y="374.64454976303318"/>
         </scene>
     </scenes>
     <resources>
         <image name="M2MLogo2" width="499" height="499"/>
+        <image name="b1ndlogo" width="150" height="150"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.3919999897480011" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>

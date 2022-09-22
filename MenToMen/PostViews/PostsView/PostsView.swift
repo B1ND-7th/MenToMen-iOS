@@ -12,11 +12,24 @@ struct PostsView: View {
     @Binding var postdata: PostDatas
     @Binding var postlink: Bool
     @Binding var postuser: Int
+    @Binding var searchText: String
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
+    @State var originalDatas = [PostDatas]()
     @State var datas = [PostDatas]()
     @State var userId: Int = 0
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
+    func dataSearch() {
+        withAnimation(.default) {
+            if searchText.isEmpty {
+                datas = originalDatas
+            } else {
+                datas = originalDatas.filter {
+                    $0.content.localizedCaseInsensitiveContains(searchText)
+                }
+            }
+        }
+    }
     func load() {
         AF.request("\(api)/user/my",
                    method: .get,
@@ -43,7 +56,8 @@ struct PostsView: View {
                     case .success:
                         guard let value = response.value else { return }
                         guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
-                        datas = result.data
+                        originalDatas = result.data
+                        dataSearch()
                     case .failure(let error):
                         errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -58,12 +72,13 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                BarView(searchButton: true)
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
                             Button(action: {
+                                withAnimation(.default) {
                                     selectedFilter = selectedFilter == idx ? 5 : idx
+                                }
                             }) {
                                 ZStack {
                                     if selectedFilter == idx || selectedFilter == 5 {
@@ -90,20 +105,24 @@ struct PostsView: View {
                     .listRowInsets(EdgeInsets())
                     .background(Color("M2MBackground"))
                     ForEach(0..<datas.count, id: \.self) { idx in
-                        Button(action: {
-                            postdata = datas[idx]
-                            postuser = userId
-                            postlink = true
-                        }) {
-                            PostsCell(data: $datas[idx])
+                        if datas[idx].tag == TypeArray[selectedFilter].uppercased() || selectedFilter == 5 {
+                            Button(action: {
+                                postdata = datas[idx]
+                                postuser = userId
+                                postlink = true
+                            }) {
+                                PostsCell(data: $datas[idx])
+                            }
+                            .customCell(true)
                         }
-                        .customCell(true)
-                        .isHidden(datas[idx].tag != TypeArray[selectedFilter].uppercased() && selectedFilter != 5, remove: true)
                     }
                 }
                 .customList()
                 .onAppear { load() }
                 .refreshable { load() }
+                .onChange(of: searchText) { text in
+                    dataSearch()
+                }
             }
             .exitAlert($errorToggle)
             .navigationBarHidden(true)
@@ -111,10 +130,3 @@ struct PostsView: View {
         }
     }
 }
-
-//struct PostsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostsView()
-//            //.preferredColorScheme(.dark)
-//    }
-//}

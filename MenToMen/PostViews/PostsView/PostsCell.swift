@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct PostsCell: View {
     @Binding var data: PostDatas
@@ -47,18 +48,17 @@ struct PostsCell: View {
                     Text(data.content)
                         .lineLimit(7)
                     Spacer()
-                    AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 40, height: 40)
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
-                    } placeholder: {
-                        Rectangle()
-                            .opacity(0)
-                            .frame(width: 40, height: 40)
+                    if data.imgUrl != nil {
+                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            NothingView()
+                        }
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
                     }
-                    .isHidden(data.imgUrl == nil, remove: true)
                 }
                 Spacer()
             }

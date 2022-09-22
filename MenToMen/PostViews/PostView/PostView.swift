@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import CachedAsyncImage
 
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
@@ -50,7 +51,7 @@ struct PostView: View {
             List {
                 VStack(spacing: 0) {
                     HStack {
-                        AsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
+                        CachedAsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
                             image
                                 .resizable()
                         } placeholder: {
@@ -58,7 +59,7 @@ struct PostView: View {
                                 Image("profile")
                                     .resizable()
                             } else {
-                                ProgressView()
+                                NothingView()
                             }
                         }
                         .frame(width: 50, height: 50)
@@ -91,21 +92,23 @@ struct PostView: View {
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    AsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
-                            .padding(.top, 10)
-                            .scaleEffect(tap ? 0.95 : 1)
-                            .onLongPressGesture(minimumDuration: 0.3) {
-                                HapticManager.instance.impact(style: .medium)
-                                tapper(true)
-                            }
-                    } placeholder: {
-                        ProgressView()
+                    if data.imgUrl != nil {
+                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 7))
+                                .padding(.top, 10)
+                                .scaleEffect(tap ? 0.95 : 1)
+                                .onTapGesture { }
+                                .onLongPressGesture(minimumDuration: 0.3) {
+                                    HapticManager.instance.impact(style: .medium)
+                                    tapper(true)
+                                }
+                        } placeholder: {
+                            ProgressView()
+                        }
                     }
-                    .isHidden(data.imgUrl == nil, remove: true)
                     Text("""
                          \(timeParser(data.createDateTime)) 작성\
                          \(data.updateStatus == "UPDATE" ? "\n\(timeParser(data.updateDateTime)) 수정" : "")

@@ -15,12 +15,6 @@ enum Alignments {
 }
 
 extension View {
-    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
-        if hidden {
-            if !remove { self.hidden() }
-        } else { self }
-    }
-    
     @ViewBuilder func dragGesture(_ dismiss: DismissAction, _ dragOffset: GestureState<CGSize>) -> some View {
         self
             .gesture(DragGesture().updating(dragOffset, body: { (value, state, transaction) in
@@ -99,5 +93,39 @@ extension View {
                     exitHandler()
                 }))
             }
+    }
+}
+
+struct NothingView: View {
+    var body: some View {
+        Rectangle()
+            .fill(.gray)
+            .opacity(0.3)
+    }
+}
+
+struct LogoView: View {
+    var body: some View {
+        Image("M2MLogo")
+            .resizable()
+            .renderingMode(.template)
+            .foregroundColor(Color(.label))
+            .frame(width: 100, height: 33.8)
+    }
+}
+
+struct NotifyIconView: View {
+    let notice: Bool
+    var body: some View {
+        ZStack {
+            if notice {
+                Circle()
+                    .fill(.red)
+                    .frame(width: 8, height: 8)
+                    .position(x: 22, y: 0)
+            }
+            Image("notification")
+                .renderIcon()
+        }
     }
 }
