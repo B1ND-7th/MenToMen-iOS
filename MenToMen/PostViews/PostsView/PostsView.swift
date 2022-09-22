@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import RefreshableScrollView
 
 struct PostsView: View {
     @Binding var postdata: PostDatas
@@ -36,7 +37,7 @@ struct PostsView: View {
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
                    interceptor: Requester()
-        ) { $0.timeoutInterval = 10 }
+        ) { $0.timeoutInterval = 5 }
         .validate()
         .responseData { response in
             switch response.result {
@@ -49,7 +50,7 @@ struct PostsView: View {
                            encoding: URLEncoding.default,
                            headers: ["Content-Type": "application/json"],
                            interceptor: Requester()
-                ) { $0.timeoutInterval = 10 }
+                ) { $0.timeoutInterval = 5 }
                 .validate()
                 .responseData { response in
                     switch response.result {
@@ -72,7 +73,7 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                List {
+                RefreshableScrollView {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
                             Button(action: {

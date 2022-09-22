@@ -36,7 +36,11 @@ struct MainView: View {
                 VStack {
                     HStack(spacing: 15) {
                         if !searchToggle {
-                            LogoView()
+                            Image("M2MLogo")
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundColor(Color(.label))
+                                .frame(width: 100, height: 33.8)
                             Spacer()
                         }
                         if selectedView == 0 {
@@ -63,7 +67,14 @@ struct MainView: View {
                         }
                         if !searchToggle {
                             NavigationLink(destination: NotifyView()) {
-                                NotifyIconView(notice: true)
+                                ZStack {
+                                    Circle()
+                                        .fill(.red)
+                                        .frame(width: 8, height: 8)
+                                        .position(x: 22, y: 0)
+                                    Image("notification")
+                                        .renderIcon()
+                                }
                             }
                             .frame(width: 25, height: 25)
                         }
@@ -72,7 +83,6 @@ struct MainView: View {
                     .padding(.bottom, 16)
                     .padding(.top, 12)
                     .background(Color(.secondarySystemGroupedBackground))
-                    
                     NavigationLink(destination: LoginView()
                         .navigationBarHidden(true), isActive: $logout) { EmptyView() }
                     NavigationLink(destination: PostView(data: postdata, userId: postuser)
@@ -101,7 +111,7 @@ struct MainView: View {
                                     case 0: transition = .slide
                                     default: transition = .backslide
                                     }
-                                    withAnimation(.easeInOut) {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
                                         selectedView = idx
                                     }
                                 }
@@ -186,12 +196,5 @@ struct MainView: View {
             }
         }
         .navigationBarHidden(true)
-    }
-}
-
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            //.preferredColorScheme(.dark)
     }
 }

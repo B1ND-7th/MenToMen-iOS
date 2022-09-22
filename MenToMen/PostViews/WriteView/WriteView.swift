@@ -36,7 +36,7 @@ struct WriteView: View {
                    encoding: JSONEncoding.default,
                    headers: ["Content-Type": "application/json"],
                    interceptor: Requester()
-        ) { $0.timeoutInterval = 10 }
+        ) { $0.timeoutInterval = 5 }
             .validate()
             .responseData { response in
                 print(params)
@@ -118,7 +118,7 @@ struct WriteView: View {
                                                      withName: "file",
                                                      fileName: fileName,
                                                      mimeType: "image/jpeg")
-                        }, to: "\(api)/file/upload") { $0.timeoutInterval = 10 }
+                        }, to: "\(api)/file/upload") { $0.timeoutInterval = 5 }
                             .validate()
                             .responseData { response in
                                 checkResponse(response)

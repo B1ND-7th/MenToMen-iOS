@@ -42,7 +42,7 @@ final class Requester: RequestInterceptor {
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json",
                    "Authorization": "Bearer \(try! getToken("refreshToken"))"]
-        ) { $0.timeoutInterval = 10 }
+        ) { $0.timeoutInterval = 5 }
         .validate()
         .responseData { response in
             checkResponse(response)

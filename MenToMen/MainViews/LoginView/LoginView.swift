@@ -101,7 +101,7 @@ struct LoginView: View {
                                            ],
                                encoding: JSONEncoding.default,
                                headers: ["Content-Type": "application/json"]
-                    ) { $0.timeoutInterval = 10 }
+                    ) { $0.timeoutInterval = 5 }
                             .validate()
                             .responseData { response in
                                 checkResponse(response)
@@ -115,7 +115,7 @@ struct LoginView: View {
                                                parameters: ["code": code],
                                                encoding: JSONEncoding.default,
                                                headers: ["Content-Type": "application/json"]
-                                    ) { $0.timeoutInterval = 10 }
+                                    ) { $0.timeoutInterval = 5 }
                                         .validate()
                                         .responseData { response in
                                         switch response.result {

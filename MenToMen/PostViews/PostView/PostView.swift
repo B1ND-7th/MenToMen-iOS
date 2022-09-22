@@ -128,7 +128,7 @@ struct PostView: View {
                            encoding: URLEncoding.default,
                            headers: ["Content-Type": "application/json"],
                            interceptor: Requester()
-                ) { $0.timeoutInterval = 10 }
+                ) { $0.timeoutInterval = 5 }
                 .validate()
                 .responseData { response in
                     checkResponse(response)
@@ -172,7 +172,7 @@ struct PostView: View {
                            encoding: JSONEncoding.default,
                            headers: ["Content-Type": "application/json"],
                            interceptor: Requester()
-                ) { $0.timeoutInterval = 10 }
+                ) { $0.timeoutInterval = 5 }
                         .validate()
                         .responseData { response in
                             checkResponse(response)
@@ -188,9 +188,3 @@ struct PostView: View {
         .navigationBarHidden(true)
     }
 }
-
-//struct PostView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostView()
-//    }
-//}
