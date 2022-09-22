@@ -12,9 +12,21 @@ struct PostsView: View {
     @Binding var postdata: PostDatas
     @Binding var postlink: Bool
     @Binding var postuser: Int
+    @FocusState var searchState: Bool
+    @State var searchToggle: Bool = false
+    @State var searchText: String = ""
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
-    @State var datas = [PostDatas]()
+    @State var originalDatas = [PostDatas]()
+    var datas: [PostDatas] {
+        if searchText.isEmpty {
+            return originalDatas
+        } else {
+            return originalDatas.filter {
+                $0.content.contains(searchText)
+            }
+        }
+    }
     @State var userId: Int = 0
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func load() {
@@ -43,7 +55,7 @@ struct PostsView: View {
                     case .success:
                         guard let value = response.value else { return }
                         guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
-                        datas = result.data
+                        originalDatas = result.data
                     case .failure(let error):
                         errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -58,7 +70,52 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                BarView(searchButton: true)
+                HStack(spacing: 15) {
+                    if searchToggle {
+                        TextField("검색어를 입력해주세요", text: $searchText)
+                            .focused($searchState)
+                            .font(.title3)
+                            .frame(height: 33.8)
+                    } else {
+                        Image("M2MLogo")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(Color(.label))
+                            .frame(width: 100, height: 33.8)
+                        Spacer()
+                    }
+                    Button(action: {
+                        withAnimation(.default) {
+                            if !searchToggle || searchText.isEmpty {
+                                searchToggle.toggle()
+                                searchState.toggle()
+                            } else {
+                                searchState = false
+                            }
+                        }
+                    }) {
+                        Image("search-normal")
+                            .renderIcon()
+                    }
+                    .frame(width: 25, height: 25)
+                    if !searchToggle {
+                        NavigationLink(destination: NotifyView()) {
+                            ZStack {
+                                Circle()
+                                    .fill(.red)
+                                    .frame(width: 8, height: 8)
+                                    .position(x: 22, y: 0)
+                                Image("notification")
+                                    .renderIcon()
+                            }
+                        }
+                        .frame(width: 25, height: 25)
+                    }
+                }
+                .padding([.leading, .trailing], 20)
+                .padding(.bottom, 16)
+                .padding(.top, 12)
+                .background(Color(.secondarySystemGroupedBackground))
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
@@ -98,7 +155,7 @@ struct PostsView: View {
                                 postuser = userId
                                 postlink = true
                             }) {
-                                PostsCell(data: $datas[idx])
+                                PostsCell(data: datas[idx])
                             }
                             .customCell(true)
                         }
@@ -114,10 +171,3 @@ struct PostsView: View {
         }
     }
 }
-
-//struct PostsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostsView()
-//            //.preferredColorScheme(.dark)
-//    }
-//}

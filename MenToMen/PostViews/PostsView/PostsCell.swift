@@ -9,7 +9,7 @@ import SwiftUI
 import CachedAsyncImage
 
 struct PostsCell: View {
-    @Binding var data: PostDatas
+    @State var data: PostDatas
     let TypeDict: [String: String] = ["DESIGN": "Design",
                                       "WEB": "Web",
                                       "ANDROID": "Android",

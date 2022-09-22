@@ -118,7 +118,7 @@ struct ProfileView: View {
                             postuser = userId
                             postlink = true
                         }) {
-                            PostsCell(data: $datas[idx])
+                            PostsCell(data: datas[idx])
                         }
                         .customCell(bottom: datas.count-1 == idx)
                     }
