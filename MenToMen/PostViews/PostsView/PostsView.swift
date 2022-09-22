@@ -18,17 +18,18 @@ struct PostsView: View {
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
     @State var originalDatas = [PostDatas]()
-    var datas: [PostDatas] {
+    @State var datas = [PostDatas]()
+    @State var userId: Int = 0
+    let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
+    func dataSearch() {
         if searchText.isEmpty {
-            return originalDatas
+            datas = originalDatas
         } else {
-            return originalDatas.filter {
-                $0.content.contains(searchText)
+            datas = originalDatas.filter {
+                $0.content.localizedCaseInsensitiveContains(searchText)
             }
         }
     }
-    @State var userId: Int = 0
-    let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     func load() {
         AF.request("\(api)/user/my",
                    method: .get,
@@ -56,6 +57,7 @@ struct PostsView: View {
                         guard let value = response.value else { return }
                         guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
                         originalDatas = result.data
+                        dataSearch()
                     case .failure(let error):
                         errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -76,6 +78,11 @@ struct PostsView: View {
                             .focused($searchState)
                             .font(.title3)
                             .frame(height: 33.8)
+                            .onChange(of: searchText) { text in
+                                withAnimation(.default) {
+                                    dataSearch()
+                                }
+                            }
                     } else {
                         Image("M2MLogo")
                             .resizable()
@@ -155,7 +162,7 @@ struct PostsView: View {
                                 postuser = userId
                                 postlink = true
                             }) {
-                                PostsCell(data: datas[idx])
+                                PostsCell(data: $datas[idx])
                             }
                             .customCell(true)
                         }
