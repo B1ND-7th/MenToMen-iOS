@@ -10,16 +10,19 @@ import SlideOverCard
 
 struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
+    @FocusState var searchState: Bool
     @State var selectedView: Int = 0
     @State var writeToggles: Bool = false
     @State var logout: Bool = false
     @State var status: Int = 0
     @State var tutorial: Bool = false
     @State var postdata: PostDatas = PostDatas(author: 0, content: "", imgUrl: "", createDateTime: "", updateDateTime: "", updateStatus: "", postId: 0, profileUrl: "", tag: "", userName: "", stdInfo: InfoDatas(grade: 1, room: 1, number: 1))
-
     @State var postlink: Bool = false
     @State var postuser: Int = 0
     @State var transition: AnyTransition = .slide
+    
+    @State var searchToggle: Bool = false
+    @State var searchText: String = ""
     func tutorialFinished() {
         UserDefaults.standard.set(true, forKey: "homeTutorial")
         SOCManager.dismiss(isPresented: $tutorial)
@@ -31,6 +34,45 @@ struct MainView: View {
                     .fill(Color(.secondarySystemGroupedBackground))
                     .ignoresSafeArea()
                 VStack {
+                    HStack(spacing: 15) {
+                        if !searchToggle {
+                            LogoView()
+                            Spacer()
+                        }
+                        if selectedView == 0 {
+                            if searchToggle {
+                                TextField("검색어를 입력해주세요", text: $searchText)
+                                    .focused($searchState)
+                                    .font(.title3)
+                                    .frame(height: 33.8)
+                            }
+                            Button(action: {
+                                withAnimation(.default) {
+                                    if !searchToggle || searchText.isEmpty {
+                                        searchToggle.toggle()
+                                        searchState.toggle()
+                                    } else {
+                                        searchState = false
+                                    }
+                                }
+                            }) {
+                                Image("search-normal")
+                                    .renderIcon()
+                            }
+                            .frame(width: 25, height: 25)
+                        }
+                        if !searchToggle {
+                            NavigationLink(destination: NotifyView()) {
+                                NotifyIconView(notice: true)
+                            }
+                            .frame(width: 25, height: 25)
+                        }
+                    }
+                    .padding([.leading, .trailing], 20)
+                    .padding(.bottom, 16)
+                    .padding(.top, 12)
+                    .background(Color(.secondarySystemGroupedBackground))
+                    
                     NavigationLink(destination: LoginView()
                         .navigationBarHidden(true), isActive: $logout) { EmptyView() }
                     NavigationLink(destination: PostView(data: postdata, userId: postuser)
@@ -38,7 +80,8 @@ struct MainView: View {
                     switch(selectedView) {
                     case 0: PostsView(postdata: $postdata,
                                       postlink: $postlink,
-                                      postuser: $postuser)
+                                      postuser: $postuser,
+                                      searchText: $searchText)
                     .transition(transition)
                     default: ProfileView(logout: $logout,
                                          postdata: $postdata,

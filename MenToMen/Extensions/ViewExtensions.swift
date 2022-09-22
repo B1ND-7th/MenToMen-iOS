@@ -55,14 +55,6 @@ extension View {
         }
     }
     
-    @ViewBuilder func customNavigation() -> some View {
-        self
-            .padding([.leading, .trailing], 20)
-            .padding(.bottom, 16)
-            .padding(.top, 12)
-            .background(Color(.secondarySystemGroupedBackground))
-    }
-    
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
         switch alignment {
         case .top: VStack {

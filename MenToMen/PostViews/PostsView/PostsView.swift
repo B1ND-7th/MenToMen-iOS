@@ -12,9 +12,7 @@ struct PostsView: View {
     @Binding var postdata: PostDatas
     @Binding var postlink: Bool
     @Binding var postuser: Int
-    @FocusState var searchState: Bool
-    @State var searchToggle: Bool = false
-    @State var searchText: String = ""
+    @Binding var searchText: String
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
     @State var originalDatas = [PostDatas]()
@@ -74,41 +72,6 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                HStack(spacing: 15) {
-                    if searchToggle {
-                        TextField("검색어를 입력해주세요", text: $searchText)
-                            .focused($searchState)
-                            .font(.title3)
-                            .frame(height: 33.8)
-                            .onChange(of: searchText) { text in
-                                dataSearch()
-                            }
-                    } else {
-                        LogoView()
-                        Spacer()
-                    }
-                    Button(action: {
-                        withAnimation(.default) {
-                            if !searchToggle || searchText.isEmpty {
-                                searchToggle.toggle()
-                                searchState.toggle()
-                            } else {
-                                searchState = false
-                            }
-                        }
-                    }) {
-                        Image("search-normal")
-                            .renderIcon()
-                    }
-                    .frame(width: 25, height: 25)
-                    if !searchToggle {
-                        NavigationLink(destination: NotifyView()) {
-                            NotifyIconView(notice: true)
-                        }
-                        .frame(width: 25, height: 25)
-                    }
-                }
-                .customNavigation()
                 List {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
@@ -157,6 +120,9 @@ struct PostsView: View {
                 .customList()
                 .onAppear { load() }
                 .refreshable { load() }
+                .onChange(of: searchText) { text in
+                    dataSearch()
+                }
             }
             .exitAlert($errorToggle)
             .navigationBarHidden(true)

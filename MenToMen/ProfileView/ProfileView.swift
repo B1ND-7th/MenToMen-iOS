@@ -67,15 +67,6 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                HStack(spacing: 15) {
-                    LogoView()
-                    Spacer()
-                    NavigationLink(destination: NotifyView()) {
-                        NotifyIconView(notice: true)
-                    }
-                    .frame(width: 25, height: 25)
-                }
-                .customNavigation()
                 List {
                     VStack(spacing: 0) {
                         HStack {
