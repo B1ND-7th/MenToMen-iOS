@@ -16,6 +16,7 @@ struct PostView: View {
     @State var deleteAlert: Bool = false
     @State var writeToggles: Bool = false
     @State var data: PostDatas
+    @State var comments = [CommentData]()
     @State var tap: Bool = false
     let profileImage: String = ""
     let userId: Int
@@ -33,6 +34,27 @@ struct PostView: View {
             tap = state
         }
     }
+    func loadComments() {
+        AF.request("\(api)/comment/read/\(data.postId)",
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 5 }
+        .validate()
+        .responseData { response in
+            checkResponse(response)
+            switch response.result {
+            case .success:
+                guard let value = response.value else { return }
+                guard let result = try? decoder.decode(CommentDatas.self, from: value) else { return }
+                comments = result.data
+            case .failure(let error):
+                errorToggle.toggle()
+                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+            }
+        }
+    }
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
@@ -48,47 +70,15 @@ struct PostView: View {
             .setAlignment(for: .leading)
             .frame(height: 61)
             .background(Color(.secondarySystemGroupedBackground))
-            List {
+            ScrollView {
                 VStack(spacing: 0) {
-                    HStack {
-                        CachedAsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
-                            image
-                                .resizable()
-                        } placeholder: {
-                            if data.profileUrl == nil {
-                                Image("profile")
-                                    .resizable()
-                            } else {
-                                NothingView()
-                            }
-                        }
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        VStack(alignment: .leading) {
-                            Text(data.userName)
-                            Text("\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번")
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        if data.author == userId {
-                            Button(action: {
-                                writeToggles.toggle()
-                            }) {
-                                Image("write")
-                                    .renderIcon()
-                            }
-                            .frame(width: 25, height: 25)
-                            Button(action: {
-                                deleteAlert.toggle()
-                            }) {
-                                Image("trash")
-                                    .renderIcon()
-                            }
-                            .frame(width: 25, height: 25)
-                            .padding([.leading, .trailing], 5)
-                        }
-                    }
-                    .padding(.bottom, 10)
+                    PersonView(writeToggles: $writeToggles,
+                               deleteAlert: $deleteAlert,
+                               profileUrl: data.profileUrl,
+                               userName: data.userName,
+                               stdInfo: data.stdInfo,
+                               author: data.author,
+                               userId: userId)
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -120,6 +110,24 @@ struct PostView: View {
                 }
                 .padding()
                 .customCell()
+                .onAppear {
+                    print(try! getToken("accessToken"))
+                }
+                VStack {
+                    ForEach(comments, id: \.self) { comment in
+                        PersonView(writeToggles: $writeToggles,
+                                   deleteAlert: $deleteAlert,
+                                   profileUrl: comment.profileUrl,
+                                   userName: comment.userName,
+                                   stdInfo: comment.stdInfo,
+                                   author: comment.userId,
+                                   userId: userId)
+                        Text(comment.content)
+                            .setAlignment(for: .leading)
+                    }
+                }
+                .padding()
+                .customCell()
             }
             .customList()
             .refreshable {
@@ -143,6 +151,10 @@ struct PostView: View {
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
                 }
+                loadComments()
+            }
+            .onAppear {
+                loadComments()
             }
         }
         .buttonStyle(BorderlessButtonStyle())

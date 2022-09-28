@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Alamofire
-import RefreshableScrollView
 
 struct PostsView: View {
     @Binding var postdata: PostDatas
@@ -73,7 +72,7 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                RefreshableScrollView {
+                ScrollView {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
                             Button(action: {

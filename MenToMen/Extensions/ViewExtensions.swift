@@ -34,7 +34,7 @@ extension View {
             .cornerRadius(15)
             .padding([invert ? .bottom : .top, .leading, .trailing], 20)
             .padding(.bottom, bottom ? 20 : 0)
-            .listRowInsets(EdgeInsets())
+            //.listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }
     

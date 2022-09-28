@@ -21,7 +21,7 @@ struct ProfileDatas: Decodable {
     let userId: Int
 }
 
-struct InfoDatas: Decodable {
+struct InfoDatas: Decodable, Hashable {
     let grade: Int
     let room: Int
     let number: Int

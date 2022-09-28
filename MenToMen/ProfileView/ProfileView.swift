@@ -8,7 +8,6 @@
 import SwiftUI
 import Alamofire
 import CachedAsyncImage
-import RefreshableScrollView
 
 struct ProfileView: View {
     @Binding var logout: Bool
@@ -68,7 +67,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                RefreshableScrollView {
+                ScrollView {
                     VStack(spacing: 0) {
                         HStack {
                             CachedAsyncImage(url: URL(string: profileImage)) { image in

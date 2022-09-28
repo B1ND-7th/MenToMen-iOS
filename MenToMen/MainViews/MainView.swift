@@ -20,7 +20,6 @@ struct MainView: View {
     @State var postlink: Bool = false
     @State var postuser: Int = 0
     @State var transition: AnyTransition = .slide
-    
     @State var searchToggle: Bool = false
     @State var searchText: String = ""
     func tutorialFinished() {
