@@ -19,6 +19,10 @@ struct PostView: View {
     @State var comments = [CommentData]()
     @State var commentDeleteAlert: Bool = false
     @State var commentWriteToggles: Bool = false
+    @State var currentComment: String = ""
+    @State var userName: String = ""
+    @State var stdInfo: InfoDatas = InfoDatas(grade: 0, room: 0, number: 0)
+    @State var profileUrl: String? = ""
     @State var selectedCommentId: Int = 0
     @State var tap: Bool = false
     let profileImage: String = ""
@@ -38,7 +42,7 @@ struct PostView: View {
         }
     }
     func loadComments() {
-        AF.request("\(api)/comment/read/\(data.postId)",
+        AF.request("\(api)/user/my",
                    method: .get,
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
@@ -46,12 +50,32 @@ struct PostView: View {
         ) { $0.timeoutInterval = 5 }
         .validate()
         .responseData { response in
-            checkResponse(response)
             switch response.result {
             case .success:
                 guard let value = response.value else { return }
-                guard let result = try? decoder.decode(CommentDatas.self, from: value) else { return }
-                comments = result.data
+                guard let result = try? decoder.decode(ProfileData.self, from: value) else { return }
+                userName = result.data.name
+                stdInfo = result.data.stdInfo
+                profileUrl = result.data.profileImage
+                AF.request("\(api)/comment/read/\(data.postId)",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 5 }
+                .validate()
+                .responseData { response in
+                    checkResponse(response)
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(CommentDatas.self, from: value) else { return }
+                        comments = result.data
+                    case .failure(let error):
+                        errorToggle.toggle()
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
             case .failure(let error):
                 errorToggle.toggle()
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -160,19 +184,20 @@ struct PostView: View {
                         }
                         .padding([.leading, .top, .trailing])
                         Text(comment.content)
-                            .setAlignment(for: .leading)
-                            .padding(10)
-                            .background(Color("M2MBackground"))
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
-                            .padding(.leading, 75)
-                            .padding(.top, 5)
-                            .padding([.trailing, .bottom])
-                        if comment != comments.last {
-                            Rectangle()
-                                .fill(Color("M2MBackground"))
-                                .frame(height: 1)
-                        }
+                            .customComment()
+                        Rectangle()
+                            .fill(Color("M2MBackground"))
+                            .frame(height: 1)
                     }
+                    PersonView(profileUrl: profileUrl,
+                               userName: userName,
+                               stdInfo: stdInfo,
+                               author: -1)
+                    .setAlignment(for: .leading)
+                    .padding([.leading, .top, .trailing])
+                    TextField("", text: $currentComment)
+                        .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
+                        .customComment()
                 }
                 .customCell()
             }

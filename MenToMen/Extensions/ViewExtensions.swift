@@ -55,6 +55,17 @@ extension View {
         }
     }
     
+    @ViewBuilder func customComment() -> some View {
+        self
+            .setAlignment(for: .leading)
+            .padding(10)
+            .background(Color("M2MBackground"))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .padding(.leading, 75)
+            .padding(.top, 5)
+            .padding([.trailing, .bottom])
+    }
+    
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
         switch alignment {
         case .top: VStack {
@@ -93,6 +104,20 @@ extension View {
                     exitHandler()
                 }))
             }
+    }
+    
+    func placeholder<Content: View>(
+       when shouldShow: Bool,
+       alignment: Alignment = .leading,
+       @ViewBuilder placeholder: () -> Content) -> some View {
+           ZStack(alignment: alignment) {
+               placeholder().opacity(shouldShow ? 1 : 0)
+               self
+       }
+   }
+    
+    func placeholder(_ text: String, when shouldShow: Bool, alignment: Alignment = .leading) -> some View {
+        placeholder(when: shouldShow, alignment: alignment) { Text(text).foregroundColor(.gray) }
     }
 }
 
