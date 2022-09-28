@@ -16,6 +16,14 @@ struct PostView: View {
     @State var deleteAlert: Bool = false
     @State var writeToggles: Bool = false
     @State var data: PostDatas
+    @State var comments = [CommentData]()
+    @State var commentDeleteAlert: Bool = false
+    @State var commentWriteToggles: Bool = false
+    @State var currentComment: String = ""
+    @State var userName: String = ""
+    @State var stdInfo: InfoDatas = InfoDatas(grade: 0, room: 0, number: 0)
+    @State var profileUrl: String? = ""
+    @State var selectedCommentId: Int = 0
     @State var tap: Bool = false
     let profileImage: String = ""
     let userId: Int
@@ -33,6 +41,47 @@ struct PostView: View {
             tap = state
         }
     }
+    func loadComments() {
+        AF.request("\(api)/user/my",
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 5 }
+        .validate()
+        .responseData { response in
+            switch response.result {
+            case .success:
+                guard let value = response.value else { return }
+                guard let result = try? decoder.decode(ProfileData.self, from: value) else { return }
+                userName = result.data.name
+                stdInfo = result.data.stdInfo
+                profileUrl = result.data.profileImage
+                AF.request("\(api)/comment/read/\(data.postId)",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 5 }
+                .validate()
+                .responseData { response in
+                    checkResponse(response)
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(CommentDatas.self, from: value) else { return }
+                        comments = result.data
+                    case .failure(let error):
+                        errorToggle.toggle()
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
+            case .failure(let error):
+                errorToggle.toggle()
+                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+            }
+        }
+    }
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
@@ -48,27 +97,13 @@ struct PostView: View {
             .setAlignment(for: .leading)
             .frame(height: 61)
             .background(Color(.secondarySystemGroupedBackground))
-            List {
+            ScrollView {
                 VStack(spacing: 0) {
                     HStack {
-                        CachedAsyncImage(url: URL(string: data.profileUrl ?? "")) { image in
-                            image
-                                .resizable()
-                        } placeholder: {
-                            if data.profileUrl == nil {
-                                Image("profile")
-                                    .resizable()
-                            } else {
-                                NothingView()
-                            }
-                        }
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        VStack(alignment: .leading) {
-                            Text(data.userName)
-                            Text("\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번")
-                                .foregroundColor(.gray)
-                        }
+                        PersonView(profileUrl: data.profileUrl,
+                                   userName: data.userName,
+                                   stdInfo: data.stdInfo,
+                                   author: data.author)
                         Spacer()
                         if data.author == userId {
                             Button(action: {
@@ -120,6 +155,51 @@ struct PostView: View {
                 }
                 .padding()
                 .customCell()
+                VStack(spacing: 0) {
+                    ForEach(comments, id: \.self) { comment in
+                        HStack {
+                            PersonView(profileUrl: comment.profileUrl,
+                                       userName: comment.userName,
+                                       stdInfo: comment.stdInfo,
+                                       author: comment.userId)
+                            Spacer()
+                            if comment.userId == userId {
+                                Button(action: {
+                                    commentWriteToggles.toggle()
+                                }) {
+                                    Image("write")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                Button(action: {
+                                    selectedCommentId = comment.commentId
+                                    commentDeleteAlert.toggle()
+                                }) {
+                                    Image("trash")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                .padding([.leading, .trailing], 5)
+                            }
+                        }
+                        .padding([.leading, .top, .trailing])
+                        Text(comment.content)
+                            .customComment()
+                        Rectangle()
+                            .fill(Color("M2MBackground"))
+                            .frame(height: 1)
+                    }
+                    PersonView(profileUrl: profileUrl,
+                               userName: userName,
+                               stdInfo: stdInfo,
+                               author: -1)
+                    .setAlignment(for: .leading)
+                    .padding([.leading, .top, .trailing])
+                    TextField("", text: $currentComment)
+                        .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
+                        .customComment()
+                }
+                .customCell()
             }
             .customList()
             .refreshable {
@@ -128,7 +208,7 @@ struct PostView: View {
                            encoding: URLEncoding.default,
                            headers: ["Content-Type": "application/json"],
                            interceptor: Requester()
-                ) { $0.timeoutInterval = 10 }
+                ) { $0.timeoutInterval = 5 }
                 .validate()
                 .responseData { response in
                     checkResponse(response)
@@ -143,6 +223,10 @@ struct PostView: View {
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
                 }
+                loadComments()
+            }
+            .onAppear {
+                loadComments()
             }
         }
         .buttonStyle(BorderlessButtonStyle())
@@ -172,7 +256,7 @@ struct PostView: View {
                            encoding: JSONEncoding.default,
                            headers: ["Content-Type": "application/json"],
                            interceptor: Requester()
-                ) { $0.timeoutInterval = 10 }
+                ) { $0.timeoutInterval = 5 }
                         .validate()
                         .responseData { response in
                             checkResponse(response)
@@ -183,14 +267,26 @@ struct PostView: View {
         } message: {
             Text("삭제한 게시글은 복구할 수 없습니다")
         }
+        .confirmationDialog("댓글 삭제", isPresented: $commentDeleteAlert) {
+            Button("정말 삭제하시겠습니까?", role: .destructive) {
+                AF.request("\(api)/comment/delete/\(selectedCommentId)",
+                           method: .delete,
+                           encoding: JSONEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 5 }
+                        .validate()
+                        .responseData { response in
+                            checkResponse(response)
+                            loadComments()
+                    }
+            }
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("삭제한 댓글은 복구할 수 없습니다")
+        }
         .dragGesture(dismiss, $dragOffset)
         .exitAlert($errorToggle)
         .navigationBarHidden(true)
     }
 }
-
-//struct PostView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PostView()
-//    }
-//}

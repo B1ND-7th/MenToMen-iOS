@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public let api = "http://10.80.163.171:8080"
+public let api = "http://10.80.162.149:8080"
 public let decoder: JSONDecoder = JSONDecoder()
 
 func exitHandler() {

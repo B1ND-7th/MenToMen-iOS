@@ -46,6 +46,8 @@ struct PostsCell: View {
             VStack {
                 HStack(alignment: .top) {
                     Text(data.content)
+                        .foregroundColor(Color(.label))
+                        .multilineTextAlignment(.leading)
                         .lineLimit(7)
                     Spacer()
                     if data.imgUrl != nil {

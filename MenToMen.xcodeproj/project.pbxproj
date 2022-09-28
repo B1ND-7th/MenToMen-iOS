@@ -17,8 +17,7 @@
 		934051F828D1F7BB000DD49E /* PostsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051F728D1F7BB000DD49E /* PostsCell.swift */; };
 		934051FA28D2CAEC000DD49E /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051F928D2CAEC000DD49E /* Keychain.swift */; };
 		934051FD28D2CB6B000DD49E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934051FC28D2CB6B000DD49E /* Extensions.swift */; };
-		9348E76A28C87196001ABA1B /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9348E76928C87196001ABA1B /* BarView.swift */; };
-		9348E76C28C871A3001ABA1B /* BarAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9348E76B28C871A3001ABA1B /* BarAPI.swift */; };
+		935A7E0128E4684300C19115 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935A7E0028E4684300C19115 /* PersonView.swift */; };
 		9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABCA28BCA4C100B1867B /* PostsAPI.swift */; };
 		9370ABCF28BCB38D00B1867B /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABCE28BCB38D00B1867B /* PostView.swift */; };
 		9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9370ABD228BCB46400B1867B /* NotifyView.swift */; };
@@ -80,8 +79,7 @@
 		934051F728D1F7BB000DD49E /* PostsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCell.swift; sourceTree = "<group>"; };
 		934051F928D2CAEC000DD49E /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		934051FC28D2CB6B000DD49E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		9348E76928C87196001ABA1B /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
-		9348E76B28C871A3001ABA1B /* BarAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarAPI.swift; sourceTree = "<group>"; };
+		935A7E0028E4684300C19115 /* PersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		9370ABCA28BCA4C100B1867B /* PostsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsAPI.swift; sourceTree = "<group>"; };
 		9370ABCE28BCB38D00B1867B /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		9370ABD228BCB46400B1867B /* NotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyView.swift; sourceTree = "<group>"; };
@@ -179,6 +177,7 @@
 			children = (
 				934051FE28D2CBDC000DD49E /* PostsView */,
 				9370ABCD28BCB38300B1867B /* PostView */,
+				935A7DFF28E4683800C19115 /* PersonView */,
 				9370ABCC28BCA4E900B1867B /* WriteView */,
 			);
 			path = PostViews;
@@ -189,19 +188,17 @@
 			children = (
 				9370ABD828BCC10200B1867B /* LoginView */,
 				93FA23FB28B797B7000C8D64 /* MainView.swift */,
-				9348E76828C87188001ABA1B /* BarView */,
 				9370ABD128BCB44400B1867B /* NotifyView */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
 		};
-		9348E76828C87188001ABA1B /* BarView */ = {
+		935A7DFF28E4683800C19115 /* PersonView */ = {
 			isa = PBXGroup;
 			children = (
-				9348E76928C87196001ABA1B /* BarView.swift */,
-				9348E76B28C871A3001ABA1B /* BarAPI.swift */,
+				935A7E0028E4684300C19115 /* PersonView.swift */,
 			);
-			path = BarView;
+			path = PersonView;
 			sourceTree = "<group>";
 		};
 		9370ABCC28BCA4E900B1867B /* WriteView */ = {
@@ -605,8 +602,8 @@
 				931644E828B8396B001E5243 /* ProfileView.swift in Sources */,
 				9308E8DC28BF80A5003AB02D /* Request.swift in Sources */,
 				93D458AB28C60B7E00A3F565 /* PostAPI.swift in Sources */,
+				935A7E0128E4684300C19115 /* PersonView.swift in Sources */,
 				93FA23FC28B797B7000C8D64 /* MainView.swift in Sources */,
-				9348E76A28C87196001ABA1B /* BarView.swift in Sources */,
 				9370ABCF28BCB38D00B1867B /* PostView.swift in Sources */,
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
@@ -622,7 +619,6 @@
 				93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */,
 				9308E8DA28BF809C003AB02D /* RequestAPI.swift in Sources */,
 				93FA242428B797E8000C8D64 /* PostsView.swift in Sources */,
-				9348E76C28C871A3001ABA1B /* BarAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

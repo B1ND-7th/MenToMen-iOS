@@ -26,7 +26,7 @@ struct ProfileView: View {
                    encoding: URLEncoding.default,
                    headers: ["Content-Type": "application/json"],
                    interceptor: Requester()
-        ) { $0.timeoutInterval = 10 }
+        ) { $0.timeoutInterval = 5 }
         .validate()
         .responseData { response in
             checkResponse(response)
@@ -67,7 +67,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                List {
+                ScrollView {
                     VStack(spacing: 0) {
                         HStack {
                             CachedAsyncImage(url: URL(string: profileImage)) { image in
@@ -131,9 +131,3 @@ struct ProfileView: View {
         }
     }
 }
-
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView()
-//    }
-//}

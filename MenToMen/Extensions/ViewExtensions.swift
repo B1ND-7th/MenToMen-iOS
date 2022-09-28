@@ -34,7 +34,7 @@ extension View {
             .cornerRadius(15)
             .padding([invert ? .bottom : .top, .leading, .trailing], 20)
             .padding(.bottom, bottom ? 20 : 0)
-            .listRowInsets(EdgeInsets())
+            //.listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }
     
@@ -53,6 +53,17 @@ extension View {
             self
                 .customListColor()
         }
+    }
+    
+    @ViewBuilder func customComment() -> some View {
+        self
+            .setAlignment(for: .leading)
+            .padding(10)
+            .background(Color("M2MBackground"))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .padding(.leading, 75)
+            .padding(.top, 5)
+            .padding([.trailing, .bottom])
     }
     
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
@@ -94,6 +105,20 @@ extension View {
                 }))
             }
     }
+    
+    func placeholder<Content: View>(
+       when shouldShow: Bool,
+       alignment: Alignment = .leading,
+       @ViewBuilder placeholder: () -> Content) -> some View {
+           ZStack(alignment: alignment) {
+               placeholder().opacity(shouldShow ? 1 : 0)
+               self
+       }
+   }
+    
+    func placeholder(_ text: String, when shouldShow: Bool, alignment: Alignment = .leading) -> some View {
+        placeholder(when: shouldShow, alignment: alignment) { Text(text).foregroundColor(.gray) }
+    }
 }
 
 struct NothingView: View {
@@ -101,31 +126,5 @@ struct NothingView: View {
         Rectangle()
             .fill(.gray)
             .opacity(0.3)
-    }
-}
-
-struct LogoView: View {
-    var body: some View {
-        Image("M2MLogo")
-            .resizable()
-            .renderingMode(.template)
-            .foregroundColor(Color(.label))
-            .frame(width: 100, height: 33.8)
-    }
-}
-
-struct NotifyIconView: View {
-    let notice: Bool
-    var body: some View {
-        ZStack {
-            if notice {
-                Circle()
-                    .fill(.red)
-                    .frame(width: 8, height: 8)
-                    .position(x: 22, y: 0)
-            }
-            Image("notification")
-                .renderIcon()
-        }
     }
 }
