@@ -17,6 +17,9 @@ struct PostView: View {
     @State var writeToggles: Bool = false
     @State var data: PostDatas
     @State var comments = [CommentData]()
+    @State var commentDeleteAlert: Bool = false
+    @State var commentWriteToggles: Bool = false
+    @State var selectedCommentId: Int = 0
     @State var tap: Bool = false
     let profileImage: String = ""
     let userId: Int
@@ -72,13 +75,31 @@ struct PostView: View {
             .background(Color(.secondarySystemGroupedBackground))
             ScrollView {
                 VStack(spacing: 0) {
-                    PersonView(writeToggles: $writeToggles,
-                               deleteAlert: $deleteAlert,
-                               profileUrl: data.profileUrl,
-                               userName: data.userName,
-                               stdInfo: data.stdInfo,
-                               author: data.author,
-                               userId: userId)
+                    HStack {
+                        PersonView(profileUrl: data.profileUrl,
+                                   userName: data.userName,
+                                   stdInfo: data.stdInfo,
+                                   author: data.author)
+                        Spacer()
+                        if data.author == userId {
+                            Button(action: {
+                                writeToggles.toggle()
+                            }) {
+                                Image("write")
+                                    .renderIcon()
+                            }
+                            .frame(width: 25, height: 25)
+                            Button(action: {
+                                deleteAlert.toggle()
+                            }) {
+                                Image("trash")
+                                    .renderIcon()
+                            }
+                            .frame(width: 25, height: 25)
+                            .padding([.leading, .trailing], 5)
+                        }
+                    }
+                    .padding(.bottom, 10)
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,23 +131,49 @@ struct PostView: View {
                 }
                 .padding()
                 .customCell()
-                .onAppear {
-                    print(try! getToken("accessToken"))
-                }
-                VStack {
+                VStack(spacing: 0) {
                     ForEach(comments, id: \.self) { comment in
-                        PersonView(writeToggles: $writeToggles,
-                                   deleteAlert: $deleteAlert,
-                                   profileUrl: comment.profileUrl,
-                                   userName: comment.userName,
-                                   stdInfo: comment.stdInfo,
-                                   author: comment.userId,
-                                   userId: userId)
+                        HStack {
+                            PersonView(profileUrl: comment.profileUrl,
+                                       userName: comment.userName,
+                                       stdInfo: comment.stdInfo,
+                                       author: comment.userId)
+                            Spacer()
+                            if comment.userId == userId {
+                                Button(action: {
+                                    commentWriteToggles.toggle()
+                                }) {
+                                    Image("write")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                Button(action: {
+                                    selectedCommentId = comment.commentId
+                                    commentDeleteAlert.toggle()
+                                }) {
+                                    Image("trash")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                .padding([.leading, .trailing], 5)
+                            }
+                        }
+                        .padding([.leading, .top, .trailing])
                         Text(comment.content)
                             .setAlignment(for: .leading)
+                            .padding(10)
+                            .background(Color("M2MBackground"))
+                            .clipShape(RoundedRectangle(cornerRadius: 7))
+                            .padding(.leading, 75)
+                            .padding(.top, 5)
+                            .padding([.trailing, .bottom])
+                        if comment != comments.last {
+                            Rectangle()
+                                .fill(Color("M2MBackground"))
+                                .frame(height: 1)
+                        }
                     }
                 }
-                .padding()
                 .customCell()
             }
             .customList()
@@ -194,6 +241,24 @@ struct PostView: View {
             Button("취소", role: .cancel) { }
         } message: {
             Text("삭제한 게시글은 복구할 수 없습니다")
+        }
+        .confirmationDialog("댓글 삭제", isPresented: $commentDeleteAlert) {
+            Button("정말 삭제하시겠습니까?", role: .destructive) {
+                AF.request("\(api)/comment/delete/\(selectedCommentId)",
+                           method: .delete,
+                           encoding: JSONEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 5 }
+                        .validate()
+                        .responseData { response in
+                            checkResponse(response)
+                            loadComments()
+                    }
+            }
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("삭제한 댓글은 복구할 수 없습니다")
         }
         .dragGesture(dismiss, $dragOffset)
         .exitAlert($errorToggle)
