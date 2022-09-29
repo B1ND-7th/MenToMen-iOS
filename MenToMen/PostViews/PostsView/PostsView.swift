@@ -97,7 +97,8 @@ struct PostsView: View {
                             }
                         }
                     }
-                    .padding([.top, .bottom], 15)
+                    .padding(.top, 15)
+                    .padding(.bottom, 10)
                     .padding([.leading, .trailing], 20)
                     .buttonStyle(PlainButtonStyle())
                     .listRowSeparator(.hidden)
@@ -113,7 +114,7 @@ struct PostsView: View {
                             }) {
                                 PostsCell(data: $datas[idx])
                             }
-                            .customCell(true)
+                            .customCell(true, decrease: true)
                         }
                     }
                 }

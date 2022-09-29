@@ -253,7 +253,7 @@ struct PostView: View {
                         .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
                         .customComment()
                 }
-                .customCell()
+                .customCell(decrease: true)
             }
             .customList()
             .refreshable {
