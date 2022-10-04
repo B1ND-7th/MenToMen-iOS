@@ -114,7 +114,7 @@ struct PostsView: View {
                             }) {
                                 PostsCell(data: $datas[idx])
                             }
-                            .customCell(true, decrease: true)
+                            .customCell(true, decrease: true, last: idx+1 == datas.count)
                         }
                     }
                 }

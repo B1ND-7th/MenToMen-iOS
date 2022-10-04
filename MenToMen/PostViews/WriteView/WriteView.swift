@@ -10,7 +10,8 @@ import Alamofire
 
 struct WriteView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedImage: UIImage?
+    @State private var selectedImage: [UIImage] = [UIImage]()
+    @State private var tempImage: [UIImage] = [UIImage]()
     @State var imagePickerToggle: Bool = false
     @State var imageUploadFailed: Bool = false
     @State var writingFailed: Bool = false
@@ -101,6 +102,37 @@ struct WriteView: View {
                 }
             }
             .padding()
+            if !selectedImage.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 17) {
+                        ForEach(selectedImage, id: \.self) { img in
+                            ZStack {
+                                Image(uiImage: img)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 75, height: 75)
+                                Button(action: {
+                                    withAnimation(.default) {
+                                        selectedImage = selectedImage.filter { $0 != img }
+                                    }
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .font(.caption)
+                                        .padding(5)
+                                        .foregroundColor(.white)
+                                        .background(.black.opacity(0.5))
+                                        .setAlignment(for: .trailing)
+                                        .setAlignment(for: .top)
+                                }
+                            }
+                            .frame(width: 75, height: 75)
+                            .clipShape(RoundedRectangle(cornerRadius: 7))
+                        }
+                    }
+                    .padding([.leading, .trailing])
+                }
+                .padding(.bottom)
+            }
             HStack(spacing: 0) {
                 Button(action: {
                     let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
@@ -111,13 +143,15 @@ struct WriteView: View {
                     if data != nil {
                         reqParam["postId"] = data!.postId
                     }
-                    if selectedImage != nil ||
-                        (selectedImage != nil && data != nil && imageEdited) {
+                    if !selectedImage.isEmpty ||
+                        (!selectedImage.isEmpty && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
-                            MultipartFormData.append(rotateImage(selectedImage!)!.jpegData(compressionQuality: 0.6)!,
-                                                     withName: "file",
-                                                     fileName: fileName,
-                                                     mimeType: "image/jpeg")
+                            for img in selectedImage {
+                                MultipartFormData.append(rotateImage(img)!.jpegData(compressionQuality: 0.6)!,
+                                                         withName: "file",
+                                                         fileName: fileName,
+                                                         mimeType: "image/jpeg")
+                            }
                         }, to: "\(api)/file/upload") { $0.timeoutInterval = 5 }
                             .validate()
                             .responseData { response in
@@ -150,37 +184,19 @@ struct WriteView: View {
                     .background(Color.accentColor)
                 }
                 .disabled(text.isEmpty || selectedFilter == 5)
-                Button(action: {
-                    if selectedImage == nil {
+                if selectedImage.count != 5 {
+                    Button(action: {
                         imagePickerToggle.toggle()
-                    } else {
-                        selectedImage = nil
+                        imageEdited = true
+                    }) {
+                        Image("photo")
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color(.systemBackground))
+                            .frame(width: 55, height: 55)
+                            .background(Color(.label))
                     }
-                    imageEdited = true
-                }) {
-                    ZStack {
-                        if selectedImage != nil {
-                            ZStack {
-                                Image(uiImage: selectedImage ?? UIImage(named: "null")!)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 55, height: 55)
-                                    .clipped()
-                                    .overlay(.black.opacity(0.3))
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.title3)
-                                    .foregroundColor(.white)
-                            }
-                        } else {
-                            Image("photo")
-                                .resizable()
-                                .renderingMode(.template)
-                                .frame(width: 20, height: 20)
-                        }
-                    }
-                    .foregroundColor(Color(.systemBackground))
-                    .frame(width: 55, height: 55)
-                    .background(Color(.label))
                 }
             }
             .clipped()
@@ -194,20 +210,26 @@ struct WriteView: View {
                         selectedFilter = idx
                     }
                 }
-                if data!.imgUrl != nil {
-                    DispatchQueue.global().async {
-                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
-                        DispatchQueue.main.async {
-                            if data != nil {
-                                selectedImage = UIImage(data: data!)
-                            }
-                        }
-                    }
-                }
+//                if data!.imgUrl != nil {
+//                    DispatchQueue.global().async {
+//                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
+//                        DispatchQueue.main.async {
+//                            if data != nil {
+//                                selectedImage = UIImage(data: data!)
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
         .sheet(isPresented: $imagePickerToggle) {
-            ImagePicker(image: $selectedImage)
+            PhotoPicker(images: $tempImage, selectionLimit: 5 - selectedImage.count)
+                .ignoresSafeArea(edges: .bottom)
+                .onDisappear {
+                    withAnimation(.default) {
+                        selectedImage += tempImage
+                    }
+                }
         }
         .alert(isPresented: $imageUploadFailed) {
             Alert(title: Text("오류"), message: Text("이미지 업로드에 실패했습니다"), dismissButton: .default(Text("확인")))
