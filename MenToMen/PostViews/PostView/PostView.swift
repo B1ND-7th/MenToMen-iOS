@@ -25,6 +25,8 @@ struct PostView: View {
     @State var profileUrl: String? = ""
     @State var selectedCommentId: Int = 0
     @State var tap: Bool = false
+    @State var more: Bool = false
+    @State var commentMore: [Int] = [Int]()
     let profileImage: String = ""
     let userId: Int
     func timeParser(_ original: String) -> String {
@@ -70,7 +72,9 @@ struct PostView: View {
                     case .success:
                         guard let value = response.value else { return }
                         guard let result = try? decoder.decode(CommentDatas.self, from: value) else { return }
-                        comments = result.data
+                        withAnimation(.default) {
+                            comments = result.data
+                        }
                     case .failure(let error):
                         errorToggle.toggle()
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
@@ -106,21 +110,33 @@ struct PostView: View {
                                    author: data.author)
                         Spacer()
                         if data.author == userId {
-                            Button(action: {
-                                writeToggles.toggle()
-                            }) {
-                                Image("write")
-                                    .renderIcon()
+                            if more {
+                                Button(action: {
+                                    writeToggles.toggle()
+                                }) {
+                                    Image("write")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                Button(action: {
+                                    deleteAlert.toggle()
+                                }) {
+                                    Image("trash")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
+                                .padding([.leading, .trailing], 5)
+                            } else {
+                                Button(action: {
+                                    withAnimation(.default) {
+                                        more.toggle()
+                                    }
+                                }) {
+                                    Image("more")
+                                        .renderIcon()
+                                }
+                                .frame(width: 25, height: 25)
                             }
-                            .frame(width: 25, height: 25)
-                            Button(action: {
-                                deleteAlert.toggle()
-                            }) {
-                                Image("trash")
-                                    .renderIcon()
-                            }
-                            .frame(width: 25, height: 25)
-                            .padding([.leading, .trailing], 5)
                         }
                     }
                     .padding(.bottom, 10)
@@ -164,22 +180,34 @@ struct PostView: View {
                                        author: comment.userId)
                             Spacer()
                             if comment.userId == userId {
-                                Button(action: {
-                                    commentWriteToggles.toggle()
-                                }) {
-                                    Image("write")
-                                        .renderIcon()
+                                if commentMore.contains(comment.commentId) {
+                                    Button(action: {
+                                        commentWriteToggles.toggle()
+                                    }) {
+                                        Image("write")
+                                            .renderIcon()
+                                    }
+                                    .frame(width: 25, height: 25)
+                                    Button(action: {
+                                        selectedCommentId = comment.commentId
+                                        commentDeleteAlert.toggle()
+                                    }) {
+                                        Image("trash")
+                                            .renderIcon()
+                                    }
+                                    .frame(width: 25, height: 25)
+                                    .padding([.leading, .trailing], 5)
+                                } else {
+                                    Button(action: {
+                                        withAnimation(.default) {
+                                            commentMore.append(comment.commentId)
+                                        }
+                                    }) {
+                                        Image("more")
+                                            .renderIcon()
+                                    }
+                                    .frame(width: 25, height: 25)
                                 }
-                                .frame(width: 25, height: 25)
-                                Button(action: {
-                                    selectedCommentId = comment.commentId
-                                    commentDeleteAlert.toggle()
-                                }) {
-                                    Image("trash")
-                                        .renderIcon()
-                                }
-                                .frame(width: 25, height: 25)
-                                .padding([.leading, .trailing], 5)
                             }
                         }
                         .padding([.leading, .top, .trailing])
@@ -189,17 +217,43 @@ struct PostView: View {
                             .fill(Color("M2MBackground"))
                             .frame(height: 1)
                     }
-                    PersonView(profileUrl: profileUrl,
-                               userName: userName,
-                               stdInfo: stdInfo,
-                               author: -1)
-                    .setAlignment(for: .leading)
+                    HStack {
+                        PersonView(profileUrl: profileUrl,
+                                   userName: userName,
+                                   stdInfo: stdInfo,
+                                   author: -1)
+                        Spacer()
+                        Button(action: {
+                            AF.request("\(api)/comment/submit",
+                                       method: .post,
+                                       parameters: ["content": currentComment,
+                                                    "postId": data.postId],
+                                       encoding: JSONEncoding.default,
+                                       headers: ["Content-Type": "application/json"],
+                                       interceptor: Requester()
+                            ) { $0.timeoutInterval = 5 }
+                                .validate()
+                                .responseData { response in
+                                    checkResponse(response)
+                                    switch response.result {
+                                    case .success:
+                                        loadComments()
+                                        currentComment = ""
+                                    case .failure: print("Error")
+                                    }
+                                }
+                        }) {
+                            Image("send")
+                                .renderIcon()
+                        }
+                        .frame(width: 25, height: 25)
+                    }
                     .padding([.leading, .top, .trailing])
                     TextField("", text: $currentComment)
                         .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
                         .customComment()
                 }
-                .customCell()
+                .customCell(decrease: true)
             }
             .customList()
             .refreshable {

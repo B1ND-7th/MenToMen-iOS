@@ -119,7 +119,7 @@ struct ProfileView: View {
                         }) {
                             PostsCell(data: $datas[idx])
                         }
-                        .customCell(bottom: datas.count-1 == idx)
+                        .customCell(bottom: datas.count-1 == idx, decrease: idx == 0)
                     }
                 }
                 .customList()
