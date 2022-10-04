@@ -210,16 +210,16 @@ struct WriteView: View {
                         selectedFilter = idx
                     }
                 }
-//                if data!.imgUrl != nil {
-//                    DispatchQueue.global().async {
-//                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
-//                        DispatchQueue.main.async {
-//                            if data != nil {
-//                                selectedImage = UIImage(data: data!)
-//                            }
-//                        }
-//                    }
-//                }
+                if data!.imgUrl != nil {
+                    DispatchQueue.global().async {
+                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
+                        DispatchQueue.main.async {
+                            if data != nil {
+                                selectedImage.append(UIImage(data: data!)!)
+                            }
+                        }
+                    }
+                }
             }
         }
         .sheet(isPresented: $imagePickerToggle) {
