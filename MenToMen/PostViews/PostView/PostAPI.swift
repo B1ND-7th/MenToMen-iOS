@@ -14,7 +14,7 @@ struct PostData: Decodable {
 struct PostDatas: Decodable {
     let author: Int
     let content: String
-    let imgUrls: [String]
+    let imgUrls: [String]?
     let createDateTime: String
     let updateDateTime: String
     let updateStatus: String

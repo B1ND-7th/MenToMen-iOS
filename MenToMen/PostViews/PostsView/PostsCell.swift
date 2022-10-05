@@ -50,8 +50,8 @@ struct PostsCell: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(7)
                     Spacer()
-                    if !data.imgUrls[0].isEmpty {
-                        CachedAsyncImage(url: URL(string: data.imgUrls[0])) { image in
+                    if data.imgUrls != nil {
+                        CachedAsyncImage(url: URL(string: data.imgUrls?[0] ?? "")) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -59,7 +59,7 @@ struct PostsCell: View {
                             NothingView()
                         }
                         .frame(width: 40, height: 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                     }
                 }
                 Spacer()

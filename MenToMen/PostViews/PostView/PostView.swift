@@ -144,16 +144,13 @@ struct PostView: View {
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if !data.imgUrls[0].isEmpty {
-                        VStack {
-                            ForEach(data.imgUrls, id: \.self) { url in
+                    if data.imgUrls != nil {
+                        TabView {
+                            ForEach(data.imgUrls ?? [""], id: \.self) { url in
                                 CachedAsyncImage(url: URL(string: url)) { image in
                                     image
                                         .resizable()
-                                        .scaledToFit()
-                                        .clipShape(RoundedRectangle(cornerRadius: 7))
-                                        .padding(.top, 10)
-                                        .scaleEffect(selectedImage == url && tap ? 0.95 : 1)
+                                        .scaledToFill()
                                         .onTapGesture { }
                                         .onLongPressGesture(minimumDuration: 0.3) {
                                             HapticManager.instance.impact(style: .medium)
@@ -165,6 +162,12 @@ struct PostView: View {
                                 }
                             }
                         }
+                        .frame(width: UIScreen.main.bounds.size.width - 70,
+                               height: UIScreen.main.bounds.size.width - 70)
+                        .tabViewStyle(PageTabViewStyle())
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .scaleEffect(tap ? 0.95 : 1)
+                        .padding(.top, 10)
                     }
                     Text("""
                          \(timeParser(data.createDateTime)) 작성\

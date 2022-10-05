@@ -79,21 +79,20 @@ struct WriteView: View {
                     ForEach(0..<5, id: \.self) { idx in
                         Button(action: {
                             withAnimation(.default) {
-                                selectedFilter = selectedFilter == idx ? 5 : idx
+                                selectedFilter = idx
                             }
                         }) {
                             ZStack {
-                                switch(selectedFilter) {
-                                    case idx: Capsule()
-                                        .fill(Color("\(TypeArray[idx])CR"))
-                                    case 5: Capsule()
-                                        .fill(Color("\(TypeArray[idx])CR"))
-                                    default: Capsule()
+                                if selectedFilter != idx || selectedFilter == 5 {
+                                    Capsule()
                                         .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
+                                } else {
+                                    Capsule()
+                                        .fill(Color("\(TypeArray[idx])CR"))
                                 }
                                 Text(TypeArray[idx])
                                     .font(.caption)
-                                    .foregroundColor(selectedFilter == idx || selectedFilter == 5 ? .white : Color("\(TypeArray[idx])CR"))
+                                    .foregroundColor(selectedFilter == idx ? .white : Color("\(TypeArray[idx])CR"))
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 25)
@@ -126,7 +125,7 @@ struct WriteView: View {
                                 }
                             }
                             .frame(width: 75, height: 75)
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
                         }
                     }
                     .padding([.leading, .trailing])
@@ -170,7 +169,7 @@ struct WriteView: View {
                                 case .failure: imageUploadFailed.toggle()
                                 }
                             }
-                    } else if data != nil && !imageEdited && !data!.imgUrls.isEmpty {
+                    } else if data != nil && !imageEdited && data?.imgUrls != nil {
                         reqParam["imgUrls"] = data!.imgUrls
                     } else {
                         submit(reqParam)
@@ -215,9 +214,9 @@ struct WriteView: View {
                         selectedFilter = idx
                     }
                 }
-                if !data!.imgUrls.isEmpty {
+                if data?.imgUrls != nil {
                     DispatchQueue.global().async {
-                        for url in data!.imgUrls {
+                        for url in data!.imgUrls! {
                             let data = try? Data(contentsOf: URL(string: url)!)
                             DispatchQueue.main.async {
                                 if data != nil {
