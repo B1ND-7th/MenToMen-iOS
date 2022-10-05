@@ -16,7 +16,7 @@ struct MainView: View {
     @State var logout: Bool = false
     @State var status: Int = 0
     @State var tutorial: Bool = false
-    @State var postdata: PostDatas = PostDatas(author: 0, content: "", imgUrl: "", createDateTime: "", updateDateTime: "", updateStatus: "", postId: 0, profileUrl: "", tag: "", userName: "", stdInfo: InfoDatas(grade: 1, room: 1, number: 1))
+    @State var postdata: PostDatas = PostDatas(author: 0, content: "", imgUrls: [""], createDateTime: "", updateDateTime: "", updateStatus: "", postId: 0, profileUrl: "", tag: "", userName: "", stdInfo: InfoDatas(grade: 1, room: 1, number: 1))
     @State var postlink: Bool = false
     @State var postuser: Int = 0
     @State var transition: AnyTransition = .slide

@@ -27,6 +27,7 @@ struct PostView: View {
     @State var tap: Bool = false
     @State var more: Bool = false
     @State var commentMore: [Int] = [Int]()
+    @State var selectedImage: String = ""
     let profileImage: String = ""
     let userId: Int
     func timeParser(_ original: String) -> String {
@@ -143,21 +144,26 @@ struct PostView: View {
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if data.imgUrl != nil {
-                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 7))
-                                .padding(.top, 10)
-                                .scaleEffect(tap ? 0.95 : 1)
-                                .onTapGesture { }
-                                .onLongPressGesture(minimumDuration: 0.3) {
-                                    HapticManager.instance.impact(style: .medium)
-                                    tapper(true)
+                    if !data.imgUrls[0].isEmpty {
+                        VStack {
+                            ForEach(data.imgUrls, id: \.self) { url in
+                                CachedAsyncImage(url: URL(string: url)) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                                        .padding(.top, 10)
+                                        .scaleEffect(selectedImage == url && tap ? 0.95 : 1)
+                                        .onTapGesture { }
+                                        .onLongPressGesture(minimumDuration: 0.3) {
+                                            HapticManager.instance.impact(style: .medium)
+                                            selectedImage = url
+                                            tapper(true)
+                                        }
+                                } placeholder: {
+                                    ProgressView()
                                 }
-                        } placeholder: {
-                            ProgressView()
+                            }
                         }
                     }
                     Text("""
@@ -291,7 +297,7 @@ struct PostView: View {
             Button("사진 앨범에 추가") {
                 tapper(false)
                 DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: URL(string: data.imgUrl!)!)
+                    let data = try? Data(contentsOf: URL(string: selectedImage)!)
                     DispatchQueue.main.async {
                         if data != nil {
                             UIImageWriteToSavedPhotosAlbum(UIImage(data: data!)!, nil, nil, nil)

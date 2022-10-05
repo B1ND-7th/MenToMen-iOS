@@ -50,8 +50,8 @@ struct PostsCell: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(7)
                     Spacer()
-                    if data.imgUrl != nil {
-                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
+                    if !data.imgUrls[0].isEmpty {
+                        CachedAsyncImage(url: URL(string: data.imgUrls[0])) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)

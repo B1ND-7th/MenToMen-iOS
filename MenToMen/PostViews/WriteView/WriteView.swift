@@ -143,6 +143,7 @@ struct WriteView: View {
                     if data != nil {
                         reqParam["postId"] = data!.postId
                     }
+                    reqParam["imgUrls"] = [String]()
                     if !selectedImage.isEmpty ||
                         (!selectedImage.isEmpty && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
@@ -160,13 +161,17 @@ struct WriteView: View {
                                 case .success:
                                     guard let value = response.value else { return }
                                     guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
-                                    reqParam["imgUrl"] = result.data.imgUrl
+                                    var imgUrls = [String]()
+                                    for data in result.data {
+                                        imgUrls.append(data.imgUrl)
+                                    }
+                                    reqParam["imgUrls"] = imgUrls
                                     submit(reqParam)
                                 case .failure: imageUploadFailed.toggle()
                                 }
                             }
-                    } else if data != nil && !imageEdited && data!.imgUrl != nil {
-                        reqParam["imgUrl"] = data!.imgUrl!
+                    } else if data != nil && !imageEdited && !data!.imgUrls.isEmpty {
+                        reqParam["imgUrls"] = data!.imgUrls
                     } else {
                         submit(reqParam)
                     }
@@ -210,12 +215,14 @@ struct WriteView: View {
                         selectedFilter = idx
                     }
                 }
-                if data!.imgUrl != nil {
+                if !data!.imgUrls.isEmpty {
                     DispatchQueue.global().async {
-                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
-                        DispatchQueue.main.async {
-                            if data != nil {
-                                selectedImage.append(UIImage(data: data!)!)
+                        for url in data!.imgUrls {
+                            let data = try? Data(contentsOf: URL(string: url)!)
+                            DispatchQueue.main.async {
+                                if data != nil {
+                                    selectedImage.append(UIImage(data: data!)!)
+                                }
                             }
                         }
                     }
