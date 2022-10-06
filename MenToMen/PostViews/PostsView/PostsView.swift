@@ -98,7 +98,7 @@ struct PostsView: View {
                         }
                     }
                     .padding(.top, 15)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 8)
                     .padding([.leading, .trailing], 20)
                     .buttonStyle(PlainButtonStyle())
                     .listRowSeparator(.hidden)

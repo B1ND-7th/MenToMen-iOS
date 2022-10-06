@@ -27,6 +27,7 @@ struct PostView: View {
     @State var tap: Bool = false
     @State var more: Bool = false
     @State var commentMore: [Int] = [Int]()
+    @State var selectedImage: String = ""
     let profileImage: String = ""
     let userId: Int
     func timeParser(_ original: String) -> String {
@@ -143,22 +144,30 @@ struct PostView: View {
                     Text(data.content)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if data.imgUrl != nil {
-                        CachedAsyncImage(url: URL(string: data.imgUrl ?? "")) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 7))
-                                .padding(.top, 10)
-                                .scaleEffect(tap ? 0.95 : 1)
-                                .onTapGesture { }
-                                .onLongPressGesture(minimumDuration: 0.3) {
-                                    HapticManager.instance.impact(style: .medium)
-                                    tapper(true)
+                    if data.imgUrls != nil {
+                        TabView {
+                            ForEach(data.imgUrls ?? [""], id: \.self) { url in
+                                CachedAsyncImage(url: URL(string: url)) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .onTapGesture { }
+                                        .onLongPressGesture(minimumDuration: 0.3) {
+                                            HapticManager.instance.impact(style: .medium)
+                                            selectedImage = url
+                                            tapper(true)
+                                        }
+                                } placeholder: {
+                                    ProgressView()
                                 }
-                        } placeholder: {
-                            ProgressView()
+                            }
                         }
+                        .frame(width: UIScreen.main.bounds.size.width - 70,
+                               height: UIScreen.main.bounds.size.width - 70)
+                        .tabViewStyle(PageTabViewStyle())
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .scaleEffect(tap ? 0.95 : 1)
+                        .padding(.top, 10)
                     }
                     Text("""
                          \(timeParser(data.createDateTime)) 작성\
@@ -170,7 +179,8 @@ struct PostView: View {
                         .setAlignment(for: .trailing)
                 }
                 .padding()
-                .customCell()
+                .customCell(decrease: true)
+                .padding(.top, 5)
                 VStack(spacing: 0) {
                     ForEach(comments, id: \.self) { comment in
                         HStack {
@@ -217,45 +227,57 @@ struct PostView: View {
                             .fill(Color("M2MBackground"))
                             .frame(height: 1)
                     }
-                    HStack {
-                        PersonView(profileUrl: profileUrl,
-                                   userName: userName,
-                                   stdInfo: stdInfo,
-                                   author: -1)
-                        Spacer()
-                        Button(action: {
-                            AF.request("\(api)/comment/submit",
-                                       method: .post,
-                                       parameters: ["content": currentComment,
-                                                    "postId": data.postId],
-                                       encoding: JSONEncoding.default,
-                                       headers: ["Content-Type": "application/json"],
-                                       interceptor: Requester()
-                            ) { $0.timeoutInterval = 5 }
-                                .validate()
-                                .responseData { response in
-                                    checkResponse(response)
-                                    switch response.result {
-                                    case .success:
-                                        loadComments()
-                                        currentComment = ""
-                                    case .failure: print("Error")
-                                    }
-                                }
-                        }) {
-                            Image("send")
-                                .renderIcon()
-                        }
-                        .frame(width: 25, height: 25)
-                    }
-                    .padding([.leading, .top, .trailing])
-                    TextField("", text: $currentComment)
-                        .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
-                        .customComment()
                 }
                 .customCell(decrease: true)
+                .padding(.bottom, 20)
             }
             .customList()
+            HStack {
+                CachedAsyncImage(url: URL(string: profileUrl ?? "")) { image in
+                    image
+                        .resizable()
+                } placeholder: {
+                    if profileUrl == nil {
+                        Image("profile")
+                            .resizable()
+                    } else {
+                        NothingView()
+                    }
+                }
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                TextField("", text: $currentComment)
+                    .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
+                    .customComment(false)
+                    .padding([.leading, .trailing], 5)
+                Button(action: {
+                    AF.request("\(api)/comment/submit",
+                               method: .post,
+                               parameters: ["content": currentComment,
+                                            "postId": data.postId],
+                               encoding: JSONEncoding.default,
+                               headers: ["Content-Type": "application/json"],
+                               interceptor: Requester()
+                    ) { $0.timeoutInterval = 5 }
+                        .validate()
+                        .responseData { response in
+                            checkResponse(response)
+                            switch response.result {
+                            case .success:
+                                loadComments()
+                                currentComment = ""
+                            case .failure: print("Error")
+                            }
+                        }
+                }) {
+                    Image("send")
+                        .renderIcon()
+                }
+                .frame(width: 25, height: 25)
+            }
+            .padding([.leading, .trailing])
+            .padding([.top, .bottom], 10)
+            
             .refreshable {
                 AF.request("\(api)/post/read-one/\(data.postId)",
                            method: .get,
@@ -291,7 +313,7 @@ struct PostView: View {
             Button("사진 앨범에 추가") {
                 tapper(false)
                 DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: URL(string: data.imgUrl!)!)
+                    let data = try? Data(contentsOf: URL(string: selectedImage)!)
                     DispatchQueue.main.async {
                         if data != nil {
                             UIImageWriteToSavedPhotosAlbum(UIImage(data: data!)!, nil, nil, nil)

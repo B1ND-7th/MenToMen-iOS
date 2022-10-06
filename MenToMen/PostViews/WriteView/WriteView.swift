@@ -79,21 +79,20 @@ struct WriteView: View {
                     ForEach(0..<5, id: \.self) { idx in
                         Button(action: {
                             withAnimation(.default) {
-                                selectedFilter = selectedFilter == idx ? 5 : idx
+                                selectedFilter = idx
                             }
                         }) {
                             ZStack {
-                                switch(selectedFilter) {
-                                    case idx: Capsule()
-                                        .fill(Color("\(TypeArray[idx])CR"))
-                                    case 5: Capsule()
-                                        .fill(Color("\(TypeArray[idx])CR"))
-                                    default: Capsule()
+                                if selectedFilter != idx || selectedFilter == 5 {
+                                    Capsule()
                                         .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
+                                } else {
+                                    Capsule()
+                                        .fill(Color("\(TypeArray[idx])CR"))
                                 }
                                 Text(TypeArray[idx])
                                     .font(.caption)
-                                    .foregroundColor(selectedFilter == idx || selectedFilter == 5 ? .white : Color("\(TypeArray[idx])CR"))
+                                    .foregroundColor(selectedFilter == idx ? .white : Color("\(TypeArray[idx])CR"))
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 25)
@@ -126,7 +125,7 @@ struct WriteView: View {
                                 }
                             }
                             .frame(width: 75, height: 75)
-                            .clipShape(RoundedRectangle(cornerRadius: 7))
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
                         }
                     }
                     .padding([.leading, .trailing])
@@ -143,6 +142,7 @@ struct WriteView: View {
                     if data != nil {
                         reqParam["postId"] = data!.postId
                     }
+                    reqParam["imgUrls"] = [String]()
                     if !selectedImage.isEmpty ||
                         (!selectedImage.isEmpty && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
@@ -160,13 +160,17 @@ struct WriteView: View {
                                 case .success:
                                     guard let value = response.value else { return }
                                     guard let result = try? decoder.decode(ImageData.self, from: value) else { return }
-                                    reqParam["imgUrl"] = result.data.imgUrl
+                                    var imgUrls = [String]()
+                                    for data in result.data {
+                                        imgUrls.append(data.imgUrl)
+                                    }
+                                    reqParam["imgUrls"] = imgUrls
                                     submit(reqParam)
                                 case .failure: imageUploadFailed.toggle()
                                 }
                             }
-                    } else if data != nil && !imageEdited && data!.imgUrl != nil {
-                        reqParam["imgUrl"] = data!.imgUrl!
+                    } else if data != nil && !imageEdited && data?.imgUrls != nil {
+                        reqParam["imgUrls"] = data!.imgUrls
                     } else {
                         submit(reqParam)
                     }
@@ -210,12 +214,14 @@ struct WriteView: View {
                         selectedFilter = idx
                     }
                 }
-                if data!.imgUrl != nil {
+                if data?.imgUrls != nil {
                     DispatchQueue.global().async {
-                        let data = try? Data(contentsOf: URL(string: data!.imgUrl!)!)
-                        DispatchQueue.main.async {
-                            if data != nil {
-                                selectedImage.append(UIImage(data: data!)!)
+                        for url in data!.imgUrls! {
+                            let data = try? Data(contentsOf: URL(string: url)!)
+                            DispatchQueue.main.async {
+                                if data != nil {
+                                    selectedImage.append(UIImage(data: data!)!)
+                                }
                             }
                         }
                     }
