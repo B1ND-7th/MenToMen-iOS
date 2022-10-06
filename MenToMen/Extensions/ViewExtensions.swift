@@ -66,7 +66,7 @@ extension View {
             .padding(10)
             .background(Color("M2MBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 5))
-            .padding(.leading, leadingPadding ? 75 : 0)
+            .padding(.leading, leadingPadding ? 65 : 0)
             .padding(.top, leadingPadding ? 5 : 0)
             .padding(leadingPadding ? [.trailing, .bottom] : [])
     }
@@ -109,6 +109,11 @@ extension View {
                     exitHandler()
                 }))
             }
+    }
+    
+    func endTextEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil, from: nil, for: nil)
     }
     
     func placeholder<Content: View>(

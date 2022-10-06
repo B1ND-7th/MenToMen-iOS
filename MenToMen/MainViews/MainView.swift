@@ -22,6 +22,7 @@ struct MainView: View {
     @State var transition: AnyTransition = .slide
     @State var searchToggle: Bool = false
     @State var searchText: String = ""
+    @State var refresh: Bool = false
     func tutorialFinished() {
         UserDefaults.standard.set(true, forKey: "homeTutorial")
         SOCManager.dismiss(isPresented: $tutorial)
@@ -84,18 +85,20 @@ struct MainView: View {
                     .background(Color(.secondarySystemGroupedBackground))
                     NavigationLink(destination: LoginView()
                         .navigationBarHidden(true), isActive: $logout) { EmptyView() }
-                    NavigationLink(destination: PostView(data: postdata, userId: postuser)
+                    NavigationLink(destination: PostView(refresh: $refresh, data: postdata, userId: postuser)
                         .navigationBarHidden(true), isActive: $postlink) { EmptyView() }
                     switch(selectedView) {
                     case 0: PostsView(postdata: $postdata,
                                       postlink: $postlink,
                                       postuser: $postuser,
-                                      searchText: $searchText)
+                                      searchText: $searchText,
+                                      refresh: $refresh)
                     .transition(transition)
                     default: ProfileView(logout: $logout,
                                          postdata: $postdata,
                                          postlink: $postlink,
-                                         postuser: $postuser)
+                                         postuser: $postuser,
+                                         refresh: $refresh)
                     .transition(transition)
                     }
                     HStack {
@@ -134,7 +137,7 @@ struct MainView: View {
                 .background(Color(.secondarySystemGroupedBackground))
             }
             .fullScreenCover(isPresented: $writeToggles, content: {
-                WriteView(data: nil)
+                WriteView(refresh: $refresh, data: nil)
             })
             .navigationBarHidden(true)
             .onAppear {

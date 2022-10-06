@@ -14,6 +14,7 @@ struct ProfileView: View {
     @Binding var postdata: PostDatas
     @Binding var postlink: Bool
     @Binding var postuser: Int
+    @Binding var refresh: Bool
     @State var name: String = ""
     @State var profileImage: String = "null"
     @State var info: String = ""
@@ -54,7 +55,9 @@ struct ProfileView: View {
                     case .success:
                         guard let value = response.value else { return }
                         guard let result = try? decoder.decode(PostsData.self, from: value) else { return }
-                        datas = result.data
+                        withAnimation(.default) {
+                            datas = result.data
+                        }
                     case .failure(let error):
                         print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                     }
@@ -125,6 +128,10 @@ struct ProfileView: View {
                 .customList()
                 .onAppear { load() }
                 .refreshable { load() }
+                .onChange(of: refresh) { state in
+                    load()
+                    refresh = false
+                }
             }
             .navigationBarHidden(true)
             .navigationTitle("")
