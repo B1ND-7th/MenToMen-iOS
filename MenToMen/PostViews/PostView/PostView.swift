@@ -179,7 +179,8 @@ struct PostView: View {
                         .setAlignment(for: .trailing)
                 }
                 .padding()
-                .customCell()
+                .customCell(decrease: true)
+                .padding(.top, 5)
                 VStack(spacing: 0) {
                     ForEach(comments, id: \.self) { comment in
                         HStack {
@@ -226,45 +227,57 @@ struct PostView: View {
                             .fill(Color("M2MBackground"))
                             .frame(height: 1)
                     }
-                    HStack {
-                        PersonView(profileUrl: profileUrl,
-                                   userName: userName,
-                                   stdInfo: stdInfo,
-                                   author: -1)
-                        Spacer()
-                        Button(action: {
-                            AF.request("\(api)/comment/submit",
-                                       method: .post,
-                                       parameters: ["content": currentComment,
-                                                    "postId": data.postId],
-                                       encoding: JSONEncoding.default,
-                                       headers: ["Content-Type": "application/json"],
-                                       interceptor: Requester()
-                            ) { $0.timeoutInterval = 5 }
-                                .validate()
-                                .responseData { response in
-                                    checkResponse(response)
-                                    switch response.result {
-                                    case .success:
-                                        loadComments()
-                                        currentComment = ""
-                                    case .failure: print("Error")
-                                    }
-                                }
-                        }) {
-                            Image("send")
-                                .renderIcon()
-                        }
-                        .frame(width: 25, height: 25)
-                    }
-                    .padding([.leading, .top, .trailing])
-                    TextField("", text: $currentComment)
-                        .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
-                        .customComment()
                 }
                 .customCell(decrease: true)
+                .padding(.bottom, 20)
             }
             .customList()
+            HStack {
+                CachedAsyncImage(url: URL(string: profileUrl ?? "")) { image in
+                    image
+                        .resizable()
+                } placeholder: {
+                    if profileUrl == nil {
+                        Image("profile")
+                            .resizable()
+                    } else {
+                        NothingView()
+                    }
+                }
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                TextField("", text: $currentComment)
+                    .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
+                    .customComment(false)
+                    .padding([.leading, .trailing], 5)
+                Button(action: {
+                    AF.request("\(api)/comment/submit",
+                               method: .post,
+                               parameters: ["content": currentComment,
+                                            "postId": data.postId],
+                               encoding: JSONEncoding.default,
+                               headers: ["Content-Type": "application/json"],
+                               interceptor: Requester()
+                    ) { $0.timeoutInterval = 5 }
+                        .validate()
+                        .responseData { response in
+                            checkResponse(response)
+                            switch response.result {
+                            case .success:
+                                loadComments()
+                                currentComment = ""
+                            case .failure: print("Error")
+                            }
+                        }
+                }) {
+                    Image("send")
+                        .renderIcon()
+                }
+                .frame(width: 25, height: 25)
+            }
+            .padding([.leading, .trailing])
+            .padding([.top, .bottom], 10)
+            
             .refreshable {
                 AF.request("\(api)/post/read-one/\(data.postId)",
                            method: .get,

@@ -60,15 +60,15 @@ extension View {
         }
     }
     
-    @ViewBuilder func customComment() -> some View {
+    @ViewBuilder func customComment(_ leadingPadding: Bool = true) -> some View {
         self
             .setAlignment(for: .leading)
             .padding(10)
             .background(Color("M2MBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 5))
-            .padding(.leading, 75)
-            .padding(.top, 5)
-            .padding([.trailing, .bottom])
+            .padding(.leading, leadingPadding ? 75 : 0)
+            .padding(.top, leadingPadding ? 5 : 0)
+            .padding(leadingPadding ? [.trailing, .bottom] : [])
     }
     
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
