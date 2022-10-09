@@ -26,21 +26,27 @@ struct PostsCell: View {
     var body: some View {
         ZStack(alignment: .leading) {
             VStack {
-                HStack {
+                HStack(alignment: .top) {
                     Image("\(TypeDict[data.tag!] ?? "Null")BM")
                         .resizable()
                         .frame(width: 27, height: 39)
                         .padding(.leading, 15)
+                    VStack(alignment: .leading) {
+                        Text(data.userName)
+                            .foregroundColor(Color(.label))
+                        Text("\(data.stdInfo.grade)학년 \(data.stdInfo.room)반 \(data.stdInfo.number)번")
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, 6)
                     Spacer()
                     Text("""
                          \(timeParser(data.createDateTime))\
-                         \(data.updateStatus == "UPDATE" ? "(수정됨)" : "") \
-                         · \(data.userName)
+                         \(data.updateStatus == "UPDATE" ? "(수정됨)" : "")
                          """)
-                        .font(.caption)
-                        .padding(.trailing, 10)
+                        .padding([.top, .trailing], 10)
                         .foregroundColor(.gray)
                 }
+                .font(.caption)
                 Spacer()
             }
             VStack {

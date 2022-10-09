@@ -35,6 +35,7 @@ extension View {
             //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(5)
+            .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
             .padding([.leading, .trailing], 20)
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)

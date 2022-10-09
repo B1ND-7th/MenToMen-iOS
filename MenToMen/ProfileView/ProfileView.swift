@@ -114,6 +114,7 @@ struct ProfileView: View {
                         .frame(height: 45)
                     }
                     .customCell()
+                    .padding(.bottom, 14)
                     ForEach(0..<datas.count, id: \.self) { idx in
                         Button(action: {
                             postdata = datas[idx]
@@ -122,7 +123,7 @@ struct ProfileView: View {
                         }) {
                             PostsCell(data: $datas[idx])
                         }
-                        .customCell(bottom: datas.count-1 == idx, decrease: idx == 0)
+                        .customCell(true, decrease: idx == 0)
                     }
                 }
                 .customList()
