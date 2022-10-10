@@ -121,6 +121,7 @@ struct MainView: View {
                             Spacer()
                             ForEach(0..<2, id: \.self) { idx in
                                 Button(action: {
+                                    HapticManager.instance.impact(style: .light)
                                     switch(idx) {
                                     case 0: transition = .slide
                                     default: transition = .backslide

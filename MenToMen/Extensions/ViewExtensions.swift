@@ -39,7 +39,7 @@ extension View {
             .padding([.leading, .trailing], 20)
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)
-            .padding(.bottom, last ? 6 : 0)
+            .padding(.bottom, last ? 61 : 0)
             //.listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }
