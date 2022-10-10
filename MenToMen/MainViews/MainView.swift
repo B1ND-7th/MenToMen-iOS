@@ -87,28 +87,40 @@ struct MainView: View {
                         .navigationBarHidden(true), isActive: $logout) { EmptyView() }
                     NavigationLink(destination: PostView(refresh: $refresh, data: postdata, userId: postuser)
                         .navigationBarHidden(true), isActive: $postlink) { EmptyView() }
-                    switch(selectedView) {
-                    case 0: PostsView(postdata: $postdata,
-                                      postlink: $postlink,
-                                      postuser: $postuser,
-                                      searchText: $searchText,
-                                      refresh: $refresh)
-                    .transition(transition)
-                    default: ProfileView(logout: $logout,
-                                         postdata: $postdata,
-                                         postlink: $postlink,
-                                         postuser: $postuser,
-                                         refresh: $refresh)
-                    .transition(transition)
-                    }
-                    HStack {
-                        Spacer()
-                        ForEach(0..<3, id: \.self) { idx in
-                            Button(action: {
-                                HapticManager.instance.impact(style: .light)
-                                if idx == 1 {
-                                    writeToggles.toggle()
-                                } else {
+                    ZStack {
+                        switch(selectedView) {
+                        case 0: PostsView(postdata: $postdata,
+                                          postlink: $postlink,
+                                          postuser: $postuser,
+                                          searchText: $searchText,
+                                          refresh: $refresh)
+                        .transition(transition)
+                        default: ProfileView(logout: $logout,
+                                             postdata: $postdata,
+                                             postlink: $postlink,
+                                             postuser: $postuser,
+                                             refresh: $refresh)
+                        .transition(transition)
+                        }
+                        Button(action: {
+                            HapticManager.instance.impact(style: .light)
+                            writeToggles.toggle()
+                        }) {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                                .padding(15)
+                                .background(.blue)
+                                .clipShape(Circle())
+                                .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
+                        }
+                        .setAlignment(for: .bottom)
+                        .padding(.bottom, 25)
+                        HStack {
+                            Spacer()
+                            ForEach(0..<2, id: \.self) { idx in
+                                Button(action: {
                                     switch(idx) {
                                     case 0: transition = .slide
                                     default: transition = .backslide
@@ -116,25 +128,38 @@ struct MainView: View {
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         selectedView = idx
                                     }
+                                }) {
+                                    VStack(spacing: 2) {
+                                        Image(["home", "user"][idx])
+                                            .resizable()
+                                            .renderingMode(.template)
+                                            .frame(width: 25, height: 25)
+                                        Text(["홈", "마이"][idx])
+                                            .font(.caption2)
+                                    }
+                                    .foregroundColor(idx == selectedView ? .accentColor : Color(.label))
                                 }
-                            }) {
-                                VStack(spacing: 2) {
-                                    Image(["home", "add-circle", "user"][idx])
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .frame(width: 25, height: 25)
-                                    Text(["홈", "등록", "마이"][idx])
-                                        .font(.caption2)
+                                .padding(.bottom, 6)
+                                if idx == 0 {
+                                    Spacer()
+                                    Spacer()
                                 }
-                                .foregroundColor(idx == selectedView ? .accentColor : Color(.label))
+                                Spacer()
                             }
-                            .padding([.leading, .trailing], idx == 1 ? 30 : 0)
-                            .padding(.bottom, 6)
-                            Spacer()
                         }
+                        .padding(.top, 5)
+                        .padding(.bottom, UIApplication
+                            .shared
+                            .connectedScenes
+                            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+                            .first { $0.isKeyWindow }?.safeAreaInsets.bottom)
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .clipShape(CustomShape())
+                        .setAlignment(for: .bottom)
+                        .ignoresSafeArea()
+                        .shadow(color: .black.opacity(0.2), radius: 3)
                     }
                 }
-                .background(Color(.secondarySystemGroupedBackground))
             }
             .fullScreenCover(isPresented: $writeToggles, content: {
                 WriteView(refresh: $refresh, data: nil)
