@@ -10,6 +10,7 @@ import Alamofire
 
 struct WriteView: View {
     @Environment(\.dismiss) private var dismiss
+    @Binding var refresh: Bool
     @State private var selectedImage: [UIImage] = [UIImage]()
     @State private var tempImage: [UIImage] = [UIImage]()
     @State var imagePickerToggle: Bool = false
@@ -43,7 +44,9 @@ struct WriteView: View {
                 print(params)
                 checkResponse(response)
                 switch response.result {
-                case .success: dismiss()
+                case .success:
+                    refresh.toggle()
+                    dismiss()
                 case .failure: writingFailed.toggle()
                 }
             }

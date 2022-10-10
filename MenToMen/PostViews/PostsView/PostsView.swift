@@ -13,6 +13,7 @@ struct PostsView: View {
     @Binding var postlink: Bool
     @Binding var postuser: Int
     @Binding var searchText: String
+    @Binding var refresh: Bool
     @State var errorToggle: Bool = false
     @State var selectedFilter: Int = 5
     @State var originalDatas = [PostDatas]()
@@ -97,6 +98,7 @@ struct PostsView: View {
                             }
                         }
                     }
+                    .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
                     .padding(.top, 15)
                     .padding(.bottom, 8)
                     .padding([.leading, .trailing], 20)
@@ -121,6 +123,10 @@ struct PostsView: View {
                 .customList()
                 .onAppear { load() }
                 .refreshable { load() }
+                .onChange(of: refresh) { state in
+                    load()
+                    refresh = false
+                }
                 .onChange(of: searchText) { text in
                     dataSearch()
                 }

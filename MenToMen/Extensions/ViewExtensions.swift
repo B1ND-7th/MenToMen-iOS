@@ -35,10 +35,11 @@ extension View {
             //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(5)
+            .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
             .padding([.leading, .trailing], 20)
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)
-            .padding(.bottom, last ? 6 : 0)
+            .padding(.bottom, last ? 61 : 0)
             //.listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }
@@ -66,7 +67,7 @@ extension View {
             .padding(10)
             .background(Color("M2MBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 5))
-            .padding(.leading, leadingPadding ? 75 : 0)
+            .padding(.leading, leadingPadding ? 65 : 0)
             .padding(.top, leadingPadding ? 5 : 0)
             .padding(leadingPadding ? [.trailing, .bottom] : [])
     }
@@ -109,6 +110,11 @@ extension View {
                     exitHandler()
                 }))
             }
+    }
+    
+    func endTextEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil, from: nil, for: nil)
     }
     
     func placeholder<Content: View>(

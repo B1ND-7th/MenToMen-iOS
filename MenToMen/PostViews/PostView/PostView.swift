@@ -12,6 +12,7 @@ import CachedAsyncImage
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @Binding var refresh: Bool
     @State var errorToggle: Bool = false
     @State var deleteAlert: Bool = false
     @State var writeToggles: Bool = false
@@ -89,17 +90,22 @@ struct PostView: View {
     }
     var body: some View {
         VStack(spacing: 0) {
-            Button(action: {
-                dismiss()
-            }) {
-                Image("back")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(Color(.label))
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image("back")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(Color(.label))
+                }
+                .frame(width: 30, height: 30)
+                .padding(.leading, 10)
+                Spacer()
+                Text("멘토 요청")
+                    .padding(.trailing, 40)
+                Spacer()
             }
-            .frame(width: 30, height: 30)
-            .padding(.leading, 10)
-            .setAlignment(for: .leading)
             .frame(height: 61)
             .background(Color(.secondarySystemGroupedBackground))
             ScrollView {
@@ -231,7 +237,36 @@ struct PostView: View {
                 .customCell(decrease: true)
                 .padding(.bottom, 20)
             }
+            .refreshable {
+                AF.request("\(api)/post/read-one/\(data.postId)",
+                           method: .get,
+                           encoding: URLEncoding.default,
+                           headers: ["Content-Type": "application/json"],
+                           interceptor: Requester()
+                ) { $0.timeoutInterval = 5 }
+                .validate()
+                .responseData { response in
+                    checkResponse(response)
+                    print(checkStatus(response))
+                    switch response.result {
+                    case .success:
+                        guard let value = response.value else { return }
+                        guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                        data = result.data
+                    case .failure(let error):
+                        errorToggle.toggle()
+                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                    }
+                }
+                loadComments()
+            }
+            .onAppear {
+                loadComments()
+            }
             .customList()
+            .onTapGesture {
+                endTextEditing()
+            }
             HStack {
                 CachedAsyncImage(url: URL(string: profileUrl ?? "")) { image in
                     image
@@ -277,37 +312,11 @@ struct PostView: View {
             }
             .padding([.leading, .trailing])
             .padding([.top, .bottom], 10)
-            
-            .refreshable {
-                AF.request("\(api)/post/read-one/\(data.postId)",
-                           method: .get,
-                           encoding: URLEncoding.default,
-                           headers: ["Content-Type": "application/json"],
-                           interceptor: Requester()
-                ) { $0.timeoutInterval = 5 }
-                .validate()
-                .responseData { response in
-                    checkResponse(response)
-                    print(checkStatus(response))
-                    switch response.result {
-                    case .success:
-                        guard let value = response.value else { return }
-                        guard let result = try? decoder.decode(PostData.self, from: value) else { return }
-                        data = result.data
-                    case .failure(let error):
-                        errorToggle.toggle()
-                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
-                    }
-                }
-                loadComments()
-            }
-            .onAppear {
-                loadComments()
-            }
+            .background(Color(.secondarySystemGroupedBackground))
         }
         .buttonStyle(BorderlessButtonStyle())
         .fullScreenCover(isPresented: $writeToggles, content: {
-            WriteView(data: data)
+            WriteView(refresh: $refresh, data: data)
         })
         .confirmationDialog("저장", isPresented: $tap) {
             Button("사진 앨범에 추가") {
