@@ -72,6 +72,12 @@ extension View {
             .padding(leadingPadding ? [.trailing, .bottom] : [])
     }
     
+    @ViewBuilder func customShadow(_ y: CGFloat = 0) -> some View {
+        self
+            .clipped()
+            .shadow(color: .black.opacity(0.2), radius: 3, y: y)
+    }
+    
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
         switch alignment {
         case .top: VStack {
@@ -139,3 +145,15 @@ struct NothingView: View {
             .opacity(0.3)
     }
 }
+
+public let bottomPadding: CGFloat = (UIApplication
+    .shared
+    .connectedScenes
+    .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+    .first { $0.isKeyWindow }?.safeAreaInsets.bottom)!
+
+public let topPadding: CGFloat = (UIApplication
+    .shared
+    .connectedScenes
+    .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+    .first { $0.isKeyWindow }?.safeAreaInsets.top)!

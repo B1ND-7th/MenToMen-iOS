@@ -60,9 +60,9 @@ struct MainView: View {
                         .frame(width: 25, height: 25)
                         .foregroundColor(.white)
                         .padding(15)
-                        .background(.blue)
+                        .background(Color.accentColor)
                         .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
+                        .customShadow(2)
                 }
                 .setAlignment(for: .bottom)
                 .padding(.bottom, 25)
@@ -95,16 +95,12 @@ struct MainView: View {
                     }
                 }
                 .padding(.top, 5)
-                .padding(.bottom, UIApplication
-                    .shared
-                    .connectedScenes
-                    .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-                    .first { $0.isKeyWindow }?.safeAreaInsets.bottom)
+                .padding(.bottom, bottomPadding)
                 .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(CustomShape())
                 .setAlignment(for: .bottom)
+                .customShadow()
                 .ignoresSafeArea()
-                .shadow(color: .black.opacity(0.2), radius: 3)
                 HStack(spacing: 15) {
                     if !searchToggle {
                         Image("M2MLogo")
@@ -152,11 +148,11 @@ struct MainView: View {
                 }
                 .padding([.leading, .trailing], 20)
                 .padding(.bottom, 16)
-                .padding(.top, 12)
+                .padding(.top, topPadding + 12)
                 .background(Color(.secondarySystemGroupedBackground))
-                .shadow(color: .black.opacity(0.2), radius: 3)
-                .frame(height: 61)
                 .frame(maxWidth: .infinity)
+                .customShadow()
+                .ignoresSafeArea()
                 .setAlignment(for: .top)
             }
         }
