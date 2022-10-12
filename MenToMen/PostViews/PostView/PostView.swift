@@ -89,25 +89,7 @@ struct PostView: View {
         }
     }
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image("back")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(Color(.label))
-                }
-                .frame(width: 30, height: 30)
-                .padding(.leading, 10)
-                Spacer()
-                Text("멘토 요청")
-                    .padding(.trailing, 40)
-                Spacer()
-            }
-            .frame(height: 61)
-            .background(Color(.secondarySystemGroupedBackground))
+        ZStack {
             ScrollView {
                 VStack(spacing: 0) {
                     HStack {
@@ -264,55 +246,85 @@ struct PostView: View {
                 loadComments()
             }
             .customList()
+            .padding(.top, 61)
+            .padding(.bottom, bottomPadding + 27)
             .onTapGesture {
                 endTextEditing()
             }
-            HStack {
-                CachedAsyncImage(url: URL(string: profileUrl ?? "")) { image in
-                    image
-                        .resizable()
-                } placeholder: {
-                    if profileUrl == nil {
-                        Image("profile")
+            VStack {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image("back")
                             .resizable()
-                    } else {
-                        NothingView()
+                            .renderingMode(.template)
+                            .foregroundColor(Color(.label))
                     }
+                    .frame(width: 30, height: 30)
+                    .padding(.leading, 10)
+                    Spacer()
+                    Text("멘토 요청")
+                        .padding(.trailing, 40)
+                    Spacer()
                 }
-                .frame(width: 40, height: 40)
-                .clipShape(Circle())
-                TextField("", text: $currentComment)
-                    .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
-                    .customComment(false)
-                    .padding([.leading, .trailing], 5)
-                Button(action: {
-                    AF.request("\(api)/comment/submit",
-                               method: .post,
-                               parameters: ["content": currentComment,
-                                            "postId": data.postId],
-                               encoding: JSONEncoding.default,
-                               headers: ["Content-Type": "application/json"],
-                               interceptor: Requester()
-                    ) { $0.timeoutInterval = 5 }
-                        .validate()
-                        .responseData { response in
-                            checkResponse(response)
-                            switch response.result {
-                            case .success:
-                                loadComments()
-                                currentComment = ""
-                            case .failure: print("Error")
-                            }
+                .frame(height: 61)
+                .background(Color(.secondarySystemGroupedBackground))
+                Spacer()
+                HStack {
+                    CachedAsyncImage(url: URL(string: profileUrl ?? "")) { image in
+                        image
+                            .resizable()
+                    } placeholder: {
+                        if profileUrl == nil {
+                            Image("profile")
+                                .resizable()
+                        } else {
+                            NothingView()
                         }
-                }) {
-                    Image("send")
-                        .renderIcon()
+                    }
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    TextField("", text: $currentComment)
+                        .placeholder("댓글을 입력해주세요", when: currentComment.isEmpty)
+                        .customComment(false)
+                        .padding([.leading, .trailing], 5)
+                    Button(action: {
+                        AF.request("\(api)/comment/submit",
+                                   method: .post,
+                                   parameters: ["content": currentComment,
+                                                "postId": data.postId],
+                                   encoding: JSONEncoding.default,
+                                   headers: ["Content-Type": "application/json"],
+                                   interceptor: Requester()
+                        ) { $0.timeoutInterval = 5 }
+                            .validate()
+                            .responseData { response in
+                                checkResponse(response)
+                                switch response.result {
+                                case .success:
+                                    loadComments()
+                                    currentComment = ""
+                                case .failure: print("Error")
+                                }
+                            }
+                    }) {
+                        Image("send")
+                            .renderIcon()
+                    }
+                    .frame(width: 25, height: 25)
                 }
-                .frame(width: 25, height: 25)
+                .padding([.leading, .trailing])
+                .padding([.top, .bottom], 10)
+                .background(Color(.secondarySystemGroupedBackground))
             }
-            .padding([.leading, .trailing])
-            .padding([.top, .bottom], 10)
-            .background(Color(.secondarySystemGroupedBackground))
+            .padding(.top, topPadding)
+            .customShadow()
+            .edgesIgnoringSafeArea(.top)
+            Color(.secondarySystemGroupedBackground)
+                .frame(height: bottomPadding + 10)
+                .setAlignment(for: .bottom)
+                .ignoresSafeArea()
         }
         .buttonStyle(BorderlessButtonStyle())
         .fullScreenCover(isPresented: $writeToggles, content: {

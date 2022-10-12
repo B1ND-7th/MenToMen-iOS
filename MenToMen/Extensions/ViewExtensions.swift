@@ -27,19 +27,17 @@ extension View {
     
     @ViewBuilder func customCell(_ invert: Bool = false,
                                  bottom: Bool = false,
-                                 decrease: Bool = false,
-                                 last: Bool = false) -> some View {
+                                 decrease: Bool = false) -> some View {
         self
             .listRowSeparator(.hidden)
             .frame(maxWidth: .infinity)
             //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(5)
-            .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
+            .customShadow(2)
             .padding([.leading, .trailing], 20)
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)
-            .padding(.bottom, last ? 61 : 0)
             //.listRowInsets(EdgeInsets())
             .background(Color("M2MBackground"))
     }
@@ -70,6 +68,13 @@ extension View {
             .padding(.leading, leadingPadding ? 65 : 0)
             .padding(.top, leadingPadding ? 5 : 0)
             .padding(leadingPadding ? [.trailing, .bottom] : [])
+    }
+    
+    @ViewBuilder func customShadow(_ y: CGFloat = 0) -> some View {
+        self
+            .clipped()
+            .shadow(color: .black.opacity(
+                UITraitCollection.current.userInterfaceStyle == .dark ? 0.8 : 0.2), radius: 3, y: y)
     }
     
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {
@@ -139,3 +144,15 @@ struct NothingView: View {
             .opacity(0.3)
     }
 }
+
+public let bottomPadding: CGFloat = (UIApplication
+    .shared
+    .connectedScenes
+    .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+    .first { $0.isKeyWindow }?.safeAreaInsets.bottom)!
+
+public let topPadding: CGFloat = (UIApplication
+    .shared
+    .connectedScenes
+    .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+    .first { $0.isKeyWindow }?.safeAreaInsets.top)!

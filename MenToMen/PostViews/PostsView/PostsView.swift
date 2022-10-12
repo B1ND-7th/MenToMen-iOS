@@ -73,7 +73,7 @@ struct PostsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     HStack {
                         ForEach(0..<5, id: \.self) { idx in
                             Button(action: {
@@ -98,7 +98,7 @@ struct PostsView: View {
                             }
                         }
                     }
-                    .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
+                    .customShadow(2)
                     .padding(.top, 15)
                     .padding(.bottom, 8)
                     .padding([.leading, .trailing], 20)
@@ -116,7 +116,8 @@ struct PostsView: View {
                             }) {
                                 PostsCell(data: $datas[idx])
                             }
-                            .customCell(true, decrease: true, last: idx+1 == datas.count)
+                            .customCell(true, decrease: true)
+                            .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
                         }
                     }
                 }
