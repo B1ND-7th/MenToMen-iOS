@@ -98,7 +98,7 @@ struct PostsView: View {
                             }
                         }
                     }
-                    .shadow(color: .black.opacity(0.2), radius: 3, y: 2)
+                    .customShadow(2)
                     .padding(.top, 15)
                     .padding(.bottom, 8)
                     .padding([.leading, .trailing], 20)

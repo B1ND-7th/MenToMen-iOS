@@ -9,6 +9,8 @@ import SwiftUI
 import CachedAsyncImage
 
 struct NotifyView: View {
+    @Environment(\.dismiss) private var dismiss
+    @GestureState private var dragOffset = CGSize.zero
     let profileUrl: String? = "http://dodam.b1nd.com/api/image/png/DW_IMG_89280208781.png"
     let name: String = "이석호"
     var body: some View {
@@ -35,6 +37,8 @@ struct NotifyView: View {
             .customCell()
         }
         .customList()
+        .dragGesture(dismiss, $dragOffset)
+        .navigationBarHidden(true)
     }
 }
 
