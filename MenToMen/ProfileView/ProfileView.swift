@@ -70,7 +70,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         HStack {
                             CachedAsyncImage(url: URL(string: profileImage)) { image in
@@ -123,7 +123,8 @@ struct ProfileView: View {
                         }) {
                             PostsCell(data: $datas[idx])
                         }
-                        .customCell(true, decrease: idx == 0, last: idx+1 == datas.count)
+                        .customCell(true, decrease: idx == 0)
+                        .padding(.bottom, datas.count == idx+1 ? bottomPadding + 20 : 0)
                     }
                 }
                 .customList()

@@ -246,6 +246,8 @@ struct PostView: View {
                 loadComments()
             }
             .customList()
+            .padding(.top, 61)
+            .padding(.bottom, bottomPadding + 27)
             .onTapGesture {
                 endTextEditing()
             }
@@ -316,7 +318,13 @@ struct PostView: View {
                 .padding([.top, .bottom], 10)
                 .background(Color(.secondarySystemGroupedBackground))
             }
+            .padding(.top, topPadding)
             .customShadow()
+            .edgesIgnoringSafeArea(.top)
+            Color(.secondarySystemGroupedBackground)
+                .frame(height: bottomPadding + 10)
+                .setAlignment(for: .bottom)
+                .ignoresSafeArea()
         }
         .buttonStyle(BorderlessButtonStyle())
         .fullScreenCover(isPresented: $writeToggles, content: {
