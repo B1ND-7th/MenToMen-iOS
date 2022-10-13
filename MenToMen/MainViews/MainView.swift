@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Alamofire
 import SlideOverCard
 
 struct MainView: View {
@@ -22,9 +23,30 @@ struct MainView: View {
     @State var searchToggle: Bool = false
     @State var searchText: String = ""
     @State var refresh: Bool = false
+    @State var hasNotification: Bool = false
     func tutorialFinished() {
         UserDefaults.standard.set(true, forKey: "homeTutorial")
         SOCManager.dismiss(isPresented: $tutorial)
+    }
+    func loadNotifications() {
+        AF.request("\(api)/notice/check",
+                   method: .get,
+                   encoding: URLEncoding.default,
+                   headers: ["Content-Type": "application/json"],
+                   interceptor: Requester()
+        ) { $0.timeoutInterval = 10 }
+        .validate()
+        .responseData { response in
+            checkResponse(response)
+            switch response.result {
+            case .success:
+                guard let value = response.value else { return }
+                guard let result = try? decoder.decode(AlertData.self, from: value) else { return }
+                hasNotification = result.data.noticeStatus == "EXIST"
+            case .failure(let error):
+                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+            }
+        }
     }
     var body: some View {
         NavigationView {
@@ -135,10 +157,12 @@ struct MainView: View {
                     if !searchToggle {
                         NavigationLink(destination: NotifyView()) {
                             ZStack {
-                                Circle()
-                                    .fill(.red)
-                                    .frame(width: 8, height: 8)
-                                    .position(x: 22, y: 0)
+                                if hasNotification {
+                                    Circle()
+                                        .fill(.red)
+                                        .frame(width: 8, height: 8)
+                                        .position(x: 22, y: 0)
+                                }
                                 Image("notification")
                                     .renderIcon()
                             }
@@ -156,6 +180,9 @@ struct MainView: View {
                 .ignoresSafeArea()
                 .setAlignment(for: .top)
             }
+        }
+        .onAppear {
+            loadNotifications()
         }
         .fullScreenCover(isPresented: $writeToggles, content: {
             WriteView(refresh: $refresh, data: nil)

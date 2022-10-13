@@ -43,7 +43,8 @@ struct PostsCell: View {
                          \(timeParser(data.createDateTime))\
                          \(data.updateStatus == "UPDATE" ? "(수정됨)" : "")
                          """)
-                        .padding([.top, .trailing], 10)
+                        .padding(.top, 10)
+                        .padding(.trailing, 15)
                         .foregroundColor(.gray)
                 }
                 .font(.caption)
