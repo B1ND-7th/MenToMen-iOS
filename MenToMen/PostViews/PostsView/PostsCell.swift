@@ -65,7 +65,7 @@ struct PostsCell: View {
                         } placeholder: {
                             NothingView()
                         }
-                        .frame(width: 40, height: 40)
+                        .frame(width: 50, height: 50)
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                     }
                 }

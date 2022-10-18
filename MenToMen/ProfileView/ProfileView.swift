@@ -123,8 +123,8 @@ struct ProfileView: View {
                         }) {
                             PostsCell(data: $datas[idx])
                         }
-                        .customCell(true, decrease: idx == 0)
-                        .padding(.bottom, datas.count == idx+1 ? bottomPadding + 20 : 0)
+                        .customCell(true, decrease: true)
+                        .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
                     }
                 }
                 .customList()
