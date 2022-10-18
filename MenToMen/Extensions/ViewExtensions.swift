@@ -73,8 +73,7 @@ extension View {
     @ViewBuilder func customShadow(_ y: CGFloat = 0) -> some View {
         self
             .clipped()
-            .shadow(color: .black.opacity(
-                UITraitCollection.current.userInterfaceStyle == .dark ? 0.8 : 0.2), radius: 3, y: y)
+            .shadow(color: .black.opacity(0.2), radius: 3, y: y)
     }
     
     @ViewBuilder func setAlignment(for alignment: Alignments) -> some View {

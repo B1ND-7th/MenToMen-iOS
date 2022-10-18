@@ -12,7 +12,11 @@ import CachedAsyncImage
 struct NotifyView: View {
     @Environment(\.dismiss) private var dismiss
     @GestureState private var dragOffset = CGSize.zero
+    @Binding var refresh: Bool
     @State var datas: [NotifyDatas] = [NotifyDatas]()
+    @State var postlink: Bool = false
+    @State var postdata: PostDatas = PostDataDummy
+    @State var postuser: Int = 0
     func load() {
         AF.request("\(api)/notice/list",
                    method: .get,
@@ -33,31 +37,79 @@ struct NotifyView: View {
             }
         }
     }
+    
     var body: some View {
         ZStack {
             ScrollView {
                 ForEach(0..<datas.count, id: \.self) { idx in
-                    HStack {
-                        CachedAsyncImage(url: URL(string: datas[idx].senderProfileImage ?? "")) { image in
-                            image
-                                .resizable()
-                        } placeholder: {
-                            if datas[idx].senderProfileImage == nil {
-                                Image("profile")
-                                    .resizable()
-                            } else {
-                                NothingView()
+                    NavigationLink(destination: PostView(refresh: $refresh, data: postdata, userId: postuser)
+                        .navigationBarHidden(true), isActive: $postlink) { EmptyView() }
+                    Button(action: {
+                        AF.request("\(api)/user/my",
+                                   method: .get,
+                                   encoding: URLEncoding.default,
+                                   headers: ["Content-Type": "application/json"],
+                                   interceptor: Requester()
+                        ) { $0.timeoutInterval = 5 }
+                        .validate()
+                        .responseData { response in
+                            switch response.result {
+                            case .success:
+                                guard let value = response.value else { return }
+                                guard let result = try? decoder.decode(ProfileData.self, from: value) else { return }
+                                postuser = result.data.userId
+                                AF.request("\(api)/post/read-one/\(datas[idx].postId)",
+                                           method: .get,
+                                           encoding: URLEncoding.default,
+                                           headers: ["Content-Type": "application/json"],
+                                           interceptor: Requester()
+                                ) { $0.timeoutInterval = 5 }
+                                .validate()
+                                .responseData { response in
+                                    checkResponse(response)
+                                    print(checkStatus(response))
+                                    switch response.result {
+                                    case .success:
+                                        guard let value = response.value else { return }
+                                        guard let result = try? decoder.decode(PostData.self, from: value) else { return }
+                                        postdata = result.data
+                                        postlink.toggle()
+                                    case .failure(let error):
+                                        print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+                                    }
+                                }
+                            case .failure(let error):
+                                print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
                             }
                         }
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        VStack {
-                            Text("**\(datas[idx].senderName)**님이 회원님의 게시글에 답글을 남겼습니다.")
-                            Text("\"\(datas[idx].commentContent)\"")
+                    }){
+                        HStack {
+                            CachedAsyncImage(url: URL(string: datas[idx].senderProfileImage ?? "")) { image in
+                                image
+                                    .resizable()
+                            } placeholder: {
+                                if datas[idx].senderProfileImage == nil {
+                                    Image("profile")
+                                        .resizable()
+                                } else {
+                                    NothingView()
+                                }
+                            }
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            VStack(alignment: .leading) {
+                                Text(.init("**\(datas[idx].senderName)**님이 답글을 남겼습니다."))
+                                Text("\"\(datas[idx].commentContent)\"")
+                                    .lineLimit(2)
+                            }
+                            .foregroundColor(Color(.label))
+                            .setAlignment(for: .leading)
                         }
+                        .padding()
+                        .customCell(true)
                     }
-                    .customCell()
                 }
+                .padding(.top, 21)
             }
             .padding(.top, 61)
             .customList()
@@ -92,11 +144,5 @@ struct NotifyView: View {
         }
         .dragGesture(dismiss, $dragOffset)
         .navigationBarHidden(true)
-    }
-}
-
-struct NotifyView_Previews: PreviewProvider {
-    static var previews: some View {
-        NotifyView()
     }
 }
