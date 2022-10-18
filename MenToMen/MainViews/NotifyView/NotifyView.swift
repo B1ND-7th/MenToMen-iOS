@@ -37,7 +37,14 @@ struct NotifyView: View {
             }
         }
     }
-    
+    func timeParser(_ original: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let date = formatter.date(from: original
+            .components(separatedBy: ".")[0])
+        let result = date!.relative
+        return result.last == "후" ? "방금 전" : result
+    }
     var body: some View {
         ZStack {
             ScrollView {
@@ -83,29 +90,49 @@ struct NotifyView: View {
                             }
                         }
                     }){
-                        HStack {
-                            CachedAsyncImage(url: URL(string: datas[idx].senderProfileImage ?? "")) { image in
-                                image
-                                    .resizable()
-                            } placeholder: {
-                                if datas[idx].senderProfileImage == nil {
-                                    Image("profile")
+                        ZStack {
+                            HStack {
+                                CachedAsyncImage(url: URL(string: datas[idx].senderProfileImage ?? "")) { image in
+                                    image
                                         .resizable()
-                                } else {
-                                    NothingView()
+                                } placeholder: {
+                                    if datas[idx].senderProfileImage == nil {
+                                        Image("profile")
+                                            .resizable()
+                                    } else {
+                                        NothingView()
+                                    }
                                 }
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .padding([.leading, .top, .bottom])
+                                VStack(alignment: .leading) {
+                                    Text(.init("**\(datas[idx].senderName)**님이 답글을 남겼습니다."))
+                                    Text("\"\(datas[idx].commentContent)\"")
+                                        .lineLimit(2)
+                                        .padding(.trailing, 45)
+                                }
+                                .padding([.top, .bottom])
+                                .foregroundColor(Color(.label))
+                                .setAlignment(for: .leading)
                             }
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                            VStack(alignment: .leading) {
-                                Text(.init("**\(datas[idx].senderName)**님이 답글을 남겼습니다."))
-                                Text("\"\(datas[idx].commentContent)\"")
-                                    .lineLimit(2)
+                            VStack(alignment: .trailing) {
+                                if datas[idx].noticeStatus == "EXIST" {
+                                    Circle()
+                                        .fill(.red)
+                                        .frame(width: 8, height: 8)
+                                        .padding(.top, 10)
+                                }
+                                Spacer()
+                                Text(timeParser(datas[idx].createDateTime))
+                                    .foregroundColor(.gray)
+                                    .font(.caption)
                             }
-                            .foregroundColor(Color(.label))
-                            .setAlignment(for: .leading)
+                            .padding([.leading, .trailing], 14)
+                            .padding([.top, .bottom], 2)
+                            .setAlignment(for: .trailing)
+                            .setAlignment(for: .top)
                         }
-                        .padding()
                         .customCell(true)
                     }
                 }

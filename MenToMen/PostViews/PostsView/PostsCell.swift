@@ -21,7 +21,7 @@ struct PostsCell: View {
         let date = formatter.date(from: original
             .components(separatedBy: ".")[0])
         let result = date!.relative
-        return result == "0초 후" ? "방금 전" : result
+        return result.last == "후" ? "방금 전" : result
     }
     var body: some View {
         ZStack(alignment: .leading) {

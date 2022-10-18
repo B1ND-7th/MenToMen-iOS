@@ -184,6 +184,9 @@ struct MainView: View {
         .onAppear {
             loadNotifications()
         }
+        .onTapGesture {
+            loadNotifications()
+        }
         .fullScreenCover(isPresented: $writeToggles, content: {
             WriteView(refresh: $refresh, data: nil)
         })
