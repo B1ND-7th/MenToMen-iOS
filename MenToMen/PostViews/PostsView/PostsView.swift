@@ -82,16 +82,11 @@ struct PostsView: View {
                                 }
                             }) {
                                 ZStack {
-                                    if selectedFilter == idx || selectedFilter == 5 {
-                                        Capsule()
-                                            .fill(Color("\(TypeArray[idx])CR"))
-                                    } else {
-                                        Capsule()
-                                            .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
-                                    }
+                                    Capsule()
+                                        .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
                                     Text(TypeArray[idx])
                                         .font(.caption)
-                                        .foregroundColor(selectedFilter == idx || selectedFilter == 5 ? .white : Color("\(TypeArray[idx])CR"))
+                                        .foregroundColor(.white)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 25)

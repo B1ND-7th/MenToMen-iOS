@@ -86,22 +86,18 @@ struct WriteView: View {
                             }
                         }) {
                             ZStack {
-                                if selectedFilter != idx || selectedFilter == 5 {
-                                    Capsule()
-                                        .strokeBorder(Color("\(TypeArray[idx])CR"), lineWidth: 1)
-                                } else {
-                                    Capsule()
-                                        .fill(Color("\(TypeArray[idx])CR"))
-                                }
+                                Capsule()
+                                    .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
                                 Text(TypeArray[idx])
                                     .font(.caption)
-                                    .foregroundColor(selectedFilter == idx ? .white : Color("\(TypeArray[idx])CR"))
+                                    .foregroundColor(.white)
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 25)
                         }
                     }
                 }
+                .customShadow(2)
             }
             .padding()
             if !selectedImage.isEmpty {

@@ -11,7 +11,7 @@ struct PostData: Decodable {
     let data: PostDatas
 }
 
-struct PostDatas: Decodable {
+public struct PostDatas: Decodable {
     let author: Int
     let content: String
     let imgUrls: [String]?

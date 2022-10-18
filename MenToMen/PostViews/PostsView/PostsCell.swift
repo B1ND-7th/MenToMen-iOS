@@ -21,7 +21,7 @@ struct PostsCell: View {
         let date = formatter.date(from: original
             .components(separatedBy: ".")[0])
         let result = date!.relative
-        return result == "0초 후" ? "방금 전" : result
+        return result.last == "후" ? "방금 전" : result
     }
     var body: some View {
         ZStack(alignment: .leading) {
@@ -43,7 +43,8 @@ struct PostsCell: View {
                          \(timeParser(data.createDateTime))\
                          \(data.updateStatus == "UPDATE" ? "(수정됨)" : "")
                          """)
-                        .padding([.top, .trailing], 10)
+                        .padding(.top, 10)
+                        .padding(.trailing, 15)
                         .foregroundColor(.gray)
                 }
                 .font(.caption)
@@ -64,7 +65,7 @@ struct PostsCell: View {
                         } placeholder: {
                             NothingView()
                         }
-                        .frame(width: 40, height: 40)
+                        .frame(width: 50, height: 50)
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                     }
                 }

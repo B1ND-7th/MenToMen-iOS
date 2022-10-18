@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-public let api = "http://101.101.209.184:7030"
+public let api = "http://10.80.163.37:8080/api"
 public let decoder: JSONDecoder = JSONDecoder()
+public let PostDataDummy: PostDatas = PostDatas(author: 0, content: "", imgUrls: [""], createDateTime: "", updateDateTime: "", updateStatus: "", postId: 0, profileUrl: "", tag: "", userName: "", stdInfo: InfoDatas(grade: 1, room: 1, number: 1))
 
 func exitHandler() {
     UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
