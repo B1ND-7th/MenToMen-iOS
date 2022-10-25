@@ -71,65 +71,61 @@ struct PostsView: View {
         }
     }
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    HStack {
-                        ForEach(0..<5, id: \.self) { idx in
-                            Button(action: {
-                                withAnimation(.default) {
-                                    selectedFilter = selectedFilter == idx ? 5 : idx
-                                }
-                            }) {
-                                ZStack {
-                                    Capsule()
-                                        .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
-                                    Text(TypeArray[idx])
-                                        .font(.caption)
-                                        .foregroundColor(.white)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 25)
-                            }
+        ScrollView(showsIndicators: false) {
+            HStack {
+                ForEach(0..<5, id: \.self) { idx in
+                    Button(action: {
+                        withAnimation(.default) {
+                            selectedFilter = selectedFilter == idx ? 5 : idx
                         }
-                    }
-                    .customShadow(2)
-                    .padding(.top, 15)
-                    .padding(.bottom, 8)
-                    .padding([.leading, .trailing], 20)
-                    .buttonStyle(PlainButtonStyle())
-                    .listRowSeparator(.hidden)
-                    .frame(maxWidth: .infinity)
-                    .listRowInsets(EdgeInsets())
-                    .background(Color("M2MBackground"))
-                    ForEach(0..<datas.count, id: \.self) { idx in
-                        if datas[idx].tag == TypeArray[selectedFilter].uppercased() || selectedFilter == 5 {
-                            Button(action: {
-                                postdata = datas[idx]
-                                postuser = userId
-                                postlink = true
-                            }) {
-                                PostsCell(data: $datas[idx])
-                            }
-                            .customCell(true, decrease: true)
-                            .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
+                    }) {
+                        ZStack {
+                            Capsule()
+                                .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
+                            Text(TypeArray[idx])
+                                .font(.caption)
+                                .foregroundColor(.white)
                         }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 25)
                     }
-                }
-                .customList()
-                .onAppear { load() }
-                .refreshable { load() }
-                .onChange(of: refresh) { state in
-                    load()
-                    refresh = false
-                }
-                .onChange(of: searchText) { text in
-                    dataSearch()
                 }
             }
-            .exitAlert($errorToggle)
-            .navigationBarHidden(true)
-            .navigationTitle("")
+            .customShadow(2)
+            .padding(.top, 15)
+            .padding(.bottom, 8)
+            .padding([.leading, .trailing], 20)
+            .buttonStyle(PlainButtonStyle())
+            .listRowSeparator(.hidden)
+            .frame(maxWidth: .infinity)
+            .listRowInsets(EdgeInsets())
+            .background(Color("M2MBackground"))
+            ForEach(0..<datas.count, id: \.self) { idx in
+                if datas[idx].tag == TypeArray[selectedFilter].uppercased() || selectedFilter == 5 {
+                    Button(action: {
+                        postdata = datas[idx]
+                        postuser = userId
+                        postlink = true
+                    }) {
+                        PostsCell(data: $datas[idx])
+                    }
+                    .customCell(true, decrease: true)
+                    .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
+                }
+            }
         }
+        .customList()
+        .onAppear { load() }
+        .refreshable { load() }
+        .onChange(of: refresh) { state in
+            load()
+            refresh = false
+        }
+        .onChange(of: searchText) { text in
+            dataSearch()
+        }
+        .exitAlert($errorToggle)
+        .navigationBarHidden(true)
+        .navigationTitle("")
     }
 }

@@ -146,7 +146,7 @@ struct WriteView: View {
                         (!selectedImage.isEmpty && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
                             for img in selectedImage {
-                                MultipartFormData.append(rotateImage(img)!.jpegData(compressionQuality: 0.6)!,
+                                MultipartFormData.append(rotateImage(img)!.jpegData(compressionQuality: 0.2)!,
                                                          withName: "file",
                                                          fileName: fileName,
                                                          mimeType: "image/jpeg")

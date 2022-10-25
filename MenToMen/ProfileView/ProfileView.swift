@@ -68,75 +68,71 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        NavigationView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        HStack {
-                            CachedAsyncImage(url: URL(string: profileImage)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                switch profileImage.count {
-                                case 0: Image("profile")
-                                        .resizable()
-                                default: NothingView()
-                                }
-                            }
-                                .frame(width: 70, height: 70)
-                                .clipShape(Circle())
-                            VStack(alignment: .leading) {
-                                Text(info)
-                                Text("\(name)님, 환영합니다!")
-                                    .fontWeight(.bold)
-                                    .font(.title2)
-                                Text(email)
-                                    .fontWeight(.light)
-                            }
-                            Spacer()
+                HStack {
+                    CachedAsyncImage(url: URL(string: profileImage)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } placeholder: {
+                        switch profileImage.count {
+                        case 0: Image("profile")
+                                .resizable()
+                        default: NothingView()
                         }
-                        .padding()
-                        Rectangle()
-                            .fill(Color("M2MBackground"))
-                            .frame(height: 1)
-                        Button(action: {
-                            try! removeToken("accessToken")
-                            try! removeToken("refreshToken")
-                            logout.toggle()
-                        }) {
-                            Text("로그아웃")
-                                .foregroundColor(.red)
-                                .padding(.leading, 20)
-                                .setAlignment(for: .leading)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 45)
                     }
-                    .customCell()
-                    .padding(.bottom, 14)
-                    ForEach(0..<datas.count, id: \.self) { idx in
-                        Button(action: {
-                            postdata = datas[idx]
-                            postuser = userId
-                            postlink = true
-                        }) {
-                            PostsCell(data: $datas[idx])
-                        }
-                        .customCell(true, decrease: true)
-                        .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
+                        .frame(width: 70, height: 70)
+                        .clipShape(Circle())
+                    VStack(alignment: .leading) {
+                        Text(info)
+                        Text("\(name)님, 환영합니다!")
+                            .fontWeight(.bold)
+                            .font(.title2)
+                        Text(email)
+                            .fontWeight(.light)
                     }
+                    Spacer()
                 }
-                .customList()
-                .onAppear { load() }
-                .refreshable { load() }
-                .onChange(of: refresh) { state in
-                    load()
-                    refresh = false
+                .padding()
+                Rectangle()
+                    .fill(Color("M2MBackground"))
+                    .frame(height: 1)
+                Button(action: {
+                    try! removeToken("accessToken")
+                    try! removeToken("refreshToken")
+                    logout.toggle()
+                }) {
+                    Text("로그아웃")
+                        .foregroundColor(.red)
+                        .padding(.leading, 20)
+                        .setAlignment(for: .leading)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 45)
             }
-            .navigationBarHidden(true)
-            .navigationTitle("")
+            .customCell()
+            .padding(.bottom, 14)
+            ForEach(0..<datas.count, id: \.self) { idx in
+                Button(action: {
+                    postdata = datas[idx]
+                    postuser = userId
+                    postlink = true
+                }) {
+                    PostsCell(data: $datas[idx])
+                }
+                .customCell(true, decrease: true)
+                .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
+            }
         }
+        .customList()
+        .onAppear { load() }
+        .refreshable { load() }
+        .onChange(of: refresh) { state in
+            load()
+            refresh = false
+        }
+        .navigationBarHidden(true)
+        .navigationTitle("")
     }
 }

@@ -9,6 +9,28 @@ import SwiftUI
 import Alamofire
 import SlideOverCard
 
+//func AlamofireFunction(_ url: String, _ type: HTTPMethod, _ params: [String: Any]) -> Data {
+//    var finalValue: Data = Data()
+//    AF.request(url,
+//               method: type,
+//               encoding: URLEncoding.default,
+//               headers: ["Content-Type": "application/json"],
+//               interceptor: Requester()
+//    ) { $0.timeoutInterval = 3 }
+//    .validate()
+//    .responseData { response in
+//        checkResponse(response)
+//        switch response.result {
+//        case .success:
+//            guard let value = response.value else { return }
+//            finalValue = value
+//        case .failure(let error):
+//            print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
+//        }
+//    }
+//    return finalValue
+//}
+
 struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @FocusState var searchState: Bool
@@ -42,7 +64,9 @@ struct MainView: View {
             case .success:
                 guard let value = response.value else { return }
                 guard let result = try? decoder.decode(AlertData.self, from: value) else { return }
-                hasNotification = result.data.noticeStatus == "EXIST"
+                withAnimation(.default) {
+                    hasNotification = result.data.noticeStatus == "EXIST"
+                }
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
@@ -72,7 +96,7 @@ struct MainView: View {
                                          refresh: $refresh)
                     }
                 }
-                    .padding(.top, 61)
+                .padding(.top, 61)
                 Button(action: {
                     HapticManager.instance.impact(style: .light)
                     writeToggles.toggle()
