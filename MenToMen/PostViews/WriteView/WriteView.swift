@@ -19,6 +19,7 @@ struct WriteView: View {
     @State var text: String = ""
     @State var selectedFilter: Int = 5
     @State var imageEdited: Bool = false
+    @State var submitted: Bool = false
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     let data: PostDatas?
     func rotateImage(_ image: UIImage) -> UIImage? {
@@ -47,7 +48,9 @@ struct WriteView: View {
                 case .success:
                     refresh.toggle()
                     dismiss()
-                case .failure: writingFailed.toggle()
+                case .failure:
+                    submitted = false
+                    writingFailed.toggle()
                 }
             }
     }
@@ -133,6 +136,7 @@ struct WriteView: View {
             }
             HStack(spacing: 0) {
                 Button(action: {
+                    submitted = true
                     let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
                     var reqParam: [String: Any] = ["content": text]
                     if selectedFilter != 5 {
@@ -165,7 +169,9 @@ struct WriteView: View {
                                     }
                                     reqParam["imgUrls"] = imgUrls
                                     submit(reqParam)
-                                case .failure: imageUploadFailed.toggle()
+                                case .failure:
+                                    submitted = false
+                                    imageUploadFailed.toggle()
                                 }
                             }
                     } else if data != nil && !imageEdited && data?.imgUrls != nil {
@@ -186,7 +192,7 @@ struct WriteView: View {
                     .frame(height: 55)
                     .background(Color.accentColor)
                 }
-                .disabled(text.isEmpty || selectedFilter == 5)
+                .disabled(text.isEmpty || selectedFilter == 5 || submitted)
                 if selectedImage.count != 5 {
                     Button(action: {
                         imagePickerToggle.toggle()

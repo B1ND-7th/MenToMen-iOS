@@ -290,6 +290,7 @@ struct PostView: View {
                         .customComment(false)
                         .padding([.leading, .trailing], 5)
                     Button(action: {
+                        endTextEditing()
                         AF.request("\(api)/comment/submit",
                                    method: .post,
                                    parameters: ["content": currentComment,
