@@ -110,9 +110,10 @@ struct PostsView: View {
                         PostsCell(data: $datas[idx])
                     }
                     .customCell(true, decrease: true)
-                    .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
                 }
             }
+            Color.clear
+                .padding(.bottom, 43)
         }
         .customList()
         .onAppear { load() }
