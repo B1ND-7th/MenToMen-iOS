@@ -27,7 +27,10 @@ extension View {
     
     @ViewBuilder func customCell(_ invert: Bool = false,
                                  bottom: Bool = false,
-                                 decrease: Bool = false) -> some View {
+                                 decrease: Bool = false,
+                                 trailing: Bool = true,
+                                 leading: Bool = true
+    ) -> some View {
         self
             .listRowSeparator(.hidden)
             .frame(maxWidth: .infinity)
@@ -35,7 +38,8 @@ extension View {
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(5)
             .customShadow(2)
-            .padding([.leading, .trailing], 20)
+            .padding(.leading, leading ? 20 : 10)
+            .padding(.trailing, trailing ? 20 : 10)
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)
             //.listRowInsets(EdgeInsets())

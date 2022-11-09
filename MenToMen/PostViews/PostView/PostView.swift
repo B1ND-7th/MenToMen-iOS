@@ -8,6 +8,7 @@
 import SwiftUI
 import Alamofire
 import CachedAsyncImage
+import ImageViewer
 
 struct PostView: View {
     @Environment(\.dismiss) private var dismiss
@@ -29,6 +30,8 @@ struct PostView: View {
     @State var more: Bool = false
     @State var commentMore: [Int] = [Int]()
     @State var selectedImage: String = ""
+    @State var selectedUIImage: Image?
+    @State var imageSelection: Bool = false
     let profileImage: String = ""
     let userId: Int
     func timeParser(_ original: String) -> String {
@@ -139,7 +142,10 @@ struct PostView: View {
                                     image
                                         .resizable()
                                         .scaledToFill()
-                                        .onTapGesture { }
+                                        .onTapGesture {
+                                            selectedUIImage = image
+                                            imageSelection.toggle()
+                                        }
                                         .onLongPressGesture(minimumDuration: 0.3) {
                                             HapticManager.instance.impact(style: .medium)
                                             selectedImage = url
@@ -179,13 +185,13 @@ struct PostView: View {
                             Spacer()
                             if comment.userId == userId {
                                 if commentMore.contains(comment.commentId) {
-                                    Button(action: {
-                                        commentWriteToggles.toggle()
-                                    }) {
-                                        Image("write")
-                                            .renderIcon()
-                                    }
-                                    .frame(width: 25, height: 25)
+//                                    Button(action: {
+//                                        commentWriteToggles.toggle()
+//                                    }) {
+//                                        Image("write")
+//                                            .renderIcon()
+//                                    }
+//                                    .frame(width: 25, height: 25)
                                     Button(action: {
                                         selectedCommentId = comment.commentId
                                         commentDeleteAlert.toggle()
@@ -383,6 +389,7 @@ struct PostView: View {
         } message: {
             Text("삭제한 댓글은 복구할 수 없습니다")
         }
+        .overlay(ImageViewer(image: $selectedUIImage, viewerShown: $imageSelection, closeButtonTopRight: true))
         .dragGesture(dismiss, $dragOffset)
         .exitAlert($errorToggle)
         .navigationBarHidden(true)

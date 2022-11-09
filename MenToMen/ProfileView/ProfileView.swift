@@ -113,17 +113,39 @@ struct ProfileView: View {
             }
             .customCell()
             .padding(.bottom, 14)
-            ForEach(0..<datas.count, id: \.self) { idx in
-                Button(action: {
-                    postdata = datas[idx]
-                    postuser = userId
-                    postlink = true
-                }) {
-                    PostsCell(data: $datas[idx])
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                ForEach(Array(stride(from: 0, to: datas.count, by: 2)), id: \.self) { idx in
+                    HStack(spacing: 0) {
+                        ForEach([idx, idx+1], id: \.self) { sidx in
+                            if sidx != datas.count {
+                                Button(action: {
+                                    postdata = datas[sidx]
+                                    postuser = userId
+                                    postlink = true
+                                }) {
+                                    PostsCell(data: $datas[sidx])
+                                }
+                                .customCell(true, decrease: true, trailing: !(sidx % 2 == 0), leading: (sidx % 2 == 0))
+                            } else {
+                                Color.clear.frame(maxWidth: .infinity)
+                            }
+                        }
+                    }
                 }
-                .customCell(true, decrease: true)
-                .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
+            } else {
+                ForEach(0..<datas.count, id: \.self) { idx in
+                    Button(action: {
+                        postdata = datas[idx]
+                        postuser = userId
+                        postlink = true
+                    }) {
+                        PostsCell(data: $datas[idx])
+                    }
+                    .customCell(true, decrease: true)
+                }
             }
+            Color.clear
+                .padding(.bottom, 43)
         }
         .customList()
         .onAppear { load() }

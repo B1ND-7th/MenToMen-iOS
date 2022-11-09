@@ -63,6 +63,7 @@ struct WriteView: View {
                 }) {
                     Image(systemName: "xmark")
                         .font(Font.system(size: 25, weight: .regular))
+                        .foregroundColor(Color(.label))
                 }
                 .padding([.top, .trailing], 20)
             }
@@ -90,7 +91,7 @@ struct WriteView: View {
                         }) {
                             ZStack {
                                 Capsule()
-                                    .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
+                                    .fill(selectedFilter == idx ? Color("\(TypeArray[idx])CR") : .gray)
                                 Text(TypeArray[idx])
                                     .font(.caption)
                                     .foregroundColor(.white)
