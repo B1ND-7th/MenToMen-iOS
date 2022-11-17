@@ -146,9 +146,11 @@ struct LoginView: View {
                 .disabled(loginId.isEmpty || loginPw.isEmpty || request)
                 Spacer()
             }
+            .frame(maxWidth: 500)
             .padding(40)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }
+        .navigationViewStyle(.stack)
     }
 }

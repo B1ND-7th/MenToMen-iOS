@@ -8,7 +8,9 @@
 import SwiftUI
 import Alamofire
 import SlideOverCard
+func errorHandler(_ a: Int) {
 
+}
 struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @FocusState var searchState: Bool
@@ -42,7 +44,9 @@ struct MainView: View {
             case .success:
                 guard let value = response.value else { return }
                 guard let result = try? decoder.decode(AlertData.self, from: value) else { return }
-                hasNotification = result.data.noticeStatus == "EXIST"
+                withAnimation(.default) {
+                    hasNotification = result.data.noticeStatus == "EXIST"
+                }
             case .failure(let error):
                 print("통신 오류!\nCode:\(error._code), Message: \(error.errorDescription!)")
             }
@@ -72,7 +76,7 @@ struct MainView: View {
                                          refresh: $refresh)
                     }
                 }
-                    .padding(.top, 61)
+                .padding(.top, 61)
                 Button(action: {
                     HapticManager.instance.impact(style: .light)
                     writeToggles.toggle()
@@ -248,5 +252,6 @@ struct MainView: View {
             }
         }
         .navigationBarHidden(true)
+        .navigationViewStyle(.stack)
     }
 }

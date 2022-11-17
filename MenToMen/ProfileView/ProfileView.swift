@@ -68,75 +68,93 @@ struct ProfileView: View {
         }
     }
     var body: some View {
-        NavigationView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        HStack {
-                            CachedAsyncImage(url: URL(string: profileImage)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                switch profileImage.count {
-                                case 0: Image("profile")
-                                        .resizable()
-                                default: NothingView()
-                                }
-                            }
-                                .frame(width: 70, height: 70)
-                                .clipShape(Circle())
-                            VStack(alignment: .leading) {
-                                Text(info)
-                                Text("\(name)님, 환영합니다!")
-                                    .fontWeight(.bold)
-                                    .font(.title2)
-                                Text(email)
-                                    .fontWeight(.light)
-                            }
-                            Spacer()
+                HStack {
+                    CachedAsyncImage(url: URL(string: profileImage)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } placeholder: {
+                        switch profileImage.count {
+                        case 0: Image("profile")
+                                .resizable()
+                        default: NothingView()
                         }
-                        .padding()
-                        Rectangle()
-                            .fill(Color("M2MBackground"))
-                            .frame(height: 1)
-                        Button(action: {
-                            try! removeToken("accessToken")
-                            try! removeToken("refreshToken")
-                            logout.toggle()
-                        }) {
-                            Text("로그아웃")
-                                .foregroundColor(.red)
-                                .padding(.leading, 20)
-                                .setAlignment(for: .leading)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 45)
                     }
-                    .customCell()
-                    .padding(.bottom, 14)
-                    ForEach(0..<datas.count, id: \.self) { idx in
-                        Button(action: {
-                            postdata = datas[idx]
-                            postuser = userId
-                            postlink = true
-                        }) {
-                            PostsCell(data: $datas[idx])
+                        .frame(width: 70, height: 70)
+                        .clipShape(Circle())
+                    VStack(alignment: .leading) {
+                        Text(info)
+                        Text("\(name)님, 환영합니다!")
+                            .fontWeight(.bold)
+                            .font(.title2)
+                        Text(email)
+                            .fontWeight(.light)
+                    }
+                    Spacer()
+                }
+                .padding()
+                Rectangle()
+                    .fill(Color("M2MBackground"))
+                    .frame(height: 1)
+                Button(action: {
+                    try! removeToken("accessToken")
+                    try! removeToken("refreshToken")
+                    logout.toggle()
+                }) {
+                    Text("로그아웃")
+                        .foregroundColor(.red)
+                        .padding(.leading, 20)
+                        .setAlignment(for: .leading)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 45)
+            }
+            .customCell()
+            .padding(.bottom, 14)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                ForEach(Array(stride(from: 0, to: datas.count, by: 2)), id: \.self) { idx in
+                    HStack(spacing: 0) {
+                        ForEach([idx, idx+1], id: \.self) { sidx in
+                            if sidx != datas.count {
+                                Button(action: {
+                                    postdata = datas[sidx]
+                                    postuser = userId
+                                    postlink = true
+                                }) {
+                                    PostsCell(data: $datas[sidx])
+                                }
+                                .customCell(true, decrease: true, trailing: !(sidx % 2 == 0), leading: (sidx % 2 == 0))
+                            } else {
+                                Color.clear.frame(maxWidth: .infinity)
+                            }
                         }
-                        .customCell(true, decrease: true)
-                        .padding(.bottom, datas.count == idx+1 ? bottomPadding + 25 : 0)
                     }
                 }
-                .customList()
-                .onAppear { load() }
-                .refreshable { load() }
-                .onChange(of: refresh) { state in
-                    load()
-                    refresh = false
+            } else {
+                ForEach(0..<datas.count, id: \.self) { idx in
+                    Button(action: {
+                        postdata = datas[idx]
+                        postuser = userId
+                        postlink = true
+                    }) {
+                        PostsCell(data: $datas[idx])
+                    }
+                    .customCell(true, decrease: true)
                 }
             }
-            .navigationBarHidden(true)
-            .navigationTitle("")
+            Color.clear
+                .padding(.bottom, 43)
         }
+        .customList()
+        .onAppear { load() }
+        .refreshable { load() }
+        .onChange(of: refresh) { state in
+            load()
+            refresh = false
+        }
+        .navigationBarHidden(true)
+        .navigationTitle("")
     }
 }

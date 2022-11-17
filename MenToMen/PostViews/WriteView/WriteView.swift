@@ -19,6 +19,7 @@ struct WriteView: View {
     @State var text: String = ""
     @State var selectedFilter: Int = 5
     @State var imageEdited: Bool = false
+    @State var submitted: Bool = false
     let TypeArray: [String] = ["Design", "Web", "Android", "Server", "iOS", ""]
     let data: PostDatas?
     func rotateImage(_ image: UIImage) -> UIImage? {
@@ -47,7 +48,9 @@ struct WriteView: View {
                 case .success:
                     refresh.toggle()
                     dismiss()
-                case .failure: writingFailed.toggle()
+                case .failure:
+                    submitted = false
+                    writingFailed.toggle()
                 }
             }
     }
@@ -60,6 +63,7 @@ struct WriteView: View {
                 }) {
                     Image(systemName: "xmark")
                         .font(Font.system(size: 25, weight: .regular))
+                        .foregroundColor(Color(.label))
                 }
                 .padding([.top, .trailing], 20)
             }
@@ -87,7 +91,7 @@ struct WriteView: View {
                         }) {
                             ZStack {
                                 Capsule()
-                                    .fill(selectedFilter == idx || selectedFilter == 5 ? Color("\(TypeArray[idx])CR") : .gray)
+                                    .fill(selectedFilter == idx ? Color("\(TypeArray[idx])CR") : .gray)
                                 Text(TypeArray[idx])
                                     .font(.caption)
                                     .foregroundColor(.white)
@@ -133,6 +137,7 @@ struct WriteView: View {
             }
             HStack(spacing: 0) {
                 Button(action: {
+                    submitted = true
                     let fileName: String = "\(Int((Date().timeIntervalSince1970 * 1000.0).rounded())).jpeg"
                     var reqParam: [String: Any] = ["content": text]
                     if selectedFilter != 5 {
@@ -146,7 +151,7 @@ struct WriteView: View {
                         (!selectedImage.isEmpty && data != nil && imageEdited) {
                         AF.upload(multipartFormData: { MultipartFormData in
                             for img in selectedImage {
-                                MultipartFormData.append(rotateImage(img)!.jpegData(compressionQuality: 0.6)!,
+                                MultipartFormData.append(rotateImage(img)!.jpegData(compressionQuality: 0.2)!,
                                                          withName: "file",
                                                          fileName: fileName,
                                                          mimeType: "image/jpeg")
@@ -165,7 +170,9 @@ struct WriteView: View {
                                     }
                                     reqParam["imgUrls"] = imgUrls
                                     submit(reqParam)
-                                case .failure: imageUploadFailed.toggle()
+                                case .failure:
+                                    submitted = false
+                                    imageUploadFailed.toggle()
                                 }
                             }
                     } else if data != nil && !imageEdited && data?.imgUrls != nil {
@@ -186,7 +193,7 @@ struct WriteView: View {
                     .frame(height: 55)
                     .background(Color.accentColor)
                 }
-                .disabled(text.isEmpty || selectedFilter == 5)
+                .disabled(text.isEmpty || selectedFilter == 5 || submitted)
                 if selectedImage.count != 5 {
                     Button(action: {
                         imagePickerToggle.toggle()
