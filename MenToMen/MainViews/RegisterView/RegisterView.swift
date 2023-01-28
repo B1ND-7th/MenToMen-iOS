@@ -11,6 +11,9 @@
 //
 
 import SwiftUI
+import CryptoKit
+import Alamofire
+import AVFoundation
 
 extension String {
     func isValidEmail() -> Bool {
@@ -62,7 +65,20 @@ extension String {
         let phoneRegEx = "[0-9]{10,11}"
         
         let phoneTest = NSPredicate(format:"SELF MATCHES %@", phoneRegEx)
-        return phoneTest.evaluate(with: self)
+        return phoneTest.evaluate(with: self.removeHyphen())
+    }
+    
+    func addHyphen() -> String {
+        if let regex = try? NSRegularExpression(pattern: "([0-9]{3})([0-9]{3,4})([0-9]{4})", options: .caseInsensitive) {
+            let modString = regex.stringByReplacingMatches(in: self, options: [], range: NSRange(self.startIndex..., in: self), withTemplate: "$1-$2-$3")
+            return modString
+        }
+        
+        return self
+    }
+    
+    func removeHyphen() -> String {
+        return self.replacingOccurrences(of: "-", with: "")
     }
     
     func isInt() -> Bool {
@@ -84,6 +100,10 @@ struct RegisterView: View {
     @State var registerPw: String = ""
     @State var registerName: String = ""
     @State var registerPhone: String = ""
+    @State var request: Bool = false
+    @State var success: Bool = false
+    @State var failure: Bool = false
+    @State var failmsg: String = ""
     
     @State var registerGrade: String = ""
     @FocusState var gradeState: Bool
@@ -221,16 +241,45 @@ struct RegisterView: View {
                         if status > 4 {
                             CustomTextField(text: $registerPhone, retry: $retry, placeholder: "전화번호를 입력하세요")
                                 .onChange(of: registerPhone) { value in
+                                    registerPhone = registerPhone.removeHyphen().addHyphen()
                                     changeState(value.isValidPhone(), 5)
                                 }
                                 .onDisappear {
                                     registerPhone = ""
                                 }
-                                .padding(.bottom, 30)
+                                .padding(.bottom, 20)
                         }
                         if status > 5 {
                             Button(action: {
-                                
+                                request = true
+                                AF.request("http://101.101.209.184:8080/api/auth/join-student",
+                                           method: .post,
+                                           parameters: ["email": registerEmail,
+                                                        "grade": Int(registerGrade)!,
+                                                        "id": registerId,
+                                                        "name": registerName,
+                                                        "number": Int(registerNumber)!,
+                                                        "phone": registerPhone.removeHyphen(),
+                                                        "pw":
+                                                            SHA512.hash(data: registerPw.data(using: .utf8)!)
+                                                                .compactMap{ String(format: "%02x", $0) }.joined(),
+                                                        "room": Int(registerClass)!
+                                                       ],
+                                           encoding: JSONEncoding.default,
+                                           headers: ["Content-Type": "application/json"]
+                                ) { $0.timeoutInterval = 5 }
+                                        .validate()
+                                        .responseData { response in
+                                            checkResponse(response)
+                                            switch response.result {
+                                            case .success:
+                                                print("success")
+                                            case .failure:
+                                                guard let result = try? decoder.decode(RegisterData.self, from: response.data!) else { return }
+                                                failmsg = result.message
+                                                failure.toggle()
+                                            }
+                                    }
                             }) {
                                 Text("가입하기")
                                     .foregroundColor(Color(.systemBackground))
@@ -239,12 +288,19 @@ struct RegisterView: View {
                                     .background(Color.accentColor)
                                     .clipShape(Capsule())
                             }
+                            .disabled(request)
                         }
                     }
                     Spacer()
                 }
                 .padding(.horizontal, 20)
             }
+        }
+        .alert(isPresented: $failure) {
+            Alert(title: Text("오류"), message: Text(failmsg),
+                  dismissButton: Alert.Button.default(Text("확인"), action: {
+                request = false
+            }))
         }
         .dragGesture(dismiss, $dragOffset)
         .navigationBarHidden(true)
