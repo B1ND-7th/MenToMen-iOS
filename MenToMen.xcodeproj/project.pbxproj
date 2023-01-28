@@ -32,6 +32,9 @@
 		9379692D28BCCC1000FB707F /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9379692C28BCCC1000FB707F /* LoginAPI.swift */; };
 		93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B5842728BE0C1A00A50787 /* ProfileAPI.swift */; };
 		93B5842A28BE2A4900A50787 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93B5842928BE2A4900A50787 /* Launch Screen.storyboard */; };
+		93BEFF2429852C76007B5597 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BEFF2329852C76007B5597 /* RegisterView.swift */; };
+		93BEFF2629852C7C007B5597 /* RegisterAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BEFF2529852C7C007B5597 /* RegisterAPI.swift */; };
+		93BEFF2829855036007B5597 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BEFF2729855036007B5597 /* TextField.swift */; };
 		93D458A928C591C100A3F565 /* WriteAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D458A828C591C100A3F565 /* WriteAPI.swift */; };
 		93D458AB28C60B7E00A3F565 /* PostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D458AA28C60B7E00A3F565 /* PostAPI.swift */; };
 		93D786D828D1B34000F869AA /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D786D728D1B34000F869AA /* ViewExtensions.swift */; };
@@ -96,6 +99,9 @@
 		9379692E28BCD36500FB707F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		93B5842728BE0C1A00A50787 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
 		93B5842928BE2A4900A50787 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "MenToMen/Launch Screen.storyboard"; sourceTree = SOURCE_ROOT; };
+		93BEFF2329852C76007B5597 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		93BEFF2529852C7C007B5597 /* RegisterAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterAPI.swift; sourceTree = "<group>"; };
+		93BEFF2729855036007B5597 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		93D458A828C591C100A3F565 /* WriteAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteAPI.swift; sourceTree = "<group>"; };
 		93D458AA28C60B7E00A3F565 /* PostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAPI.swift; sourceTree = "<group>"; };
 		93D786D728D1B34000F869AA /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
@@ -161,6 +167,7 @@
 				93D786D728D1B34000F869AA /* ViewExtensions.swift */,
 				934051F928D2CAEC000DD49E /* Keychain.swift */,
 				934051FC28D2CB6B000DD49E /* Extensions.swift */,
+				93BEFF2729855036007B5597 /* TextField.swift */,
 				9308E8D828BF808A003AB02D /* Request */,
 			);
 			path = Extensions;
@@ -190,6 +197,7 @@
 		9340520028D2CCC3000DD49E /* MainViews */ = {
 			isa = PBXGroup;
 			children = (
+				93BEFF2229852C6A007B5597 /* RegisterView */,
 				9370ABD828BCC10200B1867B /* LoginView */,
 				93FA23FB28B797B7000C8D64 /* MainView.swift */,
 				936D325228F3C1CD0083F6B1 /* MainShape.swift */,
@@ -261,6 +269,15 @@
 				93B5842728BE0C1A00A50787 /* ProfileAPI.swift */,
 			);
 			path = ProfileView;
+			sourceTree = "<group>";
+		};
+		93BEFF2229852C6A007B5597 /* RegisterView */ = {
+			isa = PBXGroup;
+			children = (
+				93BEFF2329852C76007B5597 /* RegisterView.swift */,
+				93BEFF2529852C7C007B5597 /* RegisterAPI.swift */,
+			);
+			path = RegisterView;
 			sourceTree = "<group>";
 		};
 		93FA23ED28B797B7000C8D64 = {
@@ -609,9 +626,11 @@
 				931644E828B8396B001E5243 /* ProfileView.swift in Sources */,
 				9308E8DC28BF80A5003AB02D /* Request.swift in Sources */,
 				93D458AB28C60B7E00A3F565 /* PostAPI.swift in Sources */,
+				93BEFF2829855036007B5597 /* TextField.swift in Sources */,
 				935A7E0128E4684300C19115 /* PersonView.swift in Sources */,
 				93FA23FC28B797B7000C8D64 /* MainView.swift in Sources */,
 				9370ABCF28BCB38D00B1867B /* PostView.swift in Sources */,
+				93BEFF2629852C7C007B5597 /* RegisterAPI.swift in Sources */,
 				931644EA28B83983001E5243 /* WriteView.swift in Sources */,
 				93FA23FA28B797B7000C8D64 /* MenToMenApp.swift in Sources */,
 				9370ABCB28BCA4C100B1867B /* PostsAPI.swift in Sources */,
@@ -625,6 +644,7 @@
 				9370ABD728BCB92400B1867B /* NotifyAPI.swift in Sources */,
 				9370ABD328BCB46400B1867B /* NotifyView.swift in Sources */,
 				93B5842828BE0C1A00A50787 /* ProfileAPI.swift in Sources */,
+				93BEFF2429852C76007B5597 /* RegisterView.swift in Sources */,
 				9308E8DA28BF809C003AB02D /* RequestAPI.swift in Sources */,
 				93FA242428B797E8000C8D64 /* PostsView.swift in Sources */,
 			);
@@ -803,7 +823,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.b1nd.MenToMen;
 				PRODUCT_NAME = MenToMen;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -841,7 +861,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.b1nd.MenToMen;
 				PRODUCT_NAME = MenToMen;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
