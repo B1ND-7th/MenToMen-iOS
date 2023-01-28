@@ -136,6 +136,7 @@ struct RegisterView: View {
             .padding(.leading, 10)
             .setAlignment(for: .leading)
             .frame(height: 61)
+            NavigationLink(destination: RegisterSuccessView(), isActive: $success) { EmptyView() }
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("도담도담 회원가입")
@@ -237,9 +238,10 @@ struct RegisterView: View {
                         }
                         .font(.title3)
                         .frame(height: 70)
+                        .transition(.slide.combined(with: .opacity))
                         
                         if status > 4 {
-                            CustomTextField(text: $registerPhone, retry: $retry, placeholder: "전화번호를 입력하세요")
+                            CustomTextField(text: $registerPhone, retry: $retry, placeholder: "전화번호를 입력하세요", type: .numeric)
                                 .onChange(of: registerPhone) { value in
                                     registerPhone = registerPhone.removeHyphen().addHyphen()
                                     changeState(value.isValidPhone(), 5)
@@ -273,7 +275,9 @@ struct RegisterView: View {
                                             checkResponse(response)
                                             switch response.result {
                                             case .success:
-                                                print("success")
+                                                HapticManager.instance.notification(type: .success)
+                                                AudioServicesPlaySystemSound(1407)
+                                                success.toggle()
                                             case .failure:
                                                 guard let result = try? decoder.decode(RegisterData.self, from: response.data!) else { return }
                                                 failmsg = result.message
@@ -294,6 +298,7 @@ struct RegisterView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 20)
+                .frame(maxWidth: 500)
             }
         }
         .alert(isPresented: $failure) {
@@ -303,6 +308,33 @@ struct RegisterView: View {
             }))
         }
         .dragGesture(dismiss, $dragOffset)
+        .navigationBarHidden(true)
+    }
+}
+
+struct RegisterSuccessView: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            Image("success")
+                .resizable()
+                .frame(width: 150, height: 150)
+                .padding(.bottom, 50)
+            Text("회원가입 성공!")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.bottom, 5)
+            Text("관리자의 승인을 기다려주세요!")
+            Spacer()
+            NavigationLink(destination: LoginView().navigationBarHidden(true)) {
+                Text("확인")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 55)
+                    .background(Color.accentColor)
+            }
+            .clipped()
+        }
         .navigationBarHidden(true)
     }
 }

@@ -11,6 +11,7 @@ enum TextFieldType {
     case normal
     case secure
     case email
+    case numeric
 }
 
 // MARK: - Custom Text Field
@@ -69,6 +70,10 @@ struct CustomTextField: View {
                         .focused($focus)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
+                case .numeric:
+                    TextField("", text: $text)
+                        .focused($focus)
+                        .keyboardType(.numberPad)
                 default:
                     TextField("", text: $text)
                         .focused($focus)
