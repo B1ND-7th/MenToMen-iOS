@@ -32,6 +32,13 @@ struct PostView: View {
     @State var selectedImage: String = ""
     @State var selectedUIImage: Image?
     @State var imageSelection: Bool = false
+    var imageSize: CGFloat {
+        if UIScreen.main.bounds.size.width >= 500 {
+            return 470
+        } else {
+            return UIScreen.main.bounds.size.width - 70
+        }
+    }
     let profileImage: String = ""
     let userId: Int
     func timeParser(_ original: String) -> String {
@@ -118,6 +125,24 @@ struct PostView: View {
                                 }
                                 .frame(width: 25, height: 25)
                                 .padding([.leading, .trailing], 5)
+                                .confirmationDialog("삭제", isPresented: $deleteAlert) {
+                                    Button("정말 삭제하시겠습니까?", role: .destructive) {
+                                        AF.request("\(api)/post/delete/\(data.postId)",
+                                                   method: .delete,
+                                                   encoding: JSONEncoding.default,
+                                                   headers: ["Content-Type": "application/json"],
+                                                   interceptor: Requester()
+                                        ) { $0.timeoutInterval = 5 }
+                                                .validate()
+                                                .responseData { response in
+                                                    checkResponse(response)
+                                                    dismiss()
+                                            }
+                                    }
+                                    Button("취소", role: .cancel) { }
+                                } message: {
+                                    Text("삭제한 게시글은 복구할 수 없습니다")
+                                }
                             } else {
                                 Button(action: {
                                     withAnimation(.default) {
@@ -151,13 +176,28 @@ struct PostView: View {
                                             selectedImage = url
                                             tapper(true)
                                         }
+                                        .confirmationDialog("저장", isPresented: $tap) {
+                                            Button("사진 앨범에 추가") {
+                                                tapper(false)
+                                                DispatchQueue.global().async {
+                                                    let data = try? Data(contentsOf: URL(string: selectedImage)!)
+                                                    DispatchQueue.main.async {
+                                                        if data != nil {
+                                                            UIImageWriteToSavedPhotosAlbum(UIImage(data: data!)!, nil, nil, nil)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            Button("취소", role: .cancel) {
+                                                tapper(false)
+                                            }
+                                        }
                                 } placeholder: {
                                     ProgressView()
                                 }
                             }
                         }
-                        .frame(width: UIScreen.main.bounds.size.width - 70,
-                               height: UIScreen.main.bounds.size.width - 70)
+                        .frame(width: imageSize, height: imageSize)
                         .tabViewStyle(PageTabViewStyle())
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                         .scaleEffect(tap ? 0.95 : 1)
@@ -173,7 +213,7 @@ struct PostView: View {
                         .setAlignment(for: .trailing)
                 }
                 .padding()
-                .customCell(decrease: true)
+                .customCell(decrease: true, limit: true)
                 .padding(.top, 5)
                 VStack(spacing: 0) {
                     ForEach(comments, id: \.self) { comment in
@@ -201,6 +241,24 @@ struct PostView: View {
                                     }
                                     .frame(width: 25, height: 25)
                                     .padding([.leading, .trailing], 5)
+                                    .confirmationDialog("댓글 삭제", isPresented: $commentDeleteAlert) {
+                                        Button("정말 삭제하시겠습니까?", role: .destructive) {
+                                            AF.request("\(api)/comment/delete/\(selectedCommentId)",
+                                                       method: .delete,
+                                                       encoding: JSONEncoding.default,
+                                                       headers: ["Content-Type": "application/json"],
+                                                       interceptor: Requester()
+                                            ) { $0.timeoutInterval = 5 }
+                                                    .validate()
+                                                    .responseData { response in
+                                                        checkResponse(response)
+                                                        loadComments()
+                                                }
+                                        }
+                                        Button("취소", role: .cancel) { }
+                                    } message: {
+                                        Text("삭제한 댓글은 복구할 수 없습니다")
+                                    }
                                 } else {
                                     Button(action: {
                                         withAnimation(.default) {
@@ -222,8 +280,8 @@ struct PostView: View {
                             .frame(height: 1)
                     }
                 }
-                .customCell(decrease: true)
-                .padding(.bottom, 20)
+                .customCell(decrease: true, limit: true)
+                .padding(.bottom, bottomPadding + 20)
             }
             .refreshable {
                 AF.request("\(api)/post/read-one/\(data.postId)",
@@ -337,58 +395,6 @@ struct PostView: View {
         .fullScreenCover(isPresented: $writeToggles, content: {
             WriteView(refresh: $refresh, data: data)
         })
-        .confirmationDialog("저장", isPresented: $tap) {
-            Button("사진 앨범에 추가") {
-                tapper(false)
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: URL(string: selectedImage)!)
-                    DispatchQueue.main.async {
-                        if data != nil {
-                            UIImageWriteToSavedPhotosAlbum(UIImage(data: data!)!, nil, nil, nil)
-                        }
-                    }
-                }
-            }
-            Button("취소", role: .cancel) {
-                tapper(false)
-            }
-        }
-        .confirmationDialog("삭제", isPresented: $deleteAlert) {
-            Button("정말 삭제하시겠습니까?", role: .destructive) {
-                AF.request("\(api)/post/delete/\(data.postId)",
-                           method: .delete,
-                           encoding: JSONEncoding.default,
-                           headers: ["Content-Type": "application/json"],
-                           interceptor: Requester()
-                ) { $0.timeoutInterval = 5 }
-                        .validate()
-                        .responseData { response in
-                            checkResponse(response)
-                            dismiss()
-                    }
-            } 
-            Button("취소", role: .cancel) { }
-        } message: {
-            Text("삭제한 게시글은 복구할 수 없습니다")
-        }
-        .confirmationDialog("댓글 삭제", isPresented: $commentDeleteAlert) {
-            Button("정말 삭제하시겠습니까?", role: .destructive) {
-                AF.request("\(api)/comment/delete/\(selectedCommentId)",
-                           method: .delete,
-                           encoding: JSONEncoding.default,
-                           headers: ["Content-Type": "application/json"],
-                           interceptor: Requester()
-                ) { $0.timeoutInterval = 5 }
-                        .validate()
-                        .responseData { response in
-                            checkResponse(response)
-                            loadComments()
-                    }
-            }
-            Button("취소", role: .cancel) { }
-        } message: {
-            Text("삭제한 댓글은 복구할 수 없습니다")
-        }
         .overlay(ImageViewer(image: $selectedUIImage, viewerShown: $imageSelection, closeButtonTopRight: true))
         .dragGesture(dismiss, $dragOffset)
         .exitAlert($errorToggle)

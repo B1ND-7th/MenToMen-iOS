@@ -20,36 +20,6 @@ struct ShakeEffect: GeometryEffect {
     }
 }
 
-struct AndroidTextField: View {
-    @FocusState private var focus: Bool
-    @Binding var text: String
-    @Binding var state: Bool
-    let type: Int
-    func toggleReset() {
-        withAnimation(.default) {
-            state = false
-        }
-    }
-    var body: some View {
-        VStack {
-            switch(type) {
-            case 0: TextField("도담도담 ID", text: $text)
-                    .onChange(of: text) { _ in toggleReset() }
-                    .focused($focus)
-                    .autocapitalization(.none)
-            default: SecureField("비밀번호", text: $text)
-                    .onChange(of: text) { _ in toggleReset() }
-                    .focused($focus)
-            }
-            Rectangle()
-                .fill(focus ? .accentColor : Color(.systemGray3))
-                .frame(height: 1.3)
-        }
-        .font(.title3)
-        .padding(.top, 25)
-    }
-}
-
 struct LoginView: View {
     @State var invalidMessage: String = ""
     @State var loginId: String = ""
@@ -77,16 +47,16 @@ struct LoginView: View {
                     .foregroundColor(.accentColor)
                     .scaledToFit()
                     .frame(width: 250)
-                VStack(alignment: .leading) {
-                    AndroidTextField(text: $loginId, state: $tfstate, type: 0)
-                    AndroidTextField(text: $loginPw, state: $tfstate, type: 1)
+                VStack(alignment: .leading, spacing: 5) {
+                    CustomTextField(text: $loginId, retry: $tfstate, placeholder: "도담도담 ID")
+                    CustomTextField(text: $loginPw, retry: $tfstate, placeholder: "비밀번호", type: .secure)
                     if invalid != 0 && tfstate {
                         Text(invalidMessage)
                             .foregroundColor(.accentColor)
                     }
                 }
                 .modifier(ShakeEffect(animatableData: CGFloat(invalid)))
-                .padding(.bottom, 40)
+                .padding(.bottom, 30)
                 NavigationLink(destination: MainView(), isActive: $success) { EmptyView() }
                 Button(action: {
                     request = true
@@ -144,6 +114,17 @@ struct LoginView: View {
                         .clipShape(Capsule())
                 }
                 .disabled(loginId.isEmpty || loginPw.isEmpty || request)
+                NavigationLink(destination: RegisterView()) {
+                    Text("도담도담 회원가입")
+                        .foregroundColor(.accentColor)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color(.systemBackground))
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(Color.accentColor, lineWidth: 1.3)
+                        )
+                }
                 Spacer()
             }
             .frame(maxWidth: 500)

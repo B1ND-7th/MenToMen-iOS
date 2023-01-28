@@ -29,11 +29,12 @@ extension View {
                                  bottom: Bool = false,
                                  decrease: Bool = false,
                                  trailing: Bool = true,
-                                 leading: Bool = true
+                                 leading: Bool = true,
+                                 limit: Bool = false
     ) -> some View {
         self
+            .frame(maxWidth: limit ? 500 : .infinity)
             .listRowSeparator(.hidden)
-            .frame(maxWidth: .infinity)
             //.frame(minHeight: 100)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(5)
@@ -43,6 +44,7 @@ extension View {
             .padding(invert ? .bottom : .top, decrease ? 14 : 20)
             .padding(.bottom, bottom ? 20 : 0)
             //.listRowInsets(EdgeInsets())
+            .frame(maxWidth: .infinity)
             .background(Color("M2MBackground"))
     }
     
